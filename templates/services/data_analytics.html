@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Data Analytics - Corporate IT Services{% endblock %}
+
+{% block content %}
+  <!-- Header Banner -->
+  <section class="bg-primary text-white py-12 border-b-4 border-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-extrabold">{{ info.title }}</h1>
+      <p class="mt-2 text-blue-200">{{ info.subtitle }}</p>
+    </div>
+  </section>
+
+  <!-- Service Details Content -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Detailed content -->
+      <div class="lg:col-span-2 space-y-6">
+        <h2 class="text-2xl font-bold text-slate-900">Compliant Enterprise Intelligence</h2>
+        <p class="text-slate-600 leading-relaxed text-base">
+          {{ info.content }}
+        </p>
+
+        <h3 class="text-xl font-bold text-slate-900 pt-4">Data Governance & Safeguards</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+            <h4 class="font-bold text-primary mb-1"><i class="fa-solid fa-file-shield mr-2"></i> Audit Logs & Logging</h4>
+            <p class="text-sm text-slate-500">Every read and write access is cryptographically logged, providing a tamper-proof trace for regulatory audits.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+            <h4 class="font-bold text-accent mb-1"><i class="fa-solid fa-fingerprint mr-2"></i> GDPR & CCPA Masking</h4>
+            <p class="text-sm text-slate-500">Automatic Personally Identifiable Information (PII) anonymization, tokenization, and dynamic policy masking on data access streams.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Architectural SVG Graphic -->
+      <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 flex flex-col justify-between">
+        <div>
+          <h3 class="font-bold text-slate-900 mb-2 border-b border-slate-200 pb-2">Auditable Data Lake Architecture</h3>
+          <p class="text-xs text-slate-500 mb-4">A visual diagram depicting data ingestion, transformation with policy enforcement, and audit logs.</p>
+          
+          <!-- SVG Diagram -->
+          <svg viewBox="0 0 400 300" class="w-full h-auto bg-white border border-slate-200 rounded-lg p-2 shadow-sm">
+            <!-- Background grids -->
+            <rect width="400" height="300" fill="#f8fafc" />
+            
+            <!-- Raw Sources -->
+            <rect x="20" y="70" width="80" height="150" rx="4" fill="#f1f5f9" stroke="#94a3b8" />
+            <text x="60" y="60" text-anchor="middle" font-size="11" font-weight="bold" fill="#475569">RAW DATA</text>
+            <circle cx="60" cy="100" r="15" fill="#e2e8f0" stroke="#cbd5e1" />
+            <text x="60" y="103" text-anchor="middle" font-size="8" fill="#475569">Logs</text>
+            <circle cx="60" cy="150" r="15" fill="#e2e8f0" stroke="#cbd5e1" />
+            <text x="60" y="153" text-anchor="middle" font-size="8" fill="#475569">DBs</text>
+            
+            <!-- Compliance Filter -->
+            <rect x="150" y="100" width="100" height="90" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="2" />
+            <text x="200" y="90" text-anchor="middle" font-size="11" font-weight="bold" fill="#ef4444">POLICIES</text>
+            <text x="200" y="130" text-anchor="middle" font-size="10" fill="#b91c1c" font-weight="bold">PII Masking</text>
+            <text x="200" y="155" text-anchor="middle" font-size="10" fill="#b91c1c" font-weight="bold">Audit Logging</text>
+            
+            <!-- Secure Analytics Lake -->
+            <rect x="300" y="70" width="80" height="150" rx="4" fill="#d1fae5" stroke="#10b981" stroke-width="2" />
+            <text x="340" y="60" text-anchor="middle" font-size="11" font-weight="bold" fill="#047857">SAFE LAKE</text>
+            <rect x="310" y="90" width="60" height="25" rx="3" fill="#10b981" />
+            <text x="340" y="105" text-anchor="middle" font-size="9" fill="#ffffff" font-weight="bold">Dashboards</text>
+            <rect x="310" y="130" width="60" height="25" rx="3" fill="#10b981" />
+            <text x="340" y="145" text-anchor="middle" font-size="9" fill="#ffffff" font-weight="bold">AI Engine</text>
+            
+            <!-- Connective Arrows -->
+            <path d="M 100 145 L 150 145" stroke="#94a3b8" stroke-width="2" fill="none" />
+            <polygon points="150,145 142,141 142,149" fill="#94a3b8" />
+            
+            <path d="M 250 145 L 300 145" stroke="#10b981" stroke-width="2" fill="none" />
+            <polygon points="300,145 292,141 292,149" fill="#10b981" />
+            
+            <!-- Audit Log out -->
+            <path d="M 200 190 L 200 240 L 300 240" stroke="#f59e0b" stroke-dasharray="3 3" stroke-width="2" fill="none" />
+            <polygon points="300,240 292,236 292,244" fill="#f59e0b" />
+            <rect x="305" y="225" width="70" height="30" rx="3" fill="#fef3c7" stroke="#d97706" />
+            <text x="340" y="243" text-anchor="middle" font-size="9" font-weight="bold" fill="#b45309">AUDIT LOGS</text>
+            
+            <text x="200" y="280" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Regulatory Ingestion & Audit Mapping</text>
+          </svg>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t border-slate-200">
+          <a href="/#leads-section" class="w-full bg-primary hover:bg-blue-800 text-white py-2 rounded text-center block text-sm font-semibold transition">
+            Request Compliance Assessment
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

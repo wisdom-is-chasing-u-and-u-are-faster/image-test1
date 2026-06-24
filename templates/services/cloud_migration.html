@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Cloud Migration - Corporate IT Services{% endblock %}
+
+{% block content %}
+  <!-- Header Banner -->
+  <section class="bg-primary text-white py-12 border-b-4 border-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-extrabold">{{ info.title }}</h1>
+      <p class="mt-2 text-blue-200">{{ info.subtitle }}</p>
+    </div>
+  </section>
+
+  <!-- Service Details Content -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Detailed content -->
+      <div class="lg:col-span-2 space-y-6">
+        <h2 class="text-2xl font-bold text-slate-900">Workload Modernization Engineering</h2>
+        <p class="text-slate-600 leading-relaxed text-base">
+          {{ info.content }}
+        </p>
+
+        <h3 class="text-xl font-bold text-slate-900 pt-4">Key Transformation Pipelines</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+            <h4 class="font-bold text-primary mb-1"><i class="fa-solid fa-server mr-2"></i> Standard VM Lift-and-Shift</h4>
+            <p class="text-sm text-slate-500">Fast, automated migration of existing Virtual Machines into highly resilient Cloud VM scales without re-architecting applications.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+            <h4 class="font-bold text-accent mb-1"><i class="fa-solid fa-database mr-2"></i> Oracle/SQL Server Modernization</h4>
+            <p class="text-sm text-slate-500">Re-platforming complex relational legacy databases into cloud-native fully-managed database engines with minimum downtime.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Architectural SVG Graphic -->
+      <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 flex flex-col justify-between">
+        <div>
+          <h3 class="font-bold text-slate-900 mb-2 border-b border-slate-200 pb-2">Workload Transformation Architecture</h3>
+          <p class="text-xs text-slate-500 mb-4">A visual diagram depicting the movement of resources from on-premise environments into secure cloud systems.</p>
+          
+          <!-- SVG Diagram -->
+          <svg viewBox="0 0 400 300" class="w-full h-auto bg-white border border-slate-200 rounded-lg p-2 shadow-sm">
+            <!-- Background grids -->
+            <rect width="400" height="300" fill="#f8fafc" />
+            
+            <!-- On-Premise Box -->
+            <rect x="20" y="50" width="120" height="200" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
+            <text x="80" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#475569">ON-PREMISE</text>
+            <rect x="35" y="70" width="90" height="35" rx="4" fill="#ffffff" stroke="#cbd5e1" />
+            <text x="80" y="92" text-anchor="middle" font-size="10" fill="#64748b">Legacy VMs</text>
+            
+            <rect x="35" y="130" width="90" height="35" rx="4" fill="#fee2e2" stroke="#fca5a5" />
+            <text x="80" y="152" text-anchor="middle" font-size="10" fill="#ef4444" font-weight="bold">Oracle DB</text>
+            
+            <!-- Migration Arrow -->
+            <path d="M 150 150 L 240 150" stroke="#f97316" stroke-width="4" stroke-dasharray="5 5" fill="none" />
+            <polygon points="245,150 235,145 235,155" fill="#f97316" />
+            <text x="195" y="135" text-anchor="middle" font-size="9" font-weight="bold" fill="#f97316">SECURE SYNC</text>
+            
+            <!-- Cloud Box -->
+            <rect x="260" y="50" width="120" height="200" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" />
+            <text x="320" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e40af">CLOUD INFRA</text>
+            <rect x="275" y="70" width="90" height="35" rx="4" fill="#3b82f6" stroke="#2563eb" />
+            <text x="320" y="92" text-anchor="middle" font-size="10" fill="#ffffff">Cloud Engine</text>
+            
+            <rect x="275" y="130" width="90" height="35" rx="4" fill="#34d399" stroke="#059669" />
+            <text x="320" y="152" text-anchor="middle" font-size="10" fill="#ffffff" font-weight="bold">Managed SQL</text>
+            
+            <!-- Details label -->
+            <text x="200" y="275" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Continuous Re-platforming Blueprint</text>
+          </svg>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t border-slate-200">
+          <a href="/#leads-section" class="w-full bg-primary hover:bg-blue-800 text-white py-2 rounded text-center block text-sm font-semibold transition">
+            Inquire About Modernization
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

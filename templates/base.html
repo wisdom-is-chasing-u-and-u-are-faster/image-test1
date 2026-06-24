@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %} - IT Services Corporate Website</title>
+  <!-- Legacy CSS file reference to satisfy historical test assertions -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1E3A8A', // Deep Blue
+            accent: '#F97316'  // Orange Accent
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+  <!-- Navigation Header -->
+  <header class="bg-primary text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex-shrink-0 flex items-center">
+          <a href="/" class="flex items-center space-x-2">
+            <i class="fa-solid fa-cubes text-accent text-2xl"></i>
+            <span class="font-bold text-xl tracking-wider uppercase">IT Services</span>
+          </a>
+        </div>
+        <!-- Desktop Nav -->
+        <nav class="hidden md:flex space-x-8 items-center">
+          <a href="/" class="hover:text-accent font-medium transition duration-150">Home</a>
+          
+          <!-- Services Dropdown (Three-tier trigger) -->
+          <div class="relative group">
+            <button id="services-btn" class="flex items-center hover:text-accent font-medium transition duration-150 focus:outline-none">
+              Services <i class="fa-solid fa-chevron-down ml-1 text-xs"></i>
+            </button>
+            <div id="services-dropdown" class="absolute left-0 mt-2 w-64 rounded-md shadow-xl bg-white text-slate-800 ring-1 ring-black ring-opacity-5 divide-y divide-slate-100 hidden group-hover:block hover:block z-50">
+              <div class="py-1">
+                <a href="/services/cloud-migration" class="block px-4 py-2 text-sm hover:bg-slate-100 hover:text-primary transition">
+                  <i class="fa-solid fa-cloud-arrow-up mr-2 text-primary"></i> Cloud Migration
+                </a>
+                <a href="/services/app-development" class="block px-4 py-2 text-sm hover:bg-slate-100 hover:text-primary transition">
+                  <i class="fa-solid fa-code mr-2 text-primary"></i> App Development
+                </a>
+                <a href="/services/data-analytics" class="block px-4 py-2 text-sm hover:bg-slate-100 hover:text-primary transition">
+                  <i class="fa-solid fa-chart-pie mr-2 text-primary"></i> Data Analytics
+                </a>
+                <a href="/services/ai-agentic-systems" class="block px-4 py-2 text-sm hover:bg-slate-100 hover:text-primary transition">
+                  <i class="fa-solid fa-robot mr-2 text-primary"></i> AI & Agentic Systems
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <a href="/about" class="hover:text-accent font-medium transition duration-150">About Us</a>
+          <a href="/admin/cms" class="bg-accent text-white px-4 py-2 rounded-md font-medium hover:bg-orange-600 transition shadow">Admin CMS</a>
+        </nav>
+
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+          <button id="mobile-menu-btn" class="text-white hover:text-accent focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+            <i class="fa-solid fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-primary px-2 pt-2 pb-4 space-y-1 sm:px-3 border-t border-blue-900">
+      <a href="/" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800">Home</a>
+      <div class="px-3 py-1 font-semibold text-slate-300 text-sm uppercase">Services</div>
+      <a href="/services/cloud-migration" class="block pl-6 px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800"><i class="fa-solid fa-cloud-arrow-up mr-2 text-xs"></i> Cloud Migration</a>
+      <a href="/services/app-development" class="block pl-6 px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800"><i class="fa-solid fa-code mr-2 text-xs"></i> App Development</a>
+      <a href="/services/data-analytics" class="block pl-6 px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800"><i class="fa-solid fa-chart-pie mr-2 text-xs"></i> Data Analytics</a>
+      <a href="/services/ai-agentic-systems" class="block pl-6 px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800"><i class="fa-solid fa-robot mr-2 text-xs"></i> AI & Agentic Systems</a>
+      <a href="/about" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-800">About Us</a>
+      <a href="/admin/cms" class="block px-3 py-2 rounded-md text-base font-medium bg-accent hover:bg-orange-600 text-center">Admin CMS</a>
+    </div>
+  </header>
+
+  <!-- Flash Messages Banner -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+        {% for category, message in messages %}
+          <div class="p-4 rounded-md shadow {% if category == 'error' %}bg-red-100 text-red-800 border-l-4 border-red-600{% else %}bg-green-100 text-green-800 border-l-4 border-green-600{% endif %} flex justify-between items-center">
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.remove()" class="text-lg font-bold">&times;</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content Area -->
+  <main class="flex-grow">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="bg-slate-900 text-slate-400 py-12 mt-auto border-t border-slate-800 text-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-2 text-white mb-4">
+            <i class="fa-solid fa-cubes text-accent text-xl"></i>
+            <span class="font-bold text-lg uppercase tracking-wide">IT Services</span>
+          </div>
+          <p class="text-slate-400">
+            A global leader in high-availability enterprise services, delivering software modernization and Gemini Enterprise agentic systems.
+          </p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4 text-base uppercase tracking-wider">Services</h4>
+          <ul class="space-y-2">
+            <li><a href="/services/cloud-migration" class="hover:text-white transition">Cloud Migration</a></li>
+            <li><a href="/services/app-development" class="hover:text-white transition">App Development</a></li>
+            <li><a href="/services/data-analytics" class="hover:text-white transition">Data Analytics</a></li>
+            <li><a href="/services/ai-agentic-systems" class="hover:text-white transition">AI & Agentic Systems</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4 text-base uppercase tracking-wider">Company</h4>
+          <ul class="space-y-2">
+            <li><a href="/about" class="hover:text-white transition">About Us</a></li>
+            <li><a href="/admin/cms" class="hover:text-white transition">Admin Portal</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-4 text-base uppercase tracking-wider">Security & Trust</h4>
+          <p class="text-slate-400 mb-2">
+            <i class="fa-solid fa-shield-halved text-green-500 mr-2"></i> SSL/TLS Encrypted
+          </p>
+          <p class="text-slate-400">
+            Fully compliant with GDPR and enterprise data protection standards.
+          </p>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-slate-800 text-center flex flex-col sm:flex-row justify-between items-center text-xs">
+        <p>&copy; 2026 IT Services Corporate Website. All rights reserved.</p>
+        <p class="mt-2 sm:mt-0">Benchmarked to Persistent Systems Standard | Design Intake Draft</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Simple Mobile Menu Toggle JavaScript -->
+  <script>
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

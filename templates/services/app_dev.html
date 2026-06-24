@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}App Development - Corporate IT Services{% endblock %}
+
+{% block content %}
+  <!-- Header Banner -->
+  <section class="bg-primary text-white py-12 border-b-4 border-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-extrabold">{{ info.title }}</h1>
+      <p class="mt-2 text-blue-200">{{ info.subtitle }}</p>
+    </div>
+  </section>
+
+  <!-- Service Details Content -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Detailed content -->
+      <div class="lg:col-span-2 space-y-6">
+        <h2 class="text-2xl font-bold text-slate-900">Modern Software Life Cycle Delivery</h2>
+        <p class="text-slate-600 leading-relaxed text-base">
+          {{ info.content }}
+        </p>
+
+        <h3 class="text-xl font-bold text-slate-900 pt-4">PDLC Milestones</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+            <h4 class="font-bold text-primary mb-1"><i class="fa-solid fa-lightbulb mr-2"></i> Requirement Ideation</h4>
+            <p class="text-sm text-slate-500">Transforming abstract business goals into rigorous low-level design specifications, traceability matrices, and clear user stories.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+            <h4 class="font-bold text-accent mb-1"><i class="fa-solid fa-infinity mr-2"></i> Automated CI/CD & Logging</h4>
+            <p class="text-sm text-slate-500">Continuous integration pipeline triggers running linter and unit tests over every commit, pushing verified images to zero-downtime environments.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Architectural SVG Graphic -->
+      <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 flex flex-col justify-between">
+        <div>
+          <h3 class="font-bold text-slate-900 mb-2 border-b border-slate-200 pb-2">CI/CD & Monitoring Blueprint</h3>
+          <p class="text-xs text-slate-500 mb-4">A visual flow depicting automatic verification, testing, and continuous monitoring of code commits.</p>
+          
+          <!-- SVG Diagram -->
+          <svg viewBox="0 0 400 300" class="w-full h-auto bg-white border border-slate-200 rounded-lg p-2 shadow-sm">
+            <!-- Background grids -->
+            <rect width="400" height="300" fill="#f8fafc" />
+            
+            <!-- Nodes -->
+            <!-- Step 1: Code -->
+            <rect x="20" y="110" width="70" height="40" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+            <text x="55" y="135" text-anchor="middle" font-size="10" font-weight="bold" fill="#1e40af">1. CODE</text>
+            
+            <!-- Step 2: Build & Test -->
+            <rect x="110" y="110" width="80" height="40" rx="4" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+            <text x="150" y="135" text-anchor="middle" font-size="10" font-weight="bold" fill="#78350f">2. BUILD/TEST</text>
+            
+            <!-- Step 3: Deploy -->
+            <rect x="210" y="110" width="80" height="40" rx="4" fill="#ecfdf5" stroke="#10b981" stroke-width="2" />
+            <text x="250" y="135" text-anchor="middle" font-size="10" font-weight="bold" fill="#065f46">3. DEPLOY</text>
+            
+            <!-- Step 4: Monitor -->
+            <rect x="310" y="110" width="70" height="40" rx="4" fill="#faf5ff" stroke="#a855f7" stroke-width="2" />
+            <text x="345" y="135" text-anchor="middle" font-size="10" font-weight="bold" fill="#581c87">4. MONITOR</text>
+            
+            <!-- Arrows -->
+            <path d="M 90 130 L 110 130" stroke="#94a3b8" stroke-width="2" fill="none" />
+            <polygon points="110,130 102,126 102,134" fill="#94a3b8" />
+            
+            <path d="M 190 130 L 210 130" stroke="#94a3b8" stroke-width="2" fill="none" />
+            <polygon points="210,130 202,126 202,134" fill="#94a3b8" />
+            
+            <path d="M 290 130 L 310 130" stroke="#94a3b8" stroke-width="2" fill="none" />
+            <polygon points="310,130 302,126 302,134" fill="#94a3b8" />
+            
+            <!-- Feedback loop arrow from monitor back to code -->
+            <path d="M 345 150 L 345 220 L 55 220 L 55 150" stroke="#a855f7" stroke-dasharray="3 3" stroke-width="2" fill="none" />
+            <polygon points="55,150 51,158 59,158" fill="#a855f7" />
+            <text x="200" y="240" text-anchor="middle" font-size="9" font-weight="bold" fill="#a855f7">LOGGING & PERFORMANCE FEEDBACK</text>
+            
+            <!-- Label -->
+            <text x="200" y="50" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">Continuous Delivery & Telemetry Pipeline</text>
+          </svg>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t border-slate-200">
+          <a href="/#leads-section" class="w-full bg-primary hover:bg-blue-800 text-white py-2 rounded text-center block text-sm font-semibold transition">
+            Boot a Development Squad
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

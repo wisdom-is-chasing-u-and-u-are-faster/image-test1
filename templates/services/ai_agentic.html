@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}AI & Agentic Systems - Corporate IT Services{% endblock %}
+
+{% block content %}
+  <!-- Header Banner -->
+  <section class="bg-primary text-white py-12 border-b-4 border-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-extrabold">{{ info.title }}</h1>
+      <p class="mt-2 text-blue-200">{{ info.subtitle }}</p>
+    </div>
+  </section>
+
+  <!-- Service Details Content -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <!-- Detailed content -->
+      <div class="lg:col-span-2 space-y-6">
+        <h2 class="text-2xl font-bold text-slate-900">Cognitive Automation & Multi-Agent Systems</h2>
+        <p class="text-slate-600 leading-relaxed text-base">
+          {{ info.content }}
+        </p>
+
+        <h3 class="text-xl font-bold text-slate-900 pt-4">Cognitive Integration Tracks</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+            <h4 class="font-bold text-primary mb-1"><i class="fa-solid fa-network-wired mr-2"></i> Agent-to-Agent Protocols</h4>
+            <p class="text-sm text-slate-500">Autonomous negotiation and data synchronization between micro-agents, ensuring self-healing execution and direct task routing.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+            <h4 class="font-bold text-accent mb-1"><i class="fa-solid fa-industry mr-2"></i> Gemini Enterprise Agent Factory</h4>
+            <p class="text-sm text-slate-500">Custom LLM prompt frameworks and context injection setups configured directly on high-performance enterprise engines.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Architectural SVG Graphic -->
+      <div class="bg-slate-50 p-6 rounded-lg border border-slate-200 flex flex-col justify-between">
+        <div>
+          <h3 class="font-bold text-slate-900 mb-2 border-b border-slate-200 pb-2">Multi-Agent Factory Blueprint</h3>
+          <p class="text-xs text-slate-500 mb-4">A visual representation of cognitive orchestration where specialized agents coordinate to complete complex workflows.</p>
+          
+          <!-- SVG Diagram -->
+          <svg viewBox="0 0 400 300" class="w-full h-auto bg-white border border-slate-200 rounded-lg p-2 shadow-sm">
+            <!-- Background grids -->
+            <rect width="400" height="300" fill="#f8fafc" />
+            
+            <!-- Central Orchestrator -->
+            <circle cx="200" cy="150" r="35" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+            <text x="200" y="147" text-anchor="middle" font-size="9" font-weight="bold" fill="#78350f">COGNITIVE</text>
+            <text x="200" y="158" text-anchor="middle" font-size="9" font-weight="bold" fill="#78350f">ROUTER</text>
+            
+            <!-- Agent 1: Researcher -->
+            <rect x="50" y="50" width="80" height="35" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" />
+            <text x="90" y="71" text-anchor="middle" font-size="9" font-weight="bold" fill="#1e40af">Research Agent</text>
+            
+            <!-- Agent 2: Coder -->
+            <rect x="270" y="50" width="80" height="35" rx="4" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5" />
+            <text x="310" y="71" text-anchor="middle" font-size="9" font-weight="bold" fill="#065f46">Coder Agent</text>
+            
+            <!-- Agent 3: QA Auditor -->
+            <rect x="50" y="210" width="80" height="35" rx="4" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.5" />
+            <text x="90" y="231" text-anchor="middle" font-size="9" font-weight="bold" fill="#9d174d">QA Auditor</text>
+            
+            <!-- Agent 4: Deployer -->
+            <rect x="270" y="210" width="80" height="35" rx="4" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5" />
+            <text x="310" y="231" text-anchor="middle" font-size="9" font-weight="bold" fill="#581c87">Deploy Agent</text>
+            
+            <!-- Double-headed arrows representing orchestration lines -->
+            <path d="M 125 85 L 170 120" stroke="#d97706" stroke-width="1.5" fill="none" />
+            <polygon points="125,85 133,88 128,94" fill="#d97706" />
+            <polygon points="170,120 162,117 167,111" fill="#d97706" />
+            
+            <path d="M 275 85 L 230 120" stroke="#d97706" stroke-width="1.5" fill="none" />
+            <polygon points="275,85 267,91 272,97" fill="#d97706" />
+            <polygon points="230,120 238,117 233,111" fill="#d97706" />
+            
+            <path d="M 125 215 L 170 180" stroke="#d97706" stroke-width="1.5" fill="none" />
+            <polygon points="125,215 128,206 133,212" fill="#d97706" />
+            <polygon points="170,180 167,189 162,183" fill="#d97706" />
+            
+            <path d="M 275 215 L 230 180" stroke="#d97706" stroke-width="1.5" fill="none" />
+            <polygon points="275,215 272,206 267,212" fill="#d97706" />
+            <polygon points="230,180 233,189 238,183" fill="#d97706" />
+            
+            <text x="200" y="280" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">Gemini Enterprise Agentic Factory Blueprint</text>
+          </svg>
+        </div>
+        
+        <div class="mt-4 pt-4 border-t border-slate-200">
+          <a href="/#leads-section" class="w-full bg-accent hover:bg-orange-600 text-white py-2 rounded text-center block text-sm font-semibold transition">
+            Initiate Agentic Discovery
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

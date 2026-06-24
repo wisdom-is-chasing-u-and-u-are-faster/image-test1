@@ -1,0 +1,88 @@
+{
+  "home": {
+    "hero_title": "Pioneering Next-Gen Enterprise IT Solutions",
+    "hero_subtitle": "Delivering premium brand positioning, global credibility, and cutting-edge execution across Cloud, Apps, Data, and Agentic AI.",
+    "value_prop_title": "Our Core Value Proposition",
+    "value_prop_text": "We empower global enterprises with resilient, high-performance architectures. From modernizing mission-critical databases to bootstrapping agent factory models, our engineering expertise ensures absolute business continuity and growth.",
+    "key_drivers_title": "Key Business Drivers",
+    "key_drivers": [
+      {
+        "title": "Business Continuity & Resilience",
+        "description": "Enterprise-grade high availability, backup policies, and disaster recovery strategies built directly into the fabric of your application."
+      },
+      {
+        "title": "User Productivity",
+        "description": "Ultra-responsive, accessible digital interfaces that elevate productivity and lead capture conversion rates."
+      },
+      {
+        "title": "Agentic Acceleration",
+        "description": "Transform operational workflows with multi-agent cooperation, cognitive orchestration, and Gemini Enterprise integrations."
+      }
+    ]
+  },
+  "services": {
+    "cloud_migration": {
+      "title": "Cloud Migration & Workload Modernization",
+      "subtitle": "Accelerate your transition to secure, cost-effective, and fully scalable cloud architectures.",
+      "content": "Transition from standard virtual machines (VMs) to high-performance, modern cloud workloads. We specialize in lifting-and-shifting legacy virtualized environments and modernizing complex relational databases like Oracle and SQL Server into cost-effective cloud alternatives with minimum downtime."
+    },
+    "app_development": {
+      "title": "End-to-End App Development",
+      "subtitle": "Transforming abstract requirements into robust, cloud-native digital systems.",
+      "content": "Our complete Product Development Life Cycle (PDLC) supports you from requirement ideation and UI/UX design to robust development, automated testing, and CI/CD pipeline deployments. We guarantee zero-downtime rolling upgrades and 24/7 logging and monitoring."
+    },
+    "data_analytics": {
+      "title": "Enterprise Data Analytics & Compliance",
+      "subtitle": "Unlock high-fidelity insights while adhering to strict global data protection regimes.",
+      "content": "Implement enterprise-grade data platforms with absolute confidence. Our solutions feature rigorous data protection policies, multi-tier auditing, secure centralized logging, and absolute compliance with international regimes (GDPR, CCPA) across all your data lakes."
+    },
+    "ai_agentic": {
+      "title": "AI & Agentic Systems",
+      "subtitle": "Harnessing the cognitive power of agent-to-agent collaboration and Gemini Enterprise.",
+      "content": "Step into the future with our specialized 'Agent Factory' models. We design and build secure agent-to-agent architectures, Gemini Enterprise enablement integrations, and natural language cognitive layers that turn complex enterprise workflows into autonomous, self-healing systems."
+    }
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "A premium team dedicated to engineering excellence and global credibility.",
+    "team": [
+      {
+        "name": "Sarah Jenkins",
+        "role": "Principal Delivery Lead",
+        "bio": "Over 15 years of experience leading complex, cross-functional delivery streams for Fortune 500 financial institutions."
+      },
+      {
+        "name": "Devendra Kumar",
+        "role": "Engineering Director",
+        "bio": "Expert in high-scalability cloud architectures, distributed ledger technologies, and enterprise CI/CD systems."
+      },
+      {
+        "name": "Alexander Sterling",
+        "role": "AI & Cognitive Lead",
+        "bio": "Pioneered multi-agent cognitive patterns and led Gemini Enterprise deployment architectures for global logistics hubs."
+      }
+    ],
+    "locations": [
+      {
+        "city": "Pune, India",
+        "type": "Global Headquarters & Principal Place of Business",
+        "address": "Persistent Hub, Senapati Bapat Road, Pune, Maharashtra 411016"
+      },
+      {
+        "city": "Santa Clara, United States",
+        "type": "North America Tech Center",
+        "address": "Silicon Valley Office, Great America Parkway, Santa Clara, CA 95054"
+      },
+      {
+        "city": "Iselin, United States",
+        "type": "East Coast Delivery Hub",
+        "address": "Metropark Center, Wood Avenue South, Iselin, NJ 08830"
+      },
+      {
+        "city": "London, United Kingdom",
+        "type": "Europe Headquarters",
+        "address": "One Canada Square, Canary Wharf, London E14 5AB"
+      }
+    ]
+  }
+}

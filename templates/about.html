@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us - Corporate IT Services{% endblock %}
+
+{% block content %}
+  <!-- Header Banner -->
+  <section class="bg-primary text-white py-12 border-b-4 border-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-extrabold">{{ info.title }}</h1>
+      <p class="mt-2 text-blue-200">{{ info.subtitle }}</p>
+    </div>
+  </section>
+
+  <!-- Leadership Team Profiles (REQ-F-013) -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-extrabold text-slate-900">Our Executive Leadership</h2>
+        <p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">
+          Our delivery streams and architectural practices are steered by industry veterans committed to software craftsmanship.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {% for leader in info.team %}
+          <div class="bg-slate-50 rounded-lg overflow-hidden border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div class="p-6">
+              <!-- Placeholder avatar -->
+              <div class="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4 shadow">
+                {{ leader.name[0] }}{{ leader.name.split(' ')[-1][0] }}
+              </div>
+              <h3 class="text-lg font-bold text-slate-900">{{ leader.name }}</h3>
+              <p class="text-xs text-accent font-semibold uppercase tracking-wider mb-3">{{ leader.role }}</p>
+              <p class="text-sm text-slate-600 leading-relaxed">
+                {{ leader.bio }}
+              </p>
+            </div>
+            <div class="px-6 py-4 bg-slate-100 border-t border-slate-200 flex space-x-3 text-slate-400">
+              <a href="#" class="hover:text-primary"><i class="fa-brands fa-linkedin text-lg"></i></a>
+              <a href="#" class="hover:text-primary"><i class="fa-brands fa-twitter text-lg"></i></a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Worldwide Locations list/map (REQ-F-014, REQ-F-015) -->
+  <section class="py-16 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-extrabold text-slate-900">Our Worldwide Locations</h2>
+        <p class="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">Operating across major global technology and commercial hubs to support around-the-clock enterprise delivery.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+        <!-- Interactive Locations list -->
+        <div class="lg:col-span-2 space-y-4">
+          {% for loc in info.locations %}
+            <button onclick="changeMap('{{ loc.city }}')" class="w-full text-left p-4 bg-white rounded border border-slate-200 shadow-sm hover:border-accent hover:shadow transition block focus:outline-none focus:ring-2 focus:ring-accent">
+              <h3 class="font-bold text-slate-900 flex items-center">
+                <i class="fa-solid fa-location-dot text-accent mr-2"></i> {{ loc.city }}
+              </h3>
+              <p class="text-xs font-semibold text-primary uppercase tracking-wide mt-1">{{ loc.type }}</p>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">{{ loc.address }}</p>
+            </button>
+          {% endfor %}
+        </div>
+
+        <!-- High-fidelity Location Map Graphic (Google Maps minimal embed) -->
+        <div class="lg:col-span-3 bg-white p-6 rounded-lg border border-slate-200 shadow-sm flex flex-col justify-between h-[380px]">
+          <h4 class="font-bold text-slate-900 mb-2 text-sm uppercase tracking-wider self-start flex items-center">
+            <i class="fa-solid fa-map-location-dot text-primary mr-2"></i> <span id="map-title">Pune, India (Global Headquarters)</span>
+          </h4>
+          
+          <!-- Responsive Google Map iFrame -->
+          <div class="w-full flex-grow rounded-md overflow-hidden border border-slate-200 relative bg-slate-100">
+            <iframe 
+              id="google-map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.997980389364!2d73.82772591489284!3d18.528956987405232!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf3b1856efcb%3A0x7d283626db49890a!2sPersistent%20Systems!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin" 
+              class="absolute inset-0 w-full h-full border-0" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-2"><i class="fa-solid fa-circle-info mr-1"></i> Click on any office on the left to swap the Google Maps target location dynamically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map Swapping JavaScript -->
+  <script>
+    const mapUrls = {
+      "Pune, India": {
+        title: "Pune, India (Global Headquarters)",
+        src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.997980389364!2d73.82772591489284!3d18.528956987405232!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf3b1856efcb%3A0x7d283626db49890a!2sPersistent%20Systems!5e0!3m2!1sen!2sin!4v1680000000000!5m2!1sen!2sin"
+      },
+      "Santa Clara, United States": {
+        title: "Santa Clara, CA (North America Tech Center)",
+        src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3170.825852504825!2d-121.98064232356515!3d37.394132872083234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808fc99cf60a3d53%3A0x26be399ec6f125a2!2sGreat%20America%20Pkwy%2C%20Santa%20Clara%2C%20CA!5e0!3m2!1sen!2sus!4v1680000000001!5m2!1sen!2sus"
+      },
+      "Iselin, United States": {
+        title: "Iselin, NJ (East Coast Delivery Hub)",
+        src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3032.5513838271034!2d-74.32924372341907!3d40.58462007141383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c3b6f2e2ee6cb5%3A0xda55cd78c1b3f7f2!2sWood%20Ave%20S%2C%20Iselin%2C%20NJ%2008830!5e0!3m2!1sen!2sus!4v1680000000002!5m2!1sen!2sus"
+      },
+      "London, United Kingdom": {
+        title: "London, UK (Europe Headquarters)",
+        src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.2505527848243!2d-0.024317622832865768!3d41.50334867123456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487602ba0653ff9d%3A0x3c990a4244c4b574!2sOne%20Canada%20Square%2C%20London%20E14%205AB!5e0!3m2!1sen!2suk!4v1680000000003!5m2!1sen!2suk"
+      }
+    };
+
+    function changeMap(city) {
+      // Extract main key
+      const key = Object.keys(mapUrls).find(k => k.startsWith(city.split(',')[0]));
+      if (key && mapUrls[key]) {
+        document.getElementById('map-title').innerText = mapUrls[key].title;
+        document.getElementById('google-map').src = mapUrls[key].src;
+      }
+    }
+  </script>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin CMS Panel - Corporate IT Services{% endblock %}
+
+{% block content %}
+  <!-- Header Banner -->
+  <section class="bg-slate-900 text-white py-12 border-b-4 border-accent">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-extrabold"><i class="fa-solid fa-gauge-high mr-2 text-accent"></i> Admin CMS Portal</h1>
+        <p class="mt-2 text-slate-300">Manage captured leads and update active page content instantly.</p>
+      </div>
+      <div>
+        <span class="inline-flex items-center px-3 py-1 rounded bg-slate-800 text-xs font-semibold text-emerald-400 border border-emerald-500/30">
+          <i class="fa-solid fa-circle text-[8px] mr-1.5 animate-pulse text-emerald-400"></i> JSON File-CMS Active
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Control Panel Dashboard -->
+  <section class="py-10 bg-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      
+      <!-- Section 1: Captured Leads Submissions -->
+      <div class="bg-white rounded-lg shadow border border-slate-200 overflow-hidden">
+        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+          <h2 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-address-book text-primary mr-2"></i> Captured Leads (leads.json)</h2>
+          <span class="text-xs font-bold px-2 py-1 bg-primary text-white rounded-full">{{ leads|length }} submissions</span>
+        </div>
+        <div class="p-6 overflow-x-auto">
+          {% if leads %}
+            <table class="min-w-full divide-y divide-slate-200 text-sm">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-700">Timestamp</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-700">Name</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-700">Email</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-700">Company</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-700">Service Track</th>
+                  <th class="px-4 py-3 text-left font-semibold text-slate-700">Technical Overview</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white">
+                {% for lead in leads|reverse %}
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 text-xs text-slate-400 font-mono whitespace-nowrap">{{ lead.timestamp }}</td>
+                    <td class="px-4 py-3 font-semibold text-slate-900 whitespace-nowrap">{{ lead.name }}</td>
+                    <td class="px-4 py-3 text-primary font-medium whitespace-nowrap">{{ lead.email }}</td>
+                    <td class="px-4 py-3 text-slate-600 whitespace-nowrap">{{ lead.company }}</td>
+                    <td class="px-4 py-3 whitespace-nowrap">
+                      <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold {% if lead.service_track == 'ai_agentic' %}bg-purple-100 text-purple-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                        {{ lead.service_track }}
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 text-slate-500 max-w-xs truncate" title="{{ lead.message }}">{{ lead.message }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <div class="text-center py-12 text-slate-400">
+              <i class="fa-solid fa-inbox text-4xl mb-3"></i>
+              <p>No strategy leads captured yet. Submit the form on the Home page to populate this table.</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Section 2: Manage Static CMS Content -->
+      <div class="bg-white rounded-lg shadow border border-slate-200 overflow-hidden">
+        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200">
+          <h2 class="text-lg font-bold text-slate-900"><i class="fa-solid fa-pen-to-square text-accent mr-2"></i> Update Active Site Content (cms_content.json)</h2>
+        </div>
+        <form action="/admin/cms/update" method="POST" class="p-6 space-y-6">
+          
+          <!-- Home page dynamic config -->
+          <div class="border-b border-slate-100 pb-6">
+            <h3 class="font-bold text-primary text-base mb-4"><i class="fa-solid fa-house mr-1"></i> Home Page Banner & Value Prop</h3>
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <label for="home_hero_title" class="block text-xs font-semibold text-slate-600 uppercase">Hero Banner Title</label>
+                <input type="text" id="home_hero_title" name="home_hero_title" value="{{ content.home.hero_title }}" class="mt-1 block w-full rounded border border-slate-300 p-2.5 text-sm focus:ring-accent">
+              </div>
+              <div>
+                <label for="home_hero_subtitle" class="block text-xs font-semibold text-slate-600 uppercase">Hero Subtitle Overview</label>
+                <textarea id="home_hero_subtitle" name="home_hero_subtitle" rows="2" class="mt-1 block w-full rounded border border-slate-300 p-2.5 text-sm focus:ring-accent">{{ content.home.hero_subtitle }}</textarea>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="home_value_prop_title" class="block text-xs font-semibold text-slate-600 uppercase">Value Proposition Section Title</label>
+                  <input type="text" id="home_value_prop_title" name="home_value_prop_title" value="{{ content.home.value_prop_title }}" class="mt-1 block w-full rounded border border-slate-300 p-2.5 text-sm focus:ring-accent">
+                </div>
+                <div>
+                  <label for="home_value_prop_text" class="block text-xs font-semibold text-slate-600 uppercase">Value Proposition Description</label>
+                  <textarea id="home_value_prop_text" name="home_value_prop_text" rows="2" class="mt-1 block w-full rounded border border-slate-300 p-2.5 text-sm focus:ring-accent">{{ content.home.value_prop_text }}</textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services dynamic config -->
+          <div class="border-b border-slate-100 pb-6">
+            <h3 class="font-bold text-primary text-base mb-4"><i class="fa-solid fa-briefcase mr-1"></i> AI & Agentic Systems Practice</h3>
+            <div class="grid grid-cols-1 gap-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="service_ai_title" class="block text-xs font-semibold text-slate-600 uppercase">AI Practice Name</label>
+                  <input type="text" id="service_ai_title" name="service_ai_title" value="{{ content.services.ai_agentic.title }}" class="mt-1 block w-full rounded border border-slate-300 p-2.5 text-sm focus:ring-accent">
+                </div>
+                <div>
+                  <label for="service_ai_subtitle" class="block text-xs font-semibold text-slate-600 uppercase">AI Subtitle / Summary</label>
+                  <input type="text" id="service_ai_subtitle" name="service_ai_subtitle" value="{{ content.services.ai_agentic.subtitle }}" class="mt-1 block w-full rounded border border-slate-300 p-2.5 text-sm focus:ring-accent">
+                </div>
+              </div>
+              <div>
+                <label for="service_ai_content" class="block text-xs font-semibold text-slate-600 uppercase">AI Practice Body / Descriptive Content</label>
+                <textarea id="service_ai_content" name="service_ai_content" rows="3" class="mt-1 block w-full rounded border border-slate-300 p-2.5 text-sm focus:ring-accent">{{ content.services.ai_agentic.content }}</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="pt-4 flex justify-end">
+            <button type="submit" class="bg-accent hover:bg-orange-600 text-white px-6 py-3 rounded-md font-bold transition shadow flex items-center">
+              <i class="fa-solid fa-floppy-disk mr-2"></i> Save Dynamic Content Changes
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </section>
+{% endblock %}
