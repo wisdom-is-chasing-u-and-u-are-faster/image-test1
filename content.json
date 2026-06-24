@@ -1,0 +1,124 @@
+{
+  "site_name": "Vertex IT Services",
+  "navigation": [
+    {"name": "Home", "url": "/"},
+    {"name": "Services", "url": "/#services"},
+    {"name": "About Us", "url": "/about"}
+  ],
+  "hero": {
+    "title": "Empowering Global Enterprise with Intelligent IT Solutions",
+    "subtitle": "Your strategic partner for Cloud Migration, Agile App Development, Advanced Data Analytics, and Enterprise AI & Agentic Systems.",
+    "cta_text": "Schedule a Consultation",
+    "cta_link": "#contact-form"
+  },
+  "value_proposition": {
+    "title": "Why Global Enterprises Choose Vertex IT Services",
+    "description": "We deliver premium digital transformation services benchmarked to world-class standards. We don't just write code; we design resilient architectures that sustain, scale, and secure your business globally."
+  },
+  "key_drivers": {
+    "title": "Our Key Architectural Drivers",
+    "subtitle": "Core principles engineered into every solution we deliver.",
+    "items": [
+      {
+        "title": "Business Continuity",
+        "description": "High-availability patterns, failovers, and robust disaster recovery strategies built-in from day one."
+      },
+      {
+        "title": "Resilience & Security",
+        "description": "Zero-trust, end-to-end encryption (SSL/TLS), and comprehensive policy compliance for peace of mind."
+      },
+      {
+        "title": "User Productivity",
+        "description": "Blazing fast page load speeds, fully responsive layouts, and intuitive interfaces optimized for all devices."
+      }
+    ]
+  },
+  "services": {
+    "cloud-migration": {
+      "title": "Cloud Migration & Modernization",
+      "short_description": "Seamless lift-and-shift of standard VMs and deep modernization of legacy database workloads.",
+      "long_description": "We specialize in both rehosting (lift-and-shift of standard virtual machines) and refactoring (modernizing complex legacy databases like Oracle and SQL Server to modern cloud-native managed services). Our approach minimizes downtime, optimizes cloud spend, and ensures business continuity.",
+      "highlights": [
+        "Infrastructure Rehosting (VM lift-and-shift)",
+        "Oracle & SQL Server modernization to cloud-native DBs",
+        "automated migration wave-planning",
+        "post-migration optimization and cost management"
+      ]
+    },
+    "app-development": {
+      "title": "App Development & Full PDLC",
+      "short_description": "End-to-end product development life cycle backed by modern CI/CD pipelines.",
+      "long_description": "Our application development services span the entire Product Development Life Cycle (PDLC). From requirement ideation and UI/UX design to robust CI/CD automated deployments, automated testing, and comprehensive real-time monitoring.",
+      "highlights": [
+        "Requirement ideation and architectural modeling",
+        "Robust CI/CD pipeline automation (GitHub Actions, GitLab)",
+        "Real-time monitoring and telemetry integration",
+        "Agile delivery with predictable release schedules"
+      ]
+    },
+    "data-analytics": {
+      "title": "Enterprise Data Analytics",
+      "short_description": "Data protection, compliance, audit trails, and multi-platform enterprise analytics.",
+      "long_description": "Unlock the true value of your data while keeping security front and center. We implement end-to-end data pipelines incorporating enterprise-grade data protection policies, secure auditing, and granular logging across diverse platforms.",
+      "highlights": [
+        "Data protection and localized residency compliance",
+        "Granular auditing and security event logging",
+        "Multi-source data lakehouse integrations",
+        "Real-time business intelligence dashboards"
+      ]
+    },
+    "ai-agentic-systems": {
+      "title": "AI & Agentic Systems",
+      "short_description": "Next-generation agent-to-agent interactions and Gemini Enterprise enablement.",
+      "long_description": "Lead the cognitive revolution. We engineer custom artificial intelligence solutions, focusing on multi-agent collaboration (agent-to-agent interaction), Gemini Enterprise enablement, and scalable 'agent factory' deployment models.",
+      "highlights": [
+        "Collaborative multi-agent orchestration frameworks",
+        "Gemini Enterprise enablement & fine-tuning",
+        "Agent Factory models for rapid enterprise automation",
+        "Ethics-first guardrails and safety filtering"
+      ]
+    }
+  },
+  "team": [
+    {
+      "name": "Arjun Mehta",
+      "role": "Principal Engineering Manager",
+      "bio": "Over 15 years of experience building scalable distributed systems. Formerly at persistent and top cloud companies, Arjun leads our cloud and AI delivery teams."
+    },
+    {
+      "name": "Sarah Jenkins",
+      "role": "Global Delivery Lead",
+      "bio": "Specializes in multi-geography agile deliveries and full PDLC coordination. Sarah ensures projects are delivered on time, on scope, and with flawless quality."
+    }
+  ],
+  "locations": [
+    {
+      "city": "Pune, India",
+      "type": "Principal Place of Business / HQ",
+      "address": "Vertex IT Hub, Hinjawadi Phase 1, Pune, MH, 411057",
+      "lat": 18.5913,
+      "lng": 73.7389
+    },
+    {
+      "city": "Santa Clara, USA",
+      "type": "US Silicon Valley Office",
+      "address": "Suite 400, Great America Parkway, Santa Clara, CA 95054",
+      "lat": 37.3541,
+      "lng": -121.9552
+    },
+    {
+      "city": "Iselin, USA",
+      "type": "US East Coast Hub",
+      "address": "120 Wood Avenue South, Iselin, NJ 08830",
+      "lat": 40.5658,
+      "lng": -74.3262
+    },
+    {
+      "city": "London, UK",
+      "type": "European Operations Hub",
+      "address": "30 St Mary Axe (The Gherkin), London, EC3A 8BF",
+      "lat": 51.5144,
+      "lng": -0.0803
+    }
+  ]
+}

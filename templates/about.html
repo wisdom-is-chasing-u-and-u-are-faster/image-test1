@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}About Us{% endblock %}
+{% block content %}
+
+<!-- Hero Banner for About Us -->
+<section class="bg-slate-900 text-white py-16 lg:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px]"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <h1 class="text-4xl lg:text-5xl font-extrabold tracking-tight">
+            About Vertex IT Services
+        </h1>
+        <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-300">
+            A world-class engineering team delivering elite software and infrastructure architectures to global enterprises.
+        </p>
+    </div>
+</section>
+
+<!-- Leadership Section (REQ-F-013) -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Our Leadership Team</h2>
+            <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-500">
+                Meet the engineering managers and delivery leads overseeing your project portfolios.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+            {% for member in team %}
+            <div class="bg-slate-50 rounded-2xl border border-slate-100 p-8 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
+                <!-- Avatar Placeholder -->
+                <div class="h-20 w-20 rounded-full bg-brand-100 text-brand-500 flex items-center justify-center font-bold text-2xl mb-6">
+                    {{ member.name[0] }}
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">{{ member.name }}</h3>
+                <span class="text-sm font-semibold text-brand-500 uppercase tracking-widest mt-1">{{ member.role }}</span>
+                <p class="mt-4 text-sm text-slate-500 leading-relaxed">
+                    {{ member.bio }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Worldwide Locations & Interactive Map (REQ-F-014 & REQ-F-015) -->
+<section class="py-20 bg-slate-50 border-t border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Global Operations Hubs</h2>
+            <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-500">
+                Operating across principal business locations in India, the United States, and the United Kingdom.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+            
+            <!-- Locations List (SOW §3.3) -->
+            <div class="lg:col-span-5 space-y-6 flex flex-col justify-center">
+                {% for loc in locations %}
+                <div class="bg-white p-6 rounded-xl border border-slate-200/60 shadow-sm hover:border-brand-500/20 transition-all duration-150">
+                    <span class="inline-block px-2.5 py-0.5 rounded text-xs font-semibold bg-brand-50 text-brand-500 mb-3">
+                        {{ loc.type }}
+                    </span>
+                    <h3 class="text-lg font-bold text-slate-900">{{ loc.city }}</h3>
+                    <p class="mt-2 text-sm text-slate-500">{{ loc.address }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Map Panel -->
+            <div class="lg:col-span-7 flex flex-col">
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex-grow min-h-[400px] flex flex-col">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 block">Interactive Operations Map</span>
+                    
+                    <!-- Map Container -->
+                    <div id="map" class="flex-grow w-full rounded-xl border border-slate-100 shadow-inner bg-slate-100 relative min-h-[350px]">
+                        <!-- Leaflet CDN Fallback script loads if Google Map fails or API key is mock -->
+                        <div id="map-placeholder" class="absolute inset-0 flex items-center justify-center flex-col text-center p-6 bg-slate-200/60 z-10 hidden">
+                            <span class="text-3xl">🗺</span>
+                            <h4 class="text-base font-bold text-slate-700 mt-2">Connecting map services...</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Leaflet Stylesheet & Script CDN for standard interactive maps fallback -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    // Injected structured JSON locations for mapping script
+    const mapLocations = {{ locations|tojson }};
+    const googleKey = "{{ google_maps_api_key }}";
+
+    function initMap() {
+        // If googleKey is loaded and valid, we use google maps
+        if (googleKey && googleKey !== "" && googleKey !== "MOCK_KEY") {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${googleKey}&callback=initGoogleMap`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        } else {
+            // Leaflet fallback is extremely fast, fully functional, and uses zero keys!
+            initLeafletMap();
+        }
+    }
+
+    function initGoogleMap() {
+        const centerCoords = { lat: 30.0, lng: -20.0 }; // Global mid-point
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 2,
+            center: centerCoords,
+            styles: [
+                { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#e9e9e9" }, { "lightness": 17 }] },
+                { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "color": "#f5f5f5" }, { "lightness": 20 }] },
+                { "featureType": "road.highway", "elementType": "geometry.fill", "stylers": [{ "color": "#ffffff" }, { "lightness": 17 }] }
+            ]
+        });
+
+        mapLocations.forEach(loc => {
+            const marker = new google.maps.Marker({
+                position: { lat: loc.lat, lng: loc.lng },
+                map: map,
+                title: loc.city
+            });
+
+            const infoWindow = new google.maps.InfoWindow({
+                content: `<div class="p-2"><h3 class="font-bold text-sm">${loc.city}</h3><p class="text-xs text-slate-500 mt-1">${loc.type}</p></div>`
+            });
+
+            marker.addListener('click', () => {
+                infoWindow.open(map, marker);
+            });
+        });
+    }
+
+    function initLeafletMap() {
+        // Build map focusing on center
+        const map = L.map('map', { scrollWheelZoom: false }).setView([25.0, 10.0], 2);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        mapLocations.forEach(loc => {
+            const marker = L.marker([loc.lat, loc.lng]).addTo(map);
+            marker.bindPopup(`<div class="p-2"><h3 class="font-bold text-sm text-slate-900">${loc.city}</h3><p class="text-xs text-slate-500 mt-1">${loc.type}</p></div>`);
+        });
+    }
+
+    window.onload = initMap;
+</script>
+
+{% endblock %}

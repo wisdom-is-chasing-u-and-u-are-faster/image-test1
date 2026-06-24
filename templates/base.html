@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | {{ site_name }}</title>
+    <!-- Tailwind CSS CDN for high-quality, modern, mobile-responsive layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0070f3',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen font-sans">
+
+    <!-- Primary Three-Tier Navigation Menu (Home, Services, About Us) -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" class="flex items-center space-x-3">
+                        <span class="text-2xl font-bold tracking-tight bg-gradient-to-r from-brand-500 to-brand-900 bg-clip-text text-transparent">
+                            {{ site_name }}
+                        </span>
+                    </a>
+                </div>
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-10 text-base font-medium">
+                    <a href="/" class="text-slate-600 hover:text-brand-500 transition-colors">Home</a>
+                    
+                    <!-- Services Dropdown (Part of Three-Tier Menu) -->
+                    <div class="relative group">
+                        <button class="text-slate-600 hover:text-brand-500 transition-colors flex items-center space-x-1 focus:outline-none">
+                            <span>Services</span>
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div class="absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-1" role="menu" aria-orientation="vertical">
+                                <a href="/services/cloud-migration" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">Cloud Migration</a>
+                                <a href="/services/app-development" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">App Development</a>
+                                <a href="/services/data-analytics" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">Data Analytics</a>
+                                <a href="/services/ai-agentic-systems" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">AI & Agentic Systems</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="/about" class="text-slate-600 hover:text-brand-500 transition-colors">About Us</a>
+                </nav>
+
+                <!-- CTA Button -->
+                <div class="hidden md:flex items-center">
+                    <a href="/#contact-form" class="bg-brand-500 hover:bg-brand-900 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-150">
+                        Get Started
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-brand-500 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden border-b border-slate-200 bg-white md:hidden transition-all duration-300">
+            <div class="px-2 pt-2 pb-4 space-y-1 sm:px-3 text-base font-medium">
+                <a href="/" class="block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100">Home</a>
+                <div class="px-3 py-2 font-bold text-slate-400 uppercase tracking-wider text-xs">Services</div>
+                <a href="/services/cloud-migration" class="block pl-6 pr-3 py-2 rounded-md text-slate-700 hover:bg-slate-100">Cloud Migration</a>
+                <a href="/services/app-development" class="block pl-6 pr-3 py-2 rounded-md text-slate-700 hover:bg-slate-100">App Development</a>
+                <a href="/services/data-analytics" class="block pl-6 pr-3 py-2 rounded-md text-slate-700 hover:bg-slate-100">Data Analytics</a>
+                <a href="/services/ai-agentic-systems" class="block pl-6 pr-3 py-2 rounded-md text-slate-700 hover:bg-slate-100">AI & Agentic Systems</a>
+                <a href="/about" class="block px-3 py-2 rounded-md text-slate-700 hover:bg-slate-100 mt-2">About Us</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        {% if error_title %}
+        <div class="max-w-xl mx-auto py-20 px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center justify-center h-16 w-16 rounded-full bg-red-100 text-red-500 mb-6">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight sm:text-5xl">{{ error_title }}</h1>
+            <p class="mt-4 text-lg text-slate-500">{{ error_message }}</p>
+            <div class="mt-8">
+                <a href="/" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-brand-500 hover:bg-brand-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
+                    Go Back Home
+                </a>
+            </div>
+        </div>
+        {% else %}
+            {% block content %}{% endblock %}
+        {% endif %}
+    </main>
+
+    <!-- universal footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <span class="text-2xl font-bold text-white tracking-tight">{{ site_name }}</span>
+                    <p class="mt-4 text-sm max-w-md">
+                        A premium global technology partner delivering robust, secure, and resilient cloud architectures, application development, analytics platforms, and agentic AI systems.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white tracking-wider uppercase">Menu</h3>
+                    <ul class="mt-4 space-y-2 text-sm">
+                        <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="/about" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="/#contact-form" class="hover:text-white transition-colors">Get Consulted</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white tracking-wider uppercase">Services</h3>
+                    <ul class="mt-4 space-y-2 text-sm">
+                        <li><a href="/services/cloud-migration" class="hover:text-white transition-colors">Cloud Migration</a></li>
+                        <li><a href="/services/app-development" class="hover:text-white transition-colors">App Development</a></li>
+                        <li><a href="/services/data-analytics" class="hover:text-white transition-colors">Data Analytics</a></li>
+                        <li><a href="/services/ai-agentic-systems" class="hover:text-white transition-colors">AI & Agentic Systems</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-slate-800 pt-8 flex flex-col sm:flex-row justify-between text-xs">
+                <p>&copy; 2024 {{ site_name }} Inc. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 sm:mt-0">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Menu Script toggle -->
+    <script>
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (btn && menu) {
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
