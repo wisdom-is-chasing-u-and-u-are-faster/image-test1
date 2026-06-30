@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Corporate Website</title>
+    <style>
+        /* CSS Reset & Base Styles */
+        :root {
+            --primary: #0A2540;
+            --accent: #30C59B;
+            --accent-dark: #28a782;
+            --text-light: #F6F9FC;
+            --text-dark: #525F7F;
+            --text-headings: #0A2540;
+            --bg-light: #FFFFFF;
+            --bg-light-alt: #F6F9FC;
+            --border-light: #E6E6E6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --spacing-1: 8px;
+            --spacing-2: 16px;
+            --spacing-3: 24px;
+            --spacing-4: 32px;
+            --spacing-5: 48px;
+            --spacing-6: 64px;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html[data-theme='dark'] {
+            --primary: #30C59B;
+            --accent: #FFFFFF;
+            --accent-dark: #cccccc;
+            --text-light: #F6F9FC;
+            --text-dark: #9aacc1;
+            --text-headings: #F6F9FC;
+            --bg-light: #0A2540;
+            --bg-light-alt: #081f33;
+            --border-light: #1e3a5a;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        h1, h2, h3, h4, h5, h6 { color: var(--text-headings); font-weight: 700; line-height: 1.2; margin-bottom: var(--spacing-2); }
+        h1 { font-size: 2.5rem; } h2 { font-size: 2rem; } h3 { font-size: 1.5rem; }
+        p { margin-bottom: var(--spacing-2); }
+        a { color: var(--accent); text-decoration: none; transition: color 0.2s ease; }
+        a:hover { color: var(--accent-dark); }
+        img, svg { max-width: 100%; height: auto; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-3); }
+        .text-gradient { background: linear-gradient(90deg, var(--accent), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn { display: inline-block; padding: var(--spacing-2) var(--spacing-4); border-radius: var(--radius-md); font-weight: 700; text-align: center; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .btn-primary { background-color: var(--accent); color: #FFF; border: 2px solid var(--accent); }
+        .btn-primary:hover { background-color: var(--accent-dark); border-color: var(--accent-dark); transform: translateY(-2px); box-shadow: var(--shadow); }
+        .btn-secondary { background-color: transparent; color: var(--text-headings); border: 2px solid var(--border-light); }
+        .btn-secondary:hover { background-color: var(--bg-light-alt); border-color: var(--border-light); transform: translateY(-2px); }
+        .skip-link { position: absolute; top: -40px; left: 0; background: var(--primary); color: white; padding: var(--spacing-1); z-index: 100; transition: top 0.3s; }
+        .skip-link:focus { top: 0; }
+        .main-header { position: sticky; top: 0; z-index: 1000; background-color: var(--bg-light); box-shadow: var(--shadow); padding: var(--spacing-2) 0; }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--text-headings); }
+        .main-nav ul { display: flex; gap: var(--spacing-4); list-style: none; }
+        .main-nav a { font-weight: 600; color: var(--text-dark); }
+        .main-nav a.active, .main-nav a:hover { color: var(--accent); }
+        .nav-controls { display: flex; align-items: center; gap: var(--spacing-2); }
+        .theme-toggle { background: none; border: none; cursor: pointer; font-size: 1.5rem; color: var(--text-dark); }
+        .mobile-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 1.5rem; color: var(--text-headings); }
+        main > section { padding: var(--spacing-6) 0; }
+        .main-footer { background-color: var(--bg-light-alt); padding: var(--spacing-5) 0; border-top: 1px solid var(--border-light); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-4); }
+        .footer-col h4 { color: var(--text-headings); margin-bottom: var(--spacing-2); }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: var(--spacing-1); }
+        .footer-col a { color: var(--text-dark); }
+        .footer-col a:hover { color: var(--accent); }
+        .footer-bottom { margin-top: var(--spacing-4); padding-top: var(--spacing-3); border-top: 1px solid var(--border-light); text-align: center; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .mobile-toggle { display: block; }
+            .main-nav { position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-light); flex-direction: column; padding: var(--spacing-3); display: none; }
+            .main-nav.active { display: flex; }
+            .main-nav ul { flex-direction: column; }
+        }
+        .card { background: var(--bg-light); border: 1px solid var(--border-light); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: var(--spacing-3); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .grid { display: grid; gap: var(--spacing-4); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .text-center { text-align: center; }
+        .hero { background-color: var(--bg-light-alt); padding: 8rem 0; text-align: center; }
+        .hero-content h1 { font-size: 3.5rem; letter-spacing: -1px; }
+        .hero-content p { font-size: 1.25rem; max-width: 600px; margin: var(--spacing-3) auto var(--spacing-4); }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header class="main-header" id="main-header">
+        <div class="container">
+            <a href="home.html" class="logo">CorpWeb</a>
+            <nav class="main-nav" id="main-nav">
+                <ul>
+                    <li><a href="home.html" class="nav-link active">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="products.html" class="nav-link">Products/Services</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact Us</a></li>
+                    <li><a href="admin-login.html" class="nav-link">Admin</a></li>
+                </ul>
+            </nav>
+            <div class="nav-controls">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                <button id="mobile-toggle" class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section id="home">
+            <div class="hero">
+                <div class="hero-content container">
+                    <h1>Innovate, Create, <span class="text-gradient">Succeed</span></h1>
+                    <p>We provide cutting-edge solutions for modern businesses. Drive growth, enhance efficiency, and unlock your potential with our expert services.</p>
+                    <div>
+                        <a href="products.html" class="btn btn-primary">Our Services</a>
+                        <a href="contact.html" class="btn btn-secondary">Get In Touch</a>
+                    </div>
+                </div>
+            </div>
+            <div class="container" style="padding-top: var(--spacing-6); padding-bottom: var(--spacing-6);">
+                <div class="text-center" style="margin-bottom: var(--spacing-5);">
+                    <h2>Why Choose Us?</h2>
+                    <p>Leverage our expertise to achieve your business goals.</p>
+                </div>
+                <div class="grid grid-cols-3">
+                    <div class="card text-center">
+                        <h3>Expert Team</h3>
+                        <p>Our team consists of industry veterans with years of experience in delivering excellence.</p>
+                    </div>
+                    <div class="card text-center">
+                        <h3>Tailored Solutions</h3>
+                        <p>We don't believe in one-size-fits-all. Every solution is customized to your specific needs.</p>
+                    </div>
+                    <div class="card text-center">
+                        <h3>Proven Results</h3>
+                        <p>We have a track record of helping businesses like yours grow and succeed.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer" id="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col"><h4>CorpWeb</h4><p>Innovate, Create, Succeed.</p></div>
+                <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="home.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="products.html">Services</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+                <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul></div>
+                <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Contact Form</a></li><li>info@corpweb.com</li></ul></div>
+            </div>
+            <div class="footer-bottom"><p>&copy; 2023 CorpWeb. All Rights Reserved.</p></div>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mainNav = document.getElementById('main-nav');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        mobileToggle.addEventListener('click', () => {
+            const isExpanded = mainNav.classList.toggle('active');
+            mobileToggle.setAttribute('aria-expanded', isExpanded);
+        });
+        
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.removeItem('theme');
+                themeToggle.textContent = '🌙';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '☀️';
+            }
+        });
+    });
+    </script>
+</body>
+</html>

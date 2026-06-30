@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post - Corporate Website</title>
+    <style>
+        :root {
+            --primary: #0A2540;
+            --accent: #30C59B;
+            --accent-dark: #28a782;
+            --text-dark: #525F7F;
+            --text-headings: #0A2540;
+            --bg-light: #FFFFFF;
+            --bg-light-alt: #F6F9FC;
+            --border-light: #E6E6E6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-lg: 16px;
+            --spacing-2: 16px;
+            --spacing-3: 24px;
+            --spacing-4: 32px;
+            --spacing-5: 48px;
+            --spacing-6: 64px;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html[data-theme='dark'] {
+            --text-dark: #9aacc1;
+            --text-headings: #F6F9FC;
+            --bg-light: #0A2540;
+            --bg-light-alt: #081f33;
+            --border-light: #1e3a5a;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-family); background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
+        h1, h3 { color: var(--text-headings); }
+        h1 { font-size: 2.5rem; }
+        h3 { font-size: 1.5rem; }
+        a { color: var(--accent); text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-3); }
+        .btn { display: inline-block; padding: var(--spacing-2) 1.5rem; border-radius: 8px; font-weight: 700; }
+        .btn-secondary { background-color: transparent; color: var(--text-headings); border: 2px solid var(--border-light); }
+        .main-header { position: sticky; top: 0; z-index: 1000; background-color: var(--bg-light); box-shadow: var(--shadow); padding: var(--spacing-2) 0; }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--text-headings); }
+        .main-nav ul { display: flex; gap: var(--spacing-4); list-style: none; }
+        .main-nav a { font-weight: 600; color: var(--text-dark); }
+        .main-nav a.active, .main-nav a:hover { color: var(--accent); }
+        .nav-controls, .mobile-toggle { display: none; } /* Simplified for this page */
+        main > section { padding: var(--spacing-6) 0; }
+        #blog-post-content img { max-width: 100%; height: auto; border-radius: var(--radius-lg); margin: var(--spacing-4) 0; }
+        .main-footer { background-color: var(--bg-light-alt); padding: var(--spacing-5) 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <a href="home.html" class="logo">CorpWeb</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="products.html">Products/Services</a></li>
+                    <li><a href="blog.html" class="active">Blog</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="admin-login.html">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section id="blog-post">
+            <div class="container" style="max-width: 800px;">
+                <a href="blog.html" class="btn btn-secondary">&larr; Back to Blog</a>
+                <article id="blog-post-content" style="margin-top: var(--spacing-4);">
+                    <h1>The Future of AI in Business</h1>
+                    <p><em>Published on October 26, 2023 by Jane Doe</em></p>
+                    <img src="https://via.placeholder.com/800x400.png/F6F9FC/525F7F?text=AI+in+Business" alt="Wide placeholder image illustrating AI concepts.">
+                    <p>Artificial intelligence (AI) is no longer a futuristic concept; it's a present-day reality that is fundamentally transforming the business landscape. From automating routine tasks to providing deep predictive insights, AI is empowering organizations to operate with unprecedented efficiency and intelligence.</p>
+                    <h3>Enhanced Customer Experiences</h3>
+                    <p>One of the most significant impacts of AI is in the realm of customer service. AI-powered chatbots provide 24/7 support, answering customer queries instantly. Personalization engines analyze user behavior to offer tailored recommendations, creating a more engaging and satisfying customer journey.</p>
+                    <h3>Data-Driven Decision Making</h3>
+                    <p>Businesses are collecting more data than ever before. AI and machine learning algorithms can sift through vast datasets to identify trends, predict future outcomes, and uncover opportunities that would be impossible for humans to spot. This enables leaders to make strategic decisions with greater confidence.</p>
+                </article>
+            </div>
+        </section>
+    </main>
+    <footer class="main-footer"><p>&copy; 2023 CorpWeb. All Rights Reserved.</p></footer>
+</body>
+</html>

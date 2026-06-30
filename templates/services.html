@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Corporate Website</title>
+    <style>
+        :root {
+            /* Color Palette */
+            --primary-light: #0D253F; --accent-light: #01B4C4; --background-light: #F9FAFB; --surface-light: #FFFFFF; --text-primary-light: #1F2937; --text-secondary-light: #6B7280; --border-light: #E5E7EB;
+            --primary-dark: #38BDF8; --accent-dark: #01B4C4; --background-dark: #0B1120; --surface-dark: #1E293B; --text-primary-dark: #F1F5F9; --text-secondary-dark: #94A3B8; --border-dark: #334155;
+            --success: #10B981; --warning: #F59E0B; --error: #EF4444;
+            /* Typography */
+            --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            --font-size-display: 3.75rem; --font-size-h1: 2.25rem; --font-size-h2: 1.875rem; --font-size-h3: 1.5rem; --font-size-body: 1rem; --font-size-small: 0.875rem;
+            --font-weight-bold: 700; --font-weight-semibold: 600; --letter-spacing-tight: -0.025em;
+            /* Spacing */
+            --spacing-1: 0.25rem; --spacing-2: 0.5rem; --spacing-4: 1rem; --spacing-6: 1.5rem; --spacing-8: 2rem; --spacing-12: 3rem; --spacing-16: 4rem; --spacing-24: 6rem;
+            /* Radius */
+            --radius-sm: 0.25rem; --radius-md: 0.5rem; --radius-lg: 0.75rem; --radius-full: 9999px;
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05); --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            /* Transitions */
+            --transition-colors: color, background-color, border-color, text-decoration-color, fill, stroke; --transition-duration: 150ms; --transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dark {
+            --primary-light: var(--primary-dark); --accent-light: var(--accent-dark); --background-light: var(--background-dark); --surface-light: var(--surface-dark); --text-primary-light: var(--text-primary-dark); --text-secondary-light: var(--text-secondary-dark); --border-light: var(--border-dark);
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; font-family: var(--font-family-sans); font-size: var(--font-size-body); line-height: 1.6; background-color: var(--background-light); color: var(--text-primary-light); transition: var(--transition-colors) var(--transition-duration) var(--transition-timing-function); }
+        .container { width: 100%; max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: var(--spacing-6); padding-right: var(--spacing-6); }
+        h1, h2, h3 { font-weight: var(--font-weight-bold); letter-spacing: var(--letter-spacing-tight); margin-top: 0; }
+        h1 { font-size: var(--font-size-h1); } h2 { font-size: var(--font-size-h2); margin-bottom: var(--spacing-4);} h3 { font-size: var(--font-size-h3); }
+        p { margin-top: 0; margin-bottom: var(--spacing-4); }
+        a { color: var(--accent-light); text-decoration: none; transition: color var(--transition-duration); }
+        a:hover { color: var(--primary-light); }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+        .main-header { background-color: color-mix(in srgb, var(--surface-light) 80%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-light); transition: var(--transition-colors) var(--transition-duration) var(--transition-timing-function); padding: 0; }
+        .nav-container { display: flex; align-items: center; justify-content: space-between; height: 4.5rem; }
+        .logo { font-weight: var(--font-weight-bold); font-size: 1.25rem; color: var(--text-primary-light); }
+        .main-nav ul { margin: 0; padding: 0; list-style: none; display: flex; align-items: center; gap: var(--spacing-6); }
+        .main-nav a { color: var(--text-secondary-light); font-weight: var(--font-weight-semibold); padding: var(--spacing-2) 0; border-bottom: 2px solid transparent; transition: color var(--transition-duration), border-color var(--transition-duration); }
+        .main-nav a.active, .main-nav a:hover { color: var(--text-primary-light); border-bottom-color: var(--accent-light); }
+        .nav-actions { display: flex; align-items: center; gap: var(--spacing-4); }
+        .theme-toggle { background: var(--surface-light); border: 1px solid var(--border-light); border-radius: var(--radius-full); width: 44px; height: 24px; padding: 2px; cursor: pointer; display: flex; align-items: center; }
+        .theme-toggle-switch { width: 18px; height: 18px; border-radius: 50%; background: var(--primary-light); transform: translateX(0); transition: transform 0.3s ease, background-color var(--transition-duration); }
+        .dark .theme-toggle-switch { transform: translateX(20px); background: var(--accent-dark); }
+        .page-section { padding-top: calc(var(--spacing-24) + 4.5rem); padding-bottom: var(--spacing-24); min-height: calc(100vh - 9rem); }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--spacing-8); }
+        .card { background: var(--surface-light); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: var(--spacing-6); box-shadow: var(--shadow); transition: transform var(--transition-duration), box-shadow var(--transition-duration); }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .card h3 { font-size: 1.25rem; margin-bottom: var(--spacing-2); }
+        .card p { color: var(--text-secondary-light); margin-bottom: 0; }
+        .main-footer { background-color: var(--surface-light); border-top: 1px solid var(--border-light); padding: var(--spacing-8) 0; text-align: center; color: var(--text-secondary-light); transition: var(--transition-colors) var(--transition-duration) var(--transition-timing-function); }
+        @media (max-width: 768px) { h1 { font-size: 2.5rem; } .nav-container { padding-left: var(--spacing-4); padding-right: var(--spacing-4); } .main-nav { display: none; } }
+    </style>
+</head>
+<body>
+    <a href="#main" class="sr-only">Skip to main content</a>
+    <header class="main-header">
+        <div class="container nav-container">
+            <a href="home.html" class="logo">MicroCorp</a>
+            <nav class="main-nav" aria-label="Main Navigation">
+                <ul>
+                    <li><a href="home.html" class="nav-link">Home</a></li>
+                    <li><a href="services.html" class="nav-link active">Services</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="contact.html" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="nav-actions">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode"><span class="theme-toggle-switch"></span></button>
+            </div>
+        </div>
+    </header>
+    <main id="main">
+        <section id="services" class="page-section">
+            <div class="container">
+                <h2 style="text-align:center;">Our Services</h2>
+                <p style="text-align:center; max-width: 600px; margin: 0 auto var(--spacing-12);">We provide end-to-end solutions for building and managing modern, scalable, and resilient applications on the cloud.</p>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Microservice Architecture</h3>
+                        <p>Design and implement robust microservice-based systems that are easy to develop, deploy, and maintain.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Google Cloud Run</h3>
+                        <p>Leverage serverless containers for ultimate scalability, scaling from zero to handle any workload, paying only for what you use.</p>
+                    </div>
+                    <div class="card">
+                        <h3>API Gateway Management</h3>
+                        <p>Secure, manage, and monitor your APIs with Google API Gateway, providing a consistent entry point for your services.</p>
+                    </div>
+                    <div class="card">
+                        <h3>CI/CD Automation</h3>
+                        <p>Implement fully automated CI/CD pipelines with Google Cloud Build for rapid, reliable, and repeatable deployments.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Content as Code</h3>
+                        <p>Manage website content in Git repositories, enabling version control, collaboration, and automated updates.</p>
+                    </div>
+                    <div class="card">
+                        <h3>Edge Caching & CDN</h3>
+                        <p>Deliver content with low latency and high transfer speeds globally using Google Cloud CDN for optimal user experience.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2024 MicroCorp. All Rights Reserved.</p>
+            <p>Built on a <a href="home.html">Microservices Architecture</a> with Google Cloud.</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            htmlElement.classList.add(savedTheme);
+            if (savedTheme === 'dark') { htmlElement.classList.replace('light', 'dark'); }
+            themeToggle.addEventListener('click', () => {
+                if (htmlElement.classList.contains('dark')) {
+                    htmlElement.classList.replace('dark', 'light');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    htmlElement.classList.replace('light', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
