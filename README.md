@@ -1,86 +1,47 @@
 # Flask Microservice Backend
 
-This repository contains a Flask-based backend with two microservice endpoints: a Content Service and a Lead Capture Service.
+This repository contains a Flask-based backend with two microservice endpoints: a Content Service and a Lead Capture Service. All endpoints are secured with API key authentication.
 
 ## Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/wisdom-is-chasing-u-and-u-are-faster/image-test1.git
-    cd image-test1
-    ```
+To install the necessary dependencies, run the following command:
 
-2.  **Create a virtual environment and activate it:**
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-
-3.  **Install the dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
 
 ## Configuration
 
-All API endpoints are secured and require an API key for access.
+This application uses API key-based authentication. You must provide an API key in the `X-API-Key` header for all requests.
 
--   **Authentication:** The API key must be passed in the `X-API-Key` header of your HTTP request.
-
-    `X-API-Key: <YOUR_API_KEY>`
-
-    Contact the service administrator to obtain a valid API key.
+The expected API key is currently hardcoded in `app.py`. For a production environment, you should use a more secure method for managing API keys, such as environment variables or a secrets management service.
 
 ## Endpoints
 
-### 1. Content Service
+### Content Service
 
--   **Endpoint:** `GET /api/v1/content/<page_slug>`
--   **Description:** Retrieves the content for a specific page.
--   **Example:**
-    ```bash
-    curl -X GET -H "X-API-Key: <YOUR_API_KEY>" http://127.0.0.1:5000/api/v1/content/home
-    ```
--   **Success Response (200 OK):**
-    ```json
-    {
-      "slug": "home",
-      "title": "Welcome to the Home Page",
-      "content": "This is the main content of the home page."
-    }
-    ```
--   **Error Response (404 Not Found):**
-    ```json
-    {
-      "error": "Page not found"
-    }
-    ```
+*   **Endpoint**: `GET /api/v1/content/<page_slug>`
+*   **Description**: Retrieves content for a given page slug.
+*   **Example**:
 
-### 2. Lead Capture Service
+```bash
+curl -X GET -H "X-API-Key: your-api-key" http://127.0.0.1:5000/api/v1/content/home
+```
 
--   **Endpoint:** `POST /api/v1/leads`
--   **Description:** Captures a new lead from a form submission.
--   **Example:**
-    ```bash
-    curl -X POST -H "X-API-Key: <YOUR_API_KEY>" -H "Content-Type: application/json" -d '''{
-      "name": "John Doe",
-      "email": "john.doe@example.com",
-      "message": "I am interested in your services."
-    }''' http://127.0.0.1:5000/api/v1/leads
-    ```
--   **Success Response (201 Created):**
-    ```json
-    {
-      "message": "Lead captured successfully"
-    }
-    ```
+### Lead Capture Service
 
-## Running Tests
+*   **Endpoint**: `POST /api/v1/leads`
+*   **Description**: Captures lead information.
+*   **Example**:
 
-This project uses `pytest` for testing.
+```bash
+curl -X POST -H "Content-Type: application/json" -H "X-API-Key: your-api-key" -d '''{"email": "test@example.com", "name": "Test User"}''' http://127.0.0.1:5000/api/v1/leads
+```
 
-1.  Make sure you have installed the development dependencies.
-2.  Run the tests from the root of the project directory:
-    ```bash
-    pytest
-    ```
+## Testing
+
+To run the test suite, use `pytest`:
+
+```bash
+pytest
+```
