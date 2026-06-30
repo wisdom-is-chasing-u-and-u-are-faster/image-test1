@@ -1,92 +1,86 @@
-# Corporate Website Backend
+# Flask Microservice Backend
 
-This is a Flask-based backend for a corporate website. It provides two microservice endpoints: a Content Service and a Lead Capture Service.
+This repository contains a Flask-based backend with two microservice endpoints: a Content Service and a Lead Capture Service.
 
 ## Installation
 
-1.  Clone the repository:
+1.  **Clone the repository:**
     ```bash
     git clone https://github.com/wisdom-is-chasing-u-and-u-are-faster/image-test1.git
     cd image-test1
     ```
 
-2.  Install the dependencies:
+2.  **Create a virtual environment and activate it:**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+3.  **Install the dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
 ## Configuration
 
-This application uses API key-based authentication. The API key must be provided in the `X-API-Key` header of each request.
+All API endpoints are secured and require an API key for access.
 
-By default, the API key is `test-api-key-123`. You can set a different API key by setting the `API_KEY` environment variable:
+-   **Authentication:** The API key must be passed in the `X-API-Key` header of your HTTP request.
 
-```bash
-export API_KEY='your-secret-api-key'
-```
+    `X-API-Key: <YOUR_API_KEY>`
 
-## Running the Application
+    Contact the service administrator to obtain a valid API key.
 
-To run the Flask development server:
+## Endpoints
 
-```bash
-python app.py
-```
+### 1. Content Service
 
-The application will be available at `http://localhost:5000`.
-
-## API Endpoints
-
-### Content Service
-
-*   **Endpoint**: `GET /api/v1/content/<page_slug>`
-*   **Description**: Retrieves content for a given page.
-*   **Authentication**: Requires a valid `X-API-Key` header.
-*   **Example Request**:
+-   **Endpoint:** `GET /api/v1/content/<page_slug>`
+-   **Description:** Retrieves the content for a specific page.
+-   **Example:**
     ```bash
-    curl -X GET -H "X-API-Key: test-api-key-123" http://localhost:5000/api/v1/content/home
+    curl -X GET -H "X-API-Key: <YOUR_API_KEY>" http://127.0.0.1:5000/api/v1/content/home
     ```
-*   **Success Response** (200 OK):
+-   **Success Response (200 OK):**
     ```json
     {
-      "title": "Welcome to Our Corporate Website",
-      "tagline": "Innovating the future of microservices.",
-      "content": "This is the home page of our enterprise application platform."
+      "slug": "home",
+      "title": "Welcome to the Home Page",
+      "content": "This is the main content of the home page."
     }
     ```
-*   **Failure Response** (404 Not Found):
+-   **Error Response (404 Not Found):**
     ```json
     {
       "error": "Page not found"
     }
     ```
 
-### Lead Capture Service
+### 2. Lead Capture Service
 
-*   **Endpoint**: `POST /api/v1/leads`
-*   **Description**: Captures lead details from a contact form.
-*   **Authentication**: Requires a valid `X-API-Key` header.
-*   **Example Request**:
+-   **Endpoint:** `POST /api/v1/leads`
+-   **Description:** Captures a new lead from a form submission.
+-   **Example:**
     ```bash
-    curl -X POST -H "Content-Type: application/json" -H "X-API-Key: test-api-key-123" -d '{"name": "John Doe", "email": "john.doe@example.com"}' http://localhost:5000/api/v1/leads
+    curl -X POST -H "X-API-Key: <YOUR_API_KEY>" -H "Content-Type: application/json" -d '''{
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "message": "I am interested in your services."
+    }''' http://127.0.0.1:5000/api/v1/leads
     ```
-*   **Success Response** (201 Created):
+-   **Success Response (201 Created):**
     ```json
     {
-      "lead_id": "a-unique-uuid"
-    }
-    ```
-*   **Failure Response** (400 Bad Request):
-    ```json
-    {
-      "error": "Missing required fields: 'name' and 'email' are required"
+      "message": "Lead captured successfully"
     }
     ```
 
 ## Running Tests
 
-This project uses `pytest` for testing. To run the tests:
+This project uses `pytest` for testing.
 
-```bash
-pytest
-```
+1.  Make sure you have installed the development dependencies.
+2.  Run the tests from the root of the project directory:
+    ```bash
+    pytest
+    ```
