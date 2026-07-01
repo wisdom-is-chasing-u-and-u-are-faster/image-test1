@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Corporate Website</title>
+    <style>
+        :root {
+            --primary: #0A2540;
+            --accent: #30C59B;
+            --text-headings: #0A2540;
+            --bg-light-alt: #F6F9FC;
+            --border-light: #E6E6E6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --spacing-1: 8px;
+            --spacing-2: 16px;
+            --spacing-3: 24px;
+            --spacing-4: 32px;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html[data-theme='dark'] {
+            --text-headings: #F6F9FC;
+            --bg-light: #0A2540;
+            --bg-light-alt: #081f33;
+            --border-light: #1e3a5a;
+        }
+        body { font-family: var(--font-family); background-color: var(--bg-light-alt); margin: 0; }
+        .admin-login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .admin-login-form { width: 100%; max-width: 400px; }
+        .card { background: #FFFFFF; border: 1px solid var(--border-light); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: var(--spacing-4); }
+        .text-center { text-align: center; }
+        h2 { font-size: 2rem; color: var(--text-headings); }
+        .form-group { margin-bottom: var(--spacing-3); }
+        .form-group label { display: block; margin-bottom: var(--spacing-1); font-weight: 600; color: var(--text-headings); }
+        .form-control { width: 100%; padding: var(--spacing-2); border: 1px solid var(--border-light); border-radius: var(--radius-md); font-size: 1rem; box-sizing: border-box; }
+        .btn-primary { display: block; width: 100%; background-color: var(--accent); color: #FFF; border: none; padding: var(--spacing-2); font-weight: 700; border-radius: var(--radius-md); cursor: pointer; text-align: center; text-decoration: none; }
+        .alert-error { color: #d9534f; background-color: #f2dede; border: 1px solid #ebccd1; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="admin-login-container">
+            <div class="admin-login-form card">
+                <div class="text-center">
+                    <h2>Admin Login</h2>
+                    <p>Access the content management dashboard.</p>
+                </div>
+                
+                {% if error %}
+                <div class="alert-error">
+                    {{ error }}
+                </div>
+                {% endif %}
+                
+                <form id="admin-login-form" style="margin-top: var(--spacing-4);" method="POST" action="/admin-login">
+                    <div class="form-group">
+                        <label for="admin-username">Username</label>
+                        <input type="text" id="admin-username" name="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="admin-password">Password</label>
+                        <input type="password" id="admin-password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Log In</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

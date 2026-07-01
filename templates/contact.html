@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Corporate Website</title>
+    <style>
+        :root {
+            --primary: #0A2540;
+            --accent: #30C59B;
+            --accent-dark: #28a782;
+            --text-dark: #525F7F;
+            --text-headings: #0A2540;
+            --bg-light: #FFFFFF;
+            --bg-light-alt: #F6F9FC;
+            --border-light: #E6E6E6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --spacing-1: 8px;
+            --spacing-2: 16px;
+            --spacing-3: 24px;
+            --spacing-4: 32px;
+            --spacing-5: 48px;
+            --spacing-6: 64px;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html[data-theme='dark'] {
+            --text-headings: #F6F9FC;
+            --text-dark: #9aacc1;
+            --bg-light: #0A2540;
+            --bg-light-alt: #081f33;
+            --border-light: #1e3a5a;
+        }
+        body { font-family: var(--font-family); background-color: var(--bg-light); color: var(--text-dark); margin: 0; line-height: 1.6; }
+        h2 { font-size: 2rem; color: var(--text-headings); }
+        a { color: var(--accent); text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-3); }
+        .main-header { position: sticky; top: 0; z-index: 1000; background-color: var(--bg-light); box-shadow: var(--shadow); padding: var(--spacing-2) 0; }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--text-headings); }
+        .main-nav ul { display: flex; gap: var(--spacing-4); list-style: none; margin: 0; padding: 0; }
+        .main-nav a { font-weight: 600; color: var(--text-dark); }
+        .main-nav a.active, .main-nav a:hover { color: var(--accent); }
+        .nav-controls, .mobile-toggle { display: none; }
+        main > section { padding: var(--spacing-6) 0; }
+        .card { background: var(--bg-light); border: 1px solid var(--border-light); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: var(--spacing-3); margin-top: var(--spacing-5); max-width: 700px; margin-left: auto; margin-right: auto; }
+        .form-group { margin-bottom: var(--spacing-3); }
+        .form-group label { display: block; margin-bottom: var(--spacing-1); font-weight: 600; color: var(--text-headings); }
+        .form-control { width: 100%; padding: var(--spacing-2); border: 1px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-light-alt); color: var(--text-dark); font-size: 1rem; box-sizing: border-box; }
+        .btn-primary { background-color: var(--accent); color: #FFF; border: 2px solid var(--accent); width: 100%; padding: var(--spacing-2) var(--spacing-4); font-weight: 700; border-radius: var(--radius-md); cursor: pointer; }
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+    <header class="main-header" id="main-header">
+        <div class="container">
+            <a href="home.html" class="logo">CorpWeb</a>
+            <nav class="main-nav" id="main-nav">
+                <ul>
+                    <li><a href="home.html" class="nav-link">Home</a></li>
+                    <li><a href="about.html" class="nav-link">About Us</a></li>
+                    <li><a href="products.html" class="nav-link">Products/Services</a></li>
+                    <li><a href="blog.html" class="nav-link">Blog</a></li>
+                    <li><a href="contact.html" class="nav-link active">Contact Us</a></li>
+                    <li><a href="admin-login.html" class="nav-link">Admin</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main id="main-content">
+        <section id="contact">
+            <div class="container">
+                <div class="text-center">
+                    <h2>Contact Us</h2>
+                    <p>We'd love to hear from you. Reach out with any questions or to start a project.</p>
+                </div>
+                <div class="card">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Send Message</button>
+                        <p id="form-status" style="margin-top: var(--spacing-2); text-align: center;"></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const formStatus = document.getElementById('form-status');
+                formStatus.textContent = 'Sending...';
+                
+                const formData = new FormData(contactForm);
+                fetch('/contact', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        formStatus.textContent = 'Thank you for your message! We will get back to you shortly.';
+                        formStatus.style.color = 'green';
+                        contactForm.reset();
+                    } else {
+                        formStatus.textContent = 'An error occurred: ' + data.message;
+                        formStatus.style.color = 'red';
+                    }
+                })
+                .catch(error => {
+                    formStatus.textContent = 'An error occurred. Please try again.';
+                    formStatus.style.color = 'red';
+                });
+            });
+        }
+    </script>
+</body>
+</html>
