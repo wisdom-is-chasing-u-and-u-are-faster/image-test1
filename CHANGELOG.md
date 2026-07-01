@@ -1,12 +1,14 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
 ## [Unreleased]
 
 ### Added
-- This changelog file.
-- Detailed comments to `app.py`.
+- **feat(ARCH-3119): UI Pages + Requirements: Corporate Website Development** ([#3](https://github.com/wisdom-is-chasing-u-and-u-are-faster/image-test1/pull/3))
+  - *Overview*: This PR introduces a new Flask application for a corporate website, including routing, templates, and a test suite.
+  - *Detailed Technical Modifications*:
+    - Added `app.py` with Flask routing for all pages.
+    - Added HTML templates for all UI pages.
+    - Added `requirements.txt` with project dependencies.
+    - Added `tests/test_app.py` with a pytest test suite.
+    - Added `README.md` with project documentation.
+    - Added `CHANGELOG.md`.
