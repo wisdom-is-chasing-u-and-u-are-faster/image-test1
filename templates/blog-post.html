@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Post - Corporate Website</title>
+    <title>{{ post.title }} - Corporate Website</title>
     <style>
         :root {
             --primary: #0A2540;
@@ -72,14 +72,10 @@
             <div class="container" style="max-width: 800px;">
                 <a href="blog.html" class="btn btn-secondary">&larr; Back to Blog</a>
                 <article id="blog-post-content" style="margin-top: var(--spacing-4);">
-                    <h1>The Future of AI in Business</h1>
-                    <p><em>Published on October 26, 2023 by Jane Doe</em></p>
-                    <img src="https://via.placeholder.com/800x400.png/F6F9FC/525F7F?text=AI+in+Business" alt="Wide placeholder image illustrating AI concepts.">
-                    <p>Artificial intelligence (AI) is no longer a futuristic concept; it's a present-day reality that is fundamentally transforming the business landscape. From automating routine tasks to providing deep predictive insights, AI is empowering organizations to operate with unprecedented efficiency and intelligence.</p>
-                    <h3>Enhanced Customer Experiences</h3>
-                    <p>One of the most significant impacts of AI is in the realm of customer service. AI-powered chatbots provide 24/7 support, answering customer queries instantly. Personalization engines analyze user behavior to offer tailored recommendations, creating a more engaging and satisfying customer journey.</p>
-                    <h3>Data-Driven Decision Making</h3>
-                    <p>Businesses are collecting more data than ever before. AI and machine learning algorithms can sift through vast datasets to identify trends, predict future outcomes, and uncover opportunities that would be impossible for humans to spot. This enables leaders to make strategic decisions with greater confidence.</p>
+                    <h1>{{ post.title }}</h1>
+                    <p><em>Published on {{ post.date }} by {{ post.author }}</em></p>
+                    <img src="{{ post.image }}" alt="{{ post.title }}">
+                    {{ post.content | safe }}
                 </article>
             </div>
         </section>

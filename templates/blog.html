@@ -100,24 +100,14 @@
                     <p>Insights, news, and articles from our team.</p>
                 </div>
                 <div id="blog-grid">
+                    {% for post in posts %}
                     <div class="card">
-                        <img src="https://via.placeholder.com/400x250.png/F6F9FC/525F7F?text=Blog+Image+1" alt="Placeholder image for a blog post">
-                        <h3>The Future of AI in Business</h3>
-                        <p>Explore how artificial intelligence is reshaping industries and what it means for you.</p>
-                        <a href="blog-post.html" class="btn btn-secondary" style="margin-top: auto;">Read More</a>
+                        <img src="{{ post.image }}" alt="{{ post.title }}">
+                        <h3>{{ post.title }}</h3>
+                        <p>{{ post.excerpt }}</p>
+                        <a href="blog-post.html?id={{ post.id }}" class="btn btn-secondary" style="margin-top: auto;">Read More</a>
                     </div>
-                    <div class="card">
-                        <img src="https://via.placeholder.com/400x250.png/F6F9FC/525F7F?text=Blog+Image+2" alt="Placeholder image for a blog post">
-                        <h3>Cybersecurity Best Practices for 2024</h3>
-                        <p>In an increasingly digital world, protecting your assets is more important than ever.</p>
-                        <a href="blog-post.html" class="btn btn-secondary" style="margin-top: auto;">Read More</a>
-                    </div>
-                    <div class="card">
-                        <img src="https://via.placeholder.com/400x250.png/F6F9FC/525F7F?text=Blog+Image+3" alt="Placeholder image for a blog post">
-                        <h3>Maximizing Your Cloud Investment</h3>
-                        <p>Are you getting the most out of your cloud services? Here are some tips to optimize your spend.</p>
-                        <a href="blog-post.html" class="btn btn-secondary" style="margin-top: auto;">Read More</a>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>

@@ -36,6 +36,7 @@
         .form-group label { display: block; margin-bottom: var(--spacing-1); font-weight: 600; color: var(--text-headings); }
         .form-control { width: 100%; padding: var(--spacing-2); border: 1px solid var(--border-light); border-radius: var(--radius-md); font-size: 1rem; box-sizing: border-box; }
         .btn-primary { display: block; width: 100%; background-color: var(--accent); color: #FFF; border: none; padding: var(--spacing-2); font-weight: 700; border-radius: var(--radius-md); cursor: pointer; text-align: center; text-decoration: none; }
+        .alert-error { color: #d9534f; background-color: #f2dede; border: 1px solid #ebccd1; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -46,14 +47,21 @@
                     <h2>Admin Login</h2>
                     <p>Access the content management dashboard.</p>
                 </div>
-                <form id="admin-login-form" style="margin-top: var(--spacing-4);" onsubmit="window.location.href='admin-dashboard.html'; return false;">
+                
+                {% if error %}
+                <div class="alert-error">
+                    {{ error }}
+                </div>
+                {% endif %}
+                
+                <form id="admin-login-form" style="margin-top: var(--spacing-4);" method="POST" action="/admin-login">
                     <div class="form-group">
                         <label for="admin-username">Username</label>
-                        <input type="text" id="admin-username" class="form-control" required>
+                        <input type="text" id="admin-username" name="username" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="admin-password">Password</label>
-                        <input type="password" id="admin-password" class="form-control" required>
+                        <input type="password" id="admin-password" name="password" class="form-control" required>
                     </div>
                     <button type="submit" class="btn-primary">Log In</button>
                 </form>

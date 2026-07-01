@@ -69,7 +69,7 @@
             <li><a href="#">Content</a></li>
             <li><a href="#">Users</a></li>
             <li><a href="#">Settings</a></li>
-            <li><a href="home.html">Logout</a></li>
+            <li><a href="logout">Logout</a></li>
         </ul>
     </nav>
     <main class="admin-main">
@@ -97,6 +97,32 @@
                             <td>2023-10-26</td>
                             <td><a href="#">Edit</a> | <a href="#" style="color: #dc3545;">Delete</a></td>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+
+             <div class="card" style="margin-top: var(--spacing-4);">
+                <h3>Contact Form Submissions</h3>
+                <p>Latest leads collected from the Contact Us form.</p>
+                <table>
+                    <thead>
+                        <tr><th>Name</th><th>Email</th><th>Message</th><th>Received At</th></tr>
+                    </thead>
+                    <tbody>
+                        {% if submissions %}
+                            {% for sub in submissions %}
+                            <tr>
+                                <td>{{ sub.name }}</td>
+                                <td>{{ sub.email }}</td>
+                                <td>{{ sub.message }}</td>
+                                <td>{{ sub.timestamp }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: var(--text-dark);">No submissions received yet.</td>
+                            </tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
