@@ -8,10 +8,13 @@ with dynamic blog posts, a mock contact lead-capture form, and a session-based s
 from datetime import datetime
 from flask import Flask, abort, redirect, render_template, request, session, jsonify
 
+# Initialize the Flask application
 app = Flask(__name__)
+# Set a secret key for session management, required for secure admin login
 app.secret_key = "super_secret_session_key_for_corporate_website_development_project"
 
 # In-memory database of blog posts (AC: The user must be able to view a list of blog posts and click to read a full post.)
+# This list of dictionaries holds the data for our blog posts.
 BLOG_POSTS = [
     {
         "id": 1,
@@ -72,6 +75,7 @@ BLOG_POSTS = [
 ]
 
 # In-memory storage for contact submissions (AC: Contact Us page with a contact form)
+# This list will store all the contact form submissions.
 CONTACT_SUBMISSIONS: list[dict[str, str]] = []
 
 
@@ -79,14 +83,18 @@ CONTACT_SUBMISSIONS: list[dict[str, str]] = []
 def login_required(func):
     """Decorator to require login for specific routes."""
     def wrapper(*args, **kwargs):
+        # If the user is not logged in, redirect them to the login page.
         if not session.get("logged_in"):
             return redirect("/admin-login")
+        # If the user is logged in, proceed to the decorated function.
         return func(*args, **kwargs)
     wrapper.__name__ = func.__name__
     return wrapper
 
 
 # Route definitions mapping standard endpoints and duplicate HTML extensions
+# The following routes render the main pages of the corporate website.
+
 @app.route("/")
 @app.route("/home")
 @app.route("/home.html")
@@ -119,7 +127,7 @@ def services():
 @app.route("/blog")
 @app.route("/blog.html")
 def blog():
-    """Renders the Blog page list view (REQ-F-004)."""
+    """Renders the Blog page list view (REQ-F-004), passing in the blog posts."""
     return render_template("blog.html", posts=BLOG_POSTS)
 
 
@@ -127,10 +135,14 @@ def blog():
 @app.route("/blog-post.html")
 def blog_post():
     """Renders a single dynamic Blog Post details view (AC: click to read a full post)."""
+    # Get the post ID from the query string, default to 1.
     post_id = request.args.get("id", 1, type=int)
+    # Find the post with the matching ID.
     post = next((p for p in BLOG_POSTS if p["id"] == post_id), None)
+    # If the post is not found, return a 404 error.
     if not post:
         abort(404)
+    # Render the blog post template with the post data.
     return render_template("blog-post.html", post=post)
 
 
@@ -138,14 +150,17 @@ def blog_post():
 @app.route("/contact.html", methods=["GET", "POST"])
 def contact():
     """Handles GET and POST for Contact Us page (REQ-F-005)."""
+    # If the form is submitted (POST request).
     if request.method == "POST":
         name = request.form.get("name")
         email = request.form.get("email")
         message = request.form.get("message")
 
+        # Basic validation to ensure fields are not empty.
         if not name or not email or not message:
             return jsonify({"status": "error", "message": "Missing form fields"}), 400
 
+        # Store the submission in our in-memory list.
         submission = {
             "name": name,
             "email": email,
@@ -153,8 +168,10 @@ def contact():
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         CONTACT_SUBMISSIONS.append(submission)
+        # Return a success response.
         return jsonify({"status": "success", "message": "Form submitted successfully!"})
 
+    # Render the contact page for GET requests.
     return render_template("contact.html")
 
 
@@ -162,16 +179,20 @@ def contact():
 @app.route("/admin-login.html", methods=["GET", "POST"])
 def admin_login():
     """Handles Admin secure authentication area (AC: An admin user must be able to log in)."""
+    # If the login form is submitted.
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
 
+        # Hardcoded credentials for demonstration purposes.
         if username == "admin" and password == "admin123":
             session["logged_in"] = True
             return redirect("/admin-dashboard")
         else:
+            # Show an error if credentials are invalid.
             return render_template("admin-login.html", error="Invalid credentials. Please use admin / admin123.")
 
+    # Render the login page for GET requests.
     return render_template("admin-login.html")
 
 
@@ -180,6 +201,7 @@ def admin_login():
 @login_required
 def admin_dashboard():
     """Renders the secure Admin Area dashboard (REQ-F-006)."""
+    # Pass the contact submissions to the dashboard template.
     return render_template("admin-dashboard.html", submissions=CONTACT_SUBMISSIONS)
 
 
@@ -191,5 +213,7 @@ def logout():
     return redirect("/home")
 
 
+# Main entry point for the application
 if __name__ == "__main__":
+    # Run the Flask app in debug mode.
     app.run(host="0.0.0.0", port=5000, debug=True)
