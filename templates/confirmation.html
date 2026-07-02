@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %}Application Confirmation - Enterprise KYC Onboarding{% endblock %}
+{% block step_name %}Application Confirmation{% endblock %}
+
+{% block content %}
+<div class="text-center space-y-6">
+    {% if status == 'Manual Review' %}
+    <div class="mx-auto w-16 h-16 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center">
+        <i data-lucide="clock" class="w-10 h-10 animate-pulse"></i>
+    </div>
+    <div class="space-y-2">
+        <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">Manual Review Required</h2>
+        <p class="text-sm text-gray-500">
+            Your application has been routed to our compliance operations team because the data mismatch exceeded our automated 15% threshold.
+        </p>
+    </div>
+    {% else %}
+    <div class="mx-auto w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center">
+        <i data-lucide="check-circle" class="w-10 h-10"></i>
+    </div>
+    <div class="space-y-2">
+        <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight">Application Approved</h2>
+        <p class="text-sm text-gray-500">
+            Congratulations! Your identity has been verified successfully. Your account has been activated with sub-second response times.
+        </p>
+    </div>
+    {% endif %}
+
+    <div class="bg-gray-50 rounded-xl p-4 text-left border border-gray-100 text-xs space-y-2.5">
+        <div class="flex justify-between">
+            <span class="text-gray-500 font-medium">Application Reference:</span>
+            <span class="font-bold text-gray-800">{{ ref_id }}</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="text-gray-500 font-medium">Verification Status:</span>
+            <span class="font-bold {% if status == 'Manual Review' %}text-amber-600{% else %}text-green-600{% endif %} uppercase tracking-wide">{{ status }}</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="text-gray-500 font-medium">Mismatch Score:</span>
+            <span class="font-bold text-gray-800">{{ mismatch_score }}%</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="text-gray-500 font-medium">Biometric Confidence:</span>
+            <span class="font-bold text-gray-800">{{ bio.match_score }}%</span>
+        </div>
+    </div>
+
+    <div class="pt-4">
+        <a href="/" class="w-full inline-flex items-center justify-center px-5 py-3 border border-gray-200 text-sm font-semibold rounded-xl text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+            <i data-lucide="refresh-cw" class="mr-2 w-4 h-4"></i>
+            Start New Onboarding
+        </a>
+    </div>
+</div>
+{% endblock %}
