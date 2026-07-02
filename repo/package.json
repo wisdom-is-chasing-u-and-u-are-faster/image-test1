@@ -1,0 +1,28 @@
+{
+  "name": "enterprise-kyc-onboarding",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.5.6",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
+    "@typescript-eslint/eslint-plugin": "^8.62.1",
+    "@typescript-eslint/parser": "^8.62.1",
+    "eslint": "^10.6.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.4.1",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  }
+}
