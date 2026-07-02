@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Biometric Scan - Enterprise KYC Onboarding{% endblock %}
+{% block step_name %}Biometric Scan{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="space-y-1">
+        <h2 class="text-xl font-bold text-gray-900">Biometric Facial Verification</h2>
+        <p class="text-xs text-gray-500">Perform a 3D facial mapping and liveness detection scan to compare against your document photo.</p>
+    </div>
+
+    <!-- Biometric scan box -->
+    <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 flex flex-col items-center justify-center space-y-4 bg-gray-50 relative overflow-hidden" id="face-box">
+        <div class="p-4 bg-blue-50 text-blue-600 rounded-full">
+            <i data-lucide="scan-face" class="w-10 h-10 animate-pulse"></i>
+        </div>
+        <div class="text-center space-y-1">
+            <p class="text-sm font-bold text-gray-800">Liveness verification active</p>
+            <p class="text-xs text-gray-500">Center your face inside the frame and blink when requested.</p>
+        </div>
+    </div>
+
+    <form method="POST" action="/bio-scan" class="space-y-4">
+        <div class="space-y-2">
+            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Choose Biometric Match Scenario</label>
+            <div class="grid grid-cols-1 gap-2">
+                <label class="relative block bg-white border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 transition duration-150">
+                    <input type="radio" name="bio_scenario" value="pass" class="sr-only" checked>
+                    <span class="block text-sm font-bold text-gray-900">High Match Confidence (Passes)</span>
+                    <span class="block text-xs text-gray-500">Matches document photo with 98% confidence. Liveness scan verified.</span>
+                </label>
+
+                <label class="relative block bg-white border border-gray-200 rounded-xl p-3 cursor-pointer hover:border-red-500 focus-within:ring-2 focus-within:ring-red-500 transition duration-150">
+                    <input type="radio" name="bio_scenario" value="fail" class="sr-only">
+                    <span class="block text-sm font-bold text-red-700">Low Match / Spoof Detected (Fail)</span>
+                    <span class="block text-xs text-gray-500">Confidence score 45%. Routes to Manual Review.</span>
+                </label>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-sm font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+            Submit Facial Scan
+            <i data-lucide="shield-check" class="ml-2 w-4 h-4"></i>
+        </button>
+    </form>
+</div>
+{% endblock %}

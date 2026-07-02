@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Enterprise KYC Onboarding{% endblock %}</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-blue-600 text-white rounded-lg">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-tight text-gray-900">Aegis Trust</h1>
+                    <p class="text-xs text-gray-500 font-medium uppercase tracking-wider">Enterprise Identity</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 text-sm text-gray-500">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200">
+                    Secure Session
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center p-4 py-8">
+        <div class="w-full max-w-lg bg-white rounded-2xl border border-gray-100 shadow-xl overflow-hidden">
+            <!-- Progress Bar -->
+            {% if step_num is defined and step_num > 0 %}
+            <div class="bg-gray-100 h-1.5 w-full">
+                <div class="bg-blue-600 h-1.5 transition-all duration-300" style="width: {{ (step_num / 8) * 100 }}%"></div>
+            </div>
+            <div class="px-6 pt-4 flex justify-between items-center text-xs font-semibold uppercase tracking-wider text-gray-400">
+                <span>Step {{ step_num }} of 8</span>
+                <span class="text-blue-600">{% block step_name %}{% endblock %}</span>
+            </div>
+            {% endif %}
+
+            <div class="p-6 md:p-8">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-4 mt-auto">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs text-gray-400 font-medium">
+            &copy; 2026 Aegis Trust. All rights reserved. Encrypted via AES-256 in transit & at rest.
+        </div>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

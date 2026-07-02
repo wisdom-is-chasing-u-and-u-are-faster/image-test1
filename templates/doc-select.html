@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}Document Selection - Enterprise KYC Onboarding{% endblock %}
+{% block step_name %}Document Selection{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="space-y-1">
+        <h2 class="text-xl font-bold text-gray-900">Select Identity Document</h2>
+        <p class="text-xs text-gray-500">Choose the document you wish to use for identity verification. Ensure it is valid and undamaged.</p>
+    </div>
+
+    <form method="POST" action="/doc-select" class="space-y-4">
+        <div class="grid grid-cols-1 gap-3">
+            <label class="relative block bg-white border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 transition duration-150">
+                <input type="radio" name="doc_type" value="passport" class="sr-only" checked>
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm font-bold text-gray-900">Passport</span>
+                        <span class="block text-xs text-gray-500">International travel passport</span>
+                    </div>
+                </div>
+            </label>
+
+            <label class="relative block bg-white border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 transition duration-150">
+                <input type="radio" name="doc_type" value="drivers_license" class="sr-only">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm font-bold text-gray-900">Driver's License</span>
+                        <span class="block text-xs text-gray-500">State or government-issued driver's permit</span>
+                    </div>
+                </div>
+            </label>
+
+            <label class="relative block bg-white border border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500 transition duration-150">
+                <input type="radio" name="doc_type" value="national_id" class="sr-only">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                        <i data-lucide="credit-card" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="block text-sm font-bold text-gray-900">National ID Card</span>
+                        <span class="block text-xs text-gray-500">Government-issued citizenship card</span>
+                    </div>
+                </div>
+            </label>
+        </div>
+
+        <button type="submit" class="w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-sm font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+            Proceed to Document Capture
+            <i data-lucide="camera" class="ml-2 w-4 h-4"></i>
+        </button>
+    </form>
+</div>
+{% endblock %}

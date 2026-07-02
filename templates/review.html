@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block title %}Review & Submit - Enterprise KYC Onboarding{% endblock %}
+{% block step_name %}Review & Submit{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="space-y-1">
+        <h2 class="text-xl font-bold text-gray-900">Application Review</h2>
+        <p class="text-xs text-gray-500">Please review the cross-validation comparison between your registration details and OCR-extracted document details.</p>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="border border-gray-200 rounded-xl overflow-hidden bg-white text-xs divide-y divide-gray-100">
+        <div class="bg-gray-50 px-4 py-3 grid grid-cols-3 gap-2 font-bold text-gray-500 uppercase tracking-wider">
+            <span>Field</span>
+            <span>Registered</span>
+            <span>OCR Extracted</span>
+        </div>
+        <div class="px-4 py-3 grid grid-cols-3 gap-2">
+            <span class="font-bold text-gray-700">Full Name</span>
+            <span class="text-gray-600">{{ registered.fullname }}</span>
+            <span class="{% if mismatch_fields.fullname %}text-red-600 font-bold{% else %}text-green-600{% endif %}">{{ ocr.fullname }}</span>
+        </div>
+        <div class="px-4 py-3 grid grid-cols-3 gap-2">
+            <span class="font-bold text-gray-700">Date of Birth</span>
+            <span class="text-gray-600">{{ registered.dob }}</span>
+            <span class="{% if mismatch_fields.dob %}text-red-600 font-bold{% else %}text-green-600{% endif %}">{{ ocr.dob }}</span>
+        </div>
+        <div class="px-4 py-3 grid grid-cols-3 gap-2">
+            <span class="font-bold text-gray-700">Address</span>
+            <span class="text-gray-600">{{ registered.address }}</span>
+            <span class="text-gray-600">{{ ocr.address }}</span>
+        </div>
+    </div>
+
+    <!-- Mismatch Alert or Badge -->
+    <div class="p-4 rounded-xl border {% if mismatch_score > 15 %}bg-red-50 border-red-100 text-red-800{% else %}bg-green-50 border-green-100 text-green-800{% endif %} text-xs space-y-2">
+        <div class="flex items-center justify-between">
+            <span class="font-bold flex items-center">
+                <i data-lucide="{% if mismatch_score > 15 %}alert-triangle{% else %}check-circle-2{% endif %}" class="w-5 h-5 mr-1.5 flex-shrink-0"></i>
+                Cross-Validation Score
+            </span>
+            <span class="px-2 py-0.5 rounded-full text-xs font-bold {% if mismatch_score > 15 %}bg-red-100 text-red-800{% else %}bg-green-100 text-green-800{% endif %}">
+                {{ mismatch_score }}% Mismatch
+            </span>
+        </div>
+        <p class="text-gray-600">
+            {% if mismatch_score > 15 %}
+            <strong>Notice:</strong> The mismatch score exceeds the 15% auto-approval threshold. Submitting this application will automatically route it to the <strong>Manual Review</strong> queue.
+            {% else %}
+            <strong>Excellent:</strong> Cross-validation mismatch is within the 15% auto-approval threshold. This application will be processed instantly.
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Biometric Info -->
+    <div class="p-4 rounded-xl border border-gray-100 bg-gray-50 flex items-start space-x-3 text-xs">
+        <div class="p-1.5 bg-blue-50 text-blue-600 rounded">
+            <i data-lucide="user-check" class="w-4 h-4"></i>
+        </div>
+        <div>
+            <p class="font-bold text-gray-800">Biometric Verification Status</p>
+            <p class="text-gray-500 mt-0.5">Facial Match Score: {{ bio.match_score }}% | Liveness: {% if bio.liveness %}Verified{% else %}Failed/Inconclusive{% endif %}</p>
+        </div>
+    </div>
+
+    <form method="POST" action="/review" class="pt-2">
+        <button type="submit" class="w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-sm font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+            Submit Final Application
+            <i data-lucide="send" class="ml-2 w-4 h-4"></i>
+        </button>
+    </form>
+</div>
+{% endblock %}
