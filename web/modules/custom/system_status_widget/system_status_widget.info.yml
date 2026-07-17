@@ -1,0 +1,8 @@
+name: 'System Status Widget'
+type: module
+description: 'Builds a secure React application status block integrated with enterprise API gateway token flows.'
+package: Custom
+core_version_requirement: ^9.4 || ^10
+dependencies:
+  - drupal:block
+  - drupal:rest

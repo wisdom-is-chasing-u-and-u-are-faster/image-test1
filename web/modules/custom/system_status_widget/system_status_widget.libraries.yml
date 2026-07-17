@@ -1,0 +1,10 @@
+react-status-app:
+  version: 1.0.0
+  js:
+    js/status-widget.build.js: {}
+  css:
+    theme:
+      css/status-widget.build.css: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
