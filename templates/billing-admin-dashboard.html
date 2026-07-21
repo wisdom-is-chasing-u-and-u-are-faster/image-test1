@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Admin Dashboard | HealthWave</title>
+    <style>
+
+/*
+  Wellness Theme Design System
+  HIPAA-Compliant Healthcare Web Application
+  Variant: variant-B
+*/
+
+:root {
+  /* Color Palette */
+  --color-primary-light: #E0F2F1;
+  --color-primary: #00796B; /* Teal */
+  --color-primary-dark: #004D40;
+  --color-accent: #4DB6AC; /* Light Teal */
+  --color-accent-dark: #26A69A;
+
+  --color-surface-0: #FFFFFF;
+  --color-surface-1: #F5FAFA;
+  --color-surface-2: #E0F2F1;
+  --color-border: #B2DFDB;
+  --color-text-primary: #0A1F1D;
+  --color-text-secondary: #3D5A57;
+  --color-text-disabled: #90A4AE;
+  --color-text-on-primary: #FFFFFF;
+
+  --color-success: #388E3C;
+  --color-warning: #FBC02D;
+  --color-danger: #D32F2F;
+  --color-info: #0288D1;
+  --color-success-bg: #E8F5E9;
+  --color-warning-bg: #FFF8E1;
+  --color-danger-bg: #FFEBEE;
+  --color-info-bg: #E1F5FE;
+
+  /* Typography */
+  --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-size-display: 3rem;   /* 48px */
+  --font-size-h1: 2.5rem;      /* 40px */
+  --font-size-h2: 2rem;        /* 32px */
+  --font-size-h3: 1.5rem;      /* 24px */
+  --font-size-h4: 1.25rem;     /* 20px */
+  --font-size-body: 1rem;      /* 16px */
+  --font-size-small: 0.875rem; /* 14px */
+  --font-size-caption: 0.75rem;/* 12px */
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  
+  --line-height-display: 1.2;
+  --line-height-heading: 1.3;
+  --line-height-body: 1.6;
+
+  /* Spacing (8pt Grid) */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem;  /* 8px */
+  --space-3: 1rem;    /* 16px */
+  --space-4: 1.5rem;  /* 24px */
+  --space-5: 2rem;    /* 32px */
+  --space-6: 3rem;    /* 48px */
+
+  /* Borders & Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --border-width: 1px;
+  --border-width-lg: 2px;
+
+  /* Shadows / Elevation */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Transitions */
+  --transition-duration: 200ms;
+  --transition-timing: ease-in-out;
+}
+
+/* Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-family-sans);
+  background-color: var(--color-surface-1);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: var(--space-3);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
+
+p {
+  margin-bottom: var(--space-3);
+  max-width: 70ch;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+
+a:hover, a:focus {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Accessibility */
+.skip-to-content {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.skip-to-content:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    padding: var(--space-2) var(--space-3);
+    margin-left: var(--space-3);
+    border-radius: var(--radius-md);
+    z-index: 1000;
+}
+
+/* Main Layout Components */
+.main-header {
+  background-color: var(--color-surface-0);
+  padding: var(--space-3) var(--space-5);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: var(--font-size-h4);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.logo svg {
+  width: 32px;
+  height: 32px;
+  color: var(--color-primary);
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: var(--space-4);
+}
+
+.main-nav a, .main-nav button {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  padding: var(--space-2) 0;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-duration) var(--transition-timing);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.main-nav a:hover, .main-nav a:focus,
+.main-nav button:hover, .main-nav button:focus,
+.main-nav a.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.main-footer {
+  background-color: var(--color-surface-2);
+  color: var(--color-text-secondary);
+  padding: var(--space-5) var(--space-5);
+  margin-top: var(--space-6);
+  text-align: center;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.footer-links {
+    margin-top: var(--space-3);
+    display: flex;
+    justify-content: center;
+    gap: var(--space-4);
+}
+
+.footer-links a {
+    font-size: var(--font-size-small);
+}
+
+.language-switcher {
+    margin-top: var(--space-4);
+    font-size: var(--font-size-small);
+}
+.language-switcher button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-primary);
+    text-decoration: underline;
+    font-size: inherit;
+    font-weight: var(--font-weight-medium);
+}
+.language-switcher button.active {
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+
+/* Reusable Components */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-5);
+}
+
+.screen {
+  display: none; /* Hidden by default */
+  animation: fadeIn 0.5s;
+}
+.screen.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-content {
+    padding: var(--space-6) 0;
+}
+
+.card {
+  background-color: var(--color-surface-0);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-5);
+  transition: all var(--transition-duration) var(--transition-timing);
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+  border-bottom: var(--border-width) solid var(--color-border);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.btn {
+  display: inline-block;
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all var(--transition-duration) var(--transition-timing);
+  line-height: 1;
+}
+
+.btn:focus-visible {
+    outline: 3px solid var(--color-primary-light);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--color-primary-dark);
+  color: var(--color-text-on-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: var(--border-width-lg) solid var(--color-primary);
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    color: var(--color-text-on-primary);
+}
+.btn-danger:hover, .btn-danger:focus {
+    background-color: #9a0007;
+    color: var(--color-text-on-primary);
+}
+
+
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+.form-group label {
+  display: block;
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-2);
+  color: var(--color-text-secondary);
+}
+
+.input, .select {
+  display: block;
+  width: 100%;
+  padding: var(--space-3);
+  font-size: var(--font-size-body);
+  background-color: var(--color-surface-0);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-duration) var(--transition-timing), box-shadow var(--transition-duration) var(--transition-timing);
+}
+
+.input:focus, .select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.input::placeholder {
+  color: #90A4AE;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.form-check input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-primary);
+}
+
+.alert {
+  padding: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  border: var(--border-width) solid transparent;
+  font-size: var(--font-size-small);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.alert-info {
+  background-color: var(--color-info-bg);
+  border-color: var(--color-info);
+  color: var(--color-info);
+}
+
+.alert-danger {
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+.alert-success {
+    background-color: var(--color-success-bg);
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.alert svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-bold);
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-success { background-color: var(--color-success-bg); color: var(--color-success); }
+.badge-warning { background-color: var(--color-warning-bg); color: #B26500; }
+.badge-danger { background-color: var(--color-danger-bg); color: var(--color-danger); }
+.badge-info { background-color: var(--color-info-bg); color: var(--color-info); }
+.badge-primary { background-color: var(--color-primary-light); color: var(--color-primary); }
+
+
+/* Page Specific Styles */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 450px;
+}
+
+.stepper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-5);
+    list-style: none;
+    padding: 0;
+}
+.step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-disabled);
+    font-weight: var(--font-weight-medium);
+    flex-grow: 1;
+}
+.step:not(:last-child)::after {
+    content: '';
+    height: 2px;
+    background-color: var(--color-border);
+    flex-grow: 1;
+    margin: 0 var(--space-2);
+}
+.step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--color-surface-2);
+    border: 2px solid var(--color-border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: var(--color-text-secondary);
+}
+.step.active .step-number {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+.step.active {
+    color: var(--color-text-primary);
+}
+.step.completed .step-number {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+}
+.step.completed {
+    color: var(--color-text-secondary);
+}
+.step-content { display: none; }
+.step-content.active { display: block; }
+.step-buttons {
+    margin-top: var(--space-5);
+    display: flex;
+    justify-content: space-between;
+}
+
+.time-slot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--space-3);
+}
+.time-slot {
+    background-color: var(--color-surface-0);
+    border: var(--border-width) solid var(--color-border);
+    color: var(--color-primary);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    text-align: center;
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+}
+.time-slot:hover {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary);
+}
+.time-slot.selected {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-on-primary);
+    font-weight: bold;
+}
+.time-slot:disabled {
+    background-color: var(--color-surface-2);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+.responsive-table {
+    width: 100%;
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--font-size-small);
+}
+th, td {
+    padding: var(--space-3);
+    text-align: left;
+    border-bottom: var(--border-width) solid var(--color-border);
+}
+th {
+    background-color: var(--color-surface-2);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+tbody tr:hover {
+    background-color: var(--color-surface-1);
+}
+td .btn {
+    font-size: var(--font-size-small);
+    padding: var(--space-2) var(--space-3);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-5);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  :root {
+    --font-size-display: 2.5rem;
+    --font-size-h1: 2rem;
+    --font-size-h2: 1.75rem;
+    --font-size-h3: 1.25rem;
+  }
+  .main-header {
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+  .container {
+    padding: 0 var(--space-4);
+  }
+  .page-content {
+      padding: var(--space-5) 0;
+  }
+  .stepper {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+  }
+  .step:not(:last-child)::after {
+      display: none;
+  }
+}
+@media (max-width: 480px) {
+    .main-nav ul {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: var(--space-1);
+    }
+    .main-nav a {
+        width: 100%;
+        text-align: center;
+    }
+    .step-buttons {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+    .step-buttons .btn {
+        width: 100%;
+    }
+}
+
+
+</style>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    <header class="main-header">
+        <a href="billing-admin-dashboard.html" class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.22 14.24c-.48.48-1.13.76-1.85.76-.72 0-1.37-.28-1.85-.76-.53-.53-.83-1.25-.83-2s.3-1.47.83-2c1.02-1.02 2.68-1.02 3.7 0 .53.53.83 1.25.83 2s-.3 1.47-.83 2zm6.14-2.83c-.52-.26-1.1-.4-1.72-.4-.72 0-1.37.28-1.85.76-.53.53-.83 1.25-.83 2s.3 1.47.83 2c1.02-1.02 2.68-1.02 3.7 0l.18-.18c.53-.53.83-1.25.83-2s-.3-1.47-.83-2l-.19-.18zM12 8c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+            <span>HealthWave</span>
+        </a>
+        <nav class="main-nav">
+            <ul>
+                <li><a href="billing-admin-dashboard.html" class="active">Billing Claims</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main id="main-content">
+        <section id="billing-admin-dashboard-screen" class="screen active">
+            <div class="container page-content">
+                <h1 style="margin-bottom: var(--space-5);">Billing Claims Management</h1>
+                <div class="card">
+                     <div class="card-header" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-4);">
+                        <h3 style="margin: 0;">All Claims</h3>
+                        <div style="display: flex; gap: var(--space-3); align-items: center; flex-grow: 1; max-width: 500px;">
+                            <input type="search" class="input" placeholder="Search by Claim ID or Patient...">
+                            <select class="select" style="min-width: 150px;">
+                                <option>Status: All</option>
+                                <option>Submitted</option>
+                                <option>Paid</option>
+                                <option>Denied</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="responsive-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Claim ID</th>
+                                    <th>Patient Name</th>
+                                    <th>Date of Service</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if claims %}
+                                    {% for claim in claims %}
+                                        <tr>
+                                            <td>CLM-{{ claim.claim_id }}</td>
+                                            <td>{{ claim.patient_name }}</td>
+                                            <td>{{ claim.created_at[:10] }}</td>
+                                            <td>${{ "%.2f"|format(claim.amount) }}</td>
+                                            <td>
+                                                {% if claim.status == 'pending' %}
+                                                    <span class="badge badge-warning">Submitted</span>
+                                                {% elif claim.status == 'approved' %}
+                                                    <span class="badge badge-success">Paid</span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">Denied</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if claim.status == 'pending' %}
+                                                    <form method="POST" action="/manage-claim" style="display: inline-block; margin: 0;">
+                                                        <input type="hidden" name="claim_id" value="{{ claim.claim_id }}">
+                                                        <button type="submit" name="action" value="approve" class="btn btn-primary" style="padding: var(--space-1) var(--space-2); font-size: var(--font-size-caption); min-height: auto;">Approve</button>
+                                                        <button type="submit" name="action" value="deny" class="btn btn-danger" style="padding: var(--space-1) var(--space-2); font-size: var(--font-size-caption); min-height: auto;">Deny</button>
+                                                    </form>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: var(--color-text-secondary); whitespace: nowrap;">No billing claims submitted.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="main-footer">
+        <p>&copy; 2024 HealthWave. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
