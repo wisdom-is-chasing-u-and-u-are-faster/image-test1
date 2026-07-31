@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Hospital Blood Request Dashboard</h2>
+    <p><a href="/hospital/create-demand" class="btn">Create New Blood Request</a></p>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Hospital</th><th>Blood Type</th><th>Units</th><th>Urgency</th><th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for demand in demands %}
+            <tr>
+                <td>{{ demand.id }}</td>
+                <td>{{ demand.hospital_name }}</td>
+                <td>{{ demand.blood_type }}</td>
+                <td>{{ demand.units_needed }}</td>
+                <td>{{ demand.urgency }}</td>
+                <td>{{ demand.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
