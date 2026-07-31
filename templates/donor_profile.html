@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Donor Profile Management</h2>
+    <p>Welcome, {{ session.get('user_name', 'Donor') }}!</p>
+    <form method="POST">
+        <p><label>Full Name: <input type="text" name="full_name" value="{{ session.get('user_name', '') }}"></label></p>
+        <p><label>Blood Type: <input type="text" name="blood_type" value="{{ session.get('user_blood_type', 'O+') }}"></label></p>
+        <p><button type="submit" class="btn">Update Profile</button></p>
+    </form>
+</div>
+{% endblock %}

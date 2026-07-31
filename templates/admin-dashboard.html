@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Administrative System Statistics Dashboard</h2>
+    <div class="grid">
+        <div class="card"><h3>Total Registered Donors</h3><p>{{ stats.total_donors }}</p></div>
+        <div class="card"><h3>Total Blood Demands</h3><p>{{ stats.total_demands }}</p></div>
+        <div class="card"><h3>Approved Demands</h3><p>{{ stats.approved_demands }}</p></div>
+        <div class="card"><h3>Pending Reviews</h3><p>{{ stats.pending_reviews }}</p></div>
+    </div>
+</div>
+{% endblock %}
