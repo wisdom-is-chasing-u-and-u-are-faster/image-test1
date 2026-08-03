@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Global Inventory Dashboard - BDCN{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>🩸 Global Blood Inventory Dashboard</h2>
+        <p class="text-muted">Aggregated real-time blood stock levels across all hospital nodes and regional blood banks.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="/hospital/create-demand" class="btn btn-danger py-2 px-3">+ Declare Shortage</a>
+    </div>
+</div>
+
+<!-- Aggregated Inventory Overview Table -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 text-dark">Aggregated Inventory Levels by Blood Type</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Blood Group</th>
+                        <th>Available Units</th>
+                        <th>Status</th>
+                        <th>Threshold Status</th>
+                        <th>Action Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in inventory %}
+                        <tr>
+                            <td><span class="badge bg-danger fs-5 px-3 py-2">{{ item.blood_type }}</span></td>
+                            <td><strong class="fs-5">{{ item.units }}</strong> units</td>
+                            <td>
+                                {% if item.units < 5 %}
+                                    <span class="badge bg-danger px-3 py-2">CRITICAL SHORTAGE</span>
+                                {% elif item.units < 15 %}
+                                    <span class="badge bg-warning text-dark px-3 py-2">LOW STOCK</span>
+                                {% else %}
+                                    <span class="badge bg-success px-3 py-2">ADEQUATE</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.units < 5 %}
+                                    <span class="text-danger fw-bold">&lt; 5 Units (Min Reserve)</span>
+                                {% else %}
+                                    <span class="text-success">&gt; Minimum Safe Reserve</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if item.units < 15 %}
+                                    <a href="/search?blood_type={{ item.blood_type }}" class="btn btn-sm btn-outline-danger">Initiate Donor Alert</a>
+                                {% else %}
+                                    <span class="text-muted small">No action needed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Regional Node Breakdown -->
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 text-dark">Hospital Node Stock Summary</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="p-3 border rounded bg-light">
+                    <h6>Downtown General Hospital Node</h6>
+                    <p class="mb-1 text-muted small">PostGIS spatial node #1 &bull; Status: Online</p>
+                    <span class="badge bg-info text-dark">14 Units Available</span>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="p-3 border rounded bg-light">
+                    <h6>North District Medical Center Node</h6>
+                    <p class="mb-1 text-muted small">PostGIS spatial node #2 &bull; Status: Online</p>
+                    <span class="badge bg-info text-dark">18 Units Available</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

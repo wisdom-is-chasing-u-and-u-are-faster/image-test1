@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Initiate Donor Search - BDCN{% endblock %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>🔍 ER Coordinator Donor Search</h2>
+        <p class="text-muted">Initiate a real-time spatial lookup for eligible blood donors across nearby nodes and districts.</p>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white py-3">
+        <h5 class="mb-0 text-danger">Search Parameters</h5>
+    </div>
+    <div class="card-body">
+        <form action="/search" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="blood_type" class="form-label font-weight-bold">Target Blood Group</label>
+                <select class="form-select" id="blood_type" name="blood_type">
+                    <option value="All" {% if selected_blood_type == 'All' %}selected{% endif %}>All Blood Types</option>
+                    <option value="O-" {% if selected_blood_type == 'O-' %}selected{% endif %}>O- (Universal Red Cell)</option>
+                    <option value="O+" {% if selected_blood_type == 'O+' %}selected{% endif %}>O+</option>
+                    <option value="A-" {% if selected_blood_type == 'A-' %}selected{% endif %}>A-</option>
+                    <option value="A+" {% if selected_blood_type == 'A+' %}selected{% endif %}>A+</option>
+                    <option value="B-" {% if selected_blood_type == 'B-' %}selected{% endif %}>B-</option>
+                    <option value="B+" {% if selected_blood_type == 'B+' %}selected{% endif %}>B+</option>
+                    <option value="AB-" {% if selected_blood_type == 'AB-' %}selected{% endif %}>AB-</option>
+                    <option value="AB+" {% if selected_blood_type == 'AB+' %}selected{% endif %}>AB+</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="radius" class="form-label font-weight-bold">Search Radius (km)</label>
+                <input type="number" class="form-control" id="radius" name="radius" value="{{ radius }}" min="1" max="100">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-danger w-100 py-2">🔍 Search Matching Donors</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Matching Eligible Donors</h5>
+        <span class="badge bg-danger fs-6">{{ donors|length }} Donors Found</span>
+    </div>
+    <div class="card-body">
+        {% if donors %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Donor Name</th>
+                            <th>Blood Group</th>
+                            <th>Age</th>
+                            <th>District</th>
+                            <th>Distance</th>
+                            <th>Eligibility Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for donor in donors %}
+                            <tr>
+                                <td><strong>{{ donor.name }}</strong></td>
+                                <td><span class="badge bg-danger fs-6">{{ donor.blood_group }}</span></td>
+                                <td>{{ donor.age }}</td>
+                                <td>{{ donor.district }}</td>
+                                <td>{{ donor.distance }} km</td>
+                                <td><span class="badge bg-success">ELIGIBLE</span></td>
+                                <td>
+                                    <form action="/hospital/create-demand" method="POST" class="d-inline">
+                                        <input type="hidden" name="blood_type" value="{{ donor.blood_group }}">
+                                        <input type="hidden" name="district" value="{{ donor.district }}">
+                                        <input type="hidden" name="units" value="1">
+                                        <input type="hidden" name="urgency" value="Emergency">
+                                        <input type="hidden" name="notes" value="Direct broadcast initiated via ER Coordinator search for {{ donor.name }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Initiate Broadcast</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5 text-muted">
+                <p class="mb-0">No eligible donors found for the selected parameters. Try widening the search radius.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
