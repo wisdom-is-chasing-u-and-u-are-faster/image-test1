@@ -1,91 +1,552 @@
-{% extends "base.html" %}
-{% block title %}Global Inventory Dashboard - BDCN{% endblock %}
-{% block content %}
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h2>🩸 Global Blood Inventory Dashboard</h2>
-        <p class="text-muted">Aggregated real-time blood stock levels across all hospital nodes and regional blood banks.</p>
-    </div>
-    <div class="col-md-4 text-end">
-        <a href="/hospital/create-demand" class="btn btn-danger py-2 px-3">+ Declare Shortage</a>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Inventory - Blood Donor Connection Network (BDCN)</title>
+    <style>
 
-<!-- Aggregated Inventory Overview Table -->
-<div class="card shadow-sm border-0 mb-4">
-    <div class="card-header bg-white py-3">
-        <h5 class="mb-0 text-dark">Aggregated Inventory Levels by Blood Type</h5>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Blood Group</th>
-                        <th>Available Units</th>
-                        <th>Status</th>
-                        <th>Threshold Status</th>
-                        <th>Action Required</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in inventory %}
+/* ==========================================================================
+   DESIGN SYSTEM: Corporate Blue
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   ART DIRECTION:
+   - PERSONALITY: Professional, trustworthy, efficient, modern. For a critical
+     medical application.
+   - COLOR: Trustworthy blues and clean neutrals.
+   - TYPOGRAPHY: Clean, legible sans-serif (Inter).
+   - SPACING: 8pt grid system.
+   - COMPONENTS: Reusable, accessible components for a consistent experience.
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   1. Root & Core Setup
+   -------------------------------------------------------------------------- */
+
+:root {
+    /* Color Palette */
+    --color-primary-base: #2c3e50; /* Slate Blue */
+    --color-primary-light: #34495e;
+    --color-accent-base: #3498db; /* Bright Blue */
+    --color-accent-light: #5dade2;
+
+    --color-text-primary: #212529;
+    --color-text-secondary: #6c757d;
+    --color-text-on-primary: #ffffff;
+    --color-text-on-accent: #ffffff;
+    --color-text-link: #3498db;
+
+    --color-background: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-border: #dee2e6;
+    --color-input-bg: #ffffff;
+
+    --color-success: #28a745;
+    --color-warning: #ffc107;
+    --color-danger: #dc3545;
+    --color-info: #17a2b8;
+
+    /* Gradients */
+    --gradient-primary-accent: linear-gradient(45deg, var(--color-accent-base), var(--color-primary-base));
+    --gradient-text: var(--gradient-primary-accent);
+
+    /* Typography */
+    --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-size-base: 1rem; /* 16px */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-bold: 700;
+
+    --font-size-display: 3.5rem;   /* 56px */
+    --font-size-h1: 2.5rem;      /* 40px */
+    --font-size-h2: 2rem;        /* 32px */
+    --font-size-h3: 1.75rem;     /* 28px */
+    --font-size-h4: 1.5rem;      /* 24px */
+    --font-size-h5: 1.25rem;     /* 20px */
+    --font-size-h6: 1rem;        /* 16px */
+    --font-size-small: 0.875rem; /* 14px */
+    --font-size-caption: 0.75rem;/* 12px */
+
+    /* Spacing (8pt Grid) */
+    --spacing-1: 0.25rem; /* 4px */
+    --spacing-2: 0.5rem;  /* 8px */
+    --spacing-3: 1rem;    /* 16px */
+    --spacing-4: 1.5rem;  /* 24px */
+    --spacing-5: 2rem;    /* 32px */
+    --spacing-6: 3rem;    /* 48px */
+
+    /* Borders & Radii */
+    --border-width: 1px;
+    --border-style: solid;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-pill: 9999px;
+    --radius-circle: 50%;
+
+    /* Shadows & Elevation */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-1: 0 1px 3px var(--shadow-color), 0 1px 2px var(--shadow-color);
+    --shadow-2: 0 3px 6px var(--shadow-color), 0 3px 6px var(--shadow-color);
+    --shadow-3: 0 10px 20px var(--shadow-color), 0 6px 6px var(--shadow-color);
+    --shadow-4: 0 15px 30px var(--shadow-color), 0 10px 10px var(--shadow-color);
+
+    /* Transitions */
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+
+    /* Z-Index */
+    --z-index-header: 1000;
+    --z-index-modal: 1100;
+
+    /* Dark Mode */
+    --color-background-dark: #121212;
+    --color-surface-dark: #1e1e1e;
+    --color-text-primary-dark: #e0e0e0;
+    --color-text-secondary-dark: #a0a0a0;
+    --color-border-dark: #333333;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: var(--font-size-base);
+}
+
+body {
+    font-family: var(--font-family-base);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark Mode Logic */
+body.dark-mode {
+    --color-background: var(--color-background-dark);
+    --color-surface: var(--color-surface-dark);
+    --color-text-primary: var(--color-text-primary-dark);
+    --color-text-secondary: var(--color-text-secondary-dark);
+    --color-border: var(--color-border-dark);
+    --color-input-bg: var(--color-surface-dark);
+}
+
+/* --------------------------------------------------------------------------
+   2. Typography
+   -------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+}
+h1 { font-size: var(--font-size-h1); letter-spacing: -0.05em; }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
+h5 { font-size: var(--font-size-h5); }
+h6 { font-size: var(--font-size-h6); }
+
+p { margin-top: 0; margin-bottom: var(--spacing-3); }
+a { color: var(--color-text-link); text-decoration: none; transition: color var(--transition-fast); }
+a:hover { color: var(--color-accent-light); text-decoration: underline; }
+
+.gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   3. Layout & Helpers
+   -------------------------------------------------------------------------- */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-4);
+}
+.main-content {
+    padding-top: 100px; /* Offset for fixed header */
+    padding-bottom: var(--spacing-6);
+    min-height: calc(100vh - 150px);
+}
+.screen { display: none; }
+.screen.active { display: block; animation: fadeIn 0.5s; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.skip-to-content {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.skip-to-content:focus {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: var(--z-index-modal);
+    background: var(--color-primary-base);
+    color: var(--color-text-on-primary);
+    padding: var(--spacing-3);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    width: auto;
+    height: auto;
+}
+
+/* --------------------------------------------------------------------------
+   4. Components
+   -------------------------------------------------------------------------- */
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    border: var(--border-width) var(--border-style) transparent;
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+.btn:focus-visible {
+    outline: 2px solid var(--color-accent-base);
+    outline-offset: 2px;
+}
+.btn-primary {
+    color: var(--color-text-on-primary);
+    background-color: var(--color-primary-base);
+    border-color: var(--color-primary-base);
+}
+.btn-primary:hover {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+.btn-accent {
+    color: var(--color-text-on-accent);
+    background-color: var(--color-accent-base);
+    border-color: var(--color-accent-base);
+}
+.btn-accent:hover {
+    background-color: var(--color-accent-light);
+    border-color: var(--color-accent-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+.btn-secondary {
+    color: var(--color-text-primary);
+    background-color: transparent;
+    border-color: var(--color-border);
+}
+.btn-secondary:hover {
+    background-color: var(--color-background);
+    border-color: var(--color-text-secondary);
+}
+
+/* Cards */
+.card {
+    background-color: var(--color-surface);
+    border: var(--border-width) var(--border-style) var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-1);
+    padding: var(--spacing-4);
+    transition: all var(--transition-medium);
+}
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-3);
+}
+.card-header {
+    padding-bottom: var(--spacing-3);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: var(--spacing-3);
+}
+
+/* Forms & Inputs */
+.form-group {
+    margin-bottom: var(--spacing-3);
+}
+.form-label {
+    display: block;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--spacing-2);
+}
+.form-control {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-base);
+    background-color: var(--color-input-bg);
+    color: var(--color-text-primary);
+    border: var(--border-width) var(--border-style) var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-accent-base);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+}
+
+/* Badges / Pills */
+.badge {
+    display: inline-block;
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--radius-pill);
+    text-transform: uppercase;
+}
+.badge-danger { background-color: var(--color-danger); color: white; }
+.badge-success { background-color: var(--color-success); color: white; }
+.badge-warning { background-color: var(--color-warning); color: var(--color-text-primary); }
+.badge-info { background-color: var(--color-info); color: white; }
+.badge-primary { background-color: var(--color-primary-base); color: var(--color-text-on-primary); }
+
+/* Tables */
+.table {
+    width: 100%;
+    margin-bottom: var(--spacing-3);
+    color: var(--color-text-primary);
+    border-collapse: collapse;
+}
+.table th, .table td {
+    padding: var(--spacing-3);
+    vertical-align: top;
+    border-top: 1px solid var(--color-border);
+    text-align: left;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid var(--color-border);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Header / Navbar */
+.app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-index-header);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-2);
+    padding: var(--spacing-3) 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-h5);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    text-decoration: none;
+}
+.logo .logo-icon {
+    font-size: 1.5em;
+    color: var(--color-danger);
+}
+.main-nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+.main-nav a {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-2) 0;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-fast);
+}
+.main-nav a:hover,
+.main-nav a.active {
+    color: var(--color-text-primary);
+    border-bottom-color: var(--color-accent-base);
+}
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+/* Footer */
+.app-footer {
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-4) 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+}
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .main-nav { display: none; /* Simplification for this example */ }
+    h1 { font-size: var(--font-size-h2); }
+    h2 { font-size: var(--font-size-h3); }
+    .container { padding: 0 var(--spacing-3); }
+}
+
+@media (max-width: 375px) {
+    h1 { font-size: 1.8rem; }
+}
+
+/* Page Specific Overrides */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: var(--spacing-4);
+}
+.login-card {
+    width: 100%;
+    max-width: 450px;
+}
+.grid-container {
+    display: grid;
+    gap: var(--spacing-4);
+}
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-1 { grid-template-columns: 1fr; }
+
+@media (max-width: 1024px) {
+    .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .grid-cols-3, .grid-cols-2 { grid-template-columns: 1fr; }
+}
+
+</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    <header class="app-header">
+        <div class="container header-content">
+            <a href="dashboard.html" class="logo">
+                <span class="logo-icon">🩸</span>
+                <span>BDCN</span>
+            </a>
+            <nav class="main-nav" aria-label="Main Navigation">
+                <ul>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="search.html">Donor Search</a></li>
+                    <li><a href="inventory.html" class="active">Global Inventory</a></li>
+                    <li><a href="admin.html">System Admin</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <span class="user-info">Welcome, Dr. Evans</span>
+                <a href="login.html" class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="main-content container">
+        <section id="inventory">
+             <header class="mb-5">
+                <h1>Global Inventory</h1>
+                <p class="text-secondary">Overall status of blood supply across the network.</p>
+            </header>
+            <div class="card">
+                 <div class="card-header">
+                    <h5>Network Supply Levels</h5>
+                </div>
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td><span class="badge bg-danger fs-5 px-3 py-2">{{ item.blood_type }}</span></td>
-                            <td><strong class="fs-5">{{ item.units }}</strong> units</td>
-                            <td>
-                                {% if item.units < 5 %}
-                                    <span class="badge bg-danger px-3 py-2">CRITICAL SHORTAGE</span>
-                                {% elif item.units < 15 %}
-                                    <span class="badge bg-warning text-dark px-3 py-2">LOW STOCK</span>
-                                {% else %}
-                                    <span class="badge bg-success px-3 py-2">ADEQUATE</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if item.units < 5 %}
-                                    <span class="text-danger fw-bold">&lt; 5 Units (Min Reserve)</span>
-                                {% else %}
-                                    <span class="text-success">&gt; Minimum Safe Reserve</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if item.units < 15 %}
-                                    <a href="/search?blood_type={{ item.blood_type }}" class="btn btn-sm btn-outline-danger">Initiate Donor Alert</a>
-                                {% else %}
-                                    <span class="text-muted small">No action needed</span>
-                                {% endif %}
-                            </td>
+                            <th>Blood Type</th>
+                            <th>Total Units</th>
+                            <th>Status</th>
+                            <th>Major Hubs</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>O-</td>
+                            <td>152 Units</td>
+                            <td><span class="badge badge-danger">Critical</span></td>
+                            <td>Metro General, St. Jude's</td>
+                        </tr>
+                        <tr>
+                            <td>O+</td>
+                            <td>1,840 Units</td>
+                            <td><span class="badge badge-success">Stable</span></td>
+                            <td>All Hubs</td>
+                        </tr>
+                        <tr>
+                            <td>A-</td>
+                            <td>430 Units</td>
+                            <td><span class="badge badge-warning">Low</span></td>
+                            <td>City Central, Mercy Hospital</td>
+                        </tr>
+                        <tr>
+                            <td>A+</td>
+                            <td>2,500 Units</td>
+                            <td><span class="badge badge-success">Stable</span></td>
+                            <td>All Hubs</td>
+                        </tr>
+                         <tr>
+                            <td>B-</td>
+                            <td>210 Units</td>
+                            <td><span class="badge badge-warning">Low</span></td>
+                            <td>Metro General</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 
-<!-- Regional Node Breakdown -->
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-white py-3">
-        <h5 class="mb-0 text-dark">Hospital Node Stock Summary</h5>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="p-3 border rounded bg-light">
-                    <h6>Downtown General Hospital Node</h6>
-                    <p class="mb-1 text-muted small">PostGIS spatial node #1 &bull; Status: Online</p>
-                    <span class="badge bg-info text-dark">14 Units Available</span>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="p-3 border rounded bg-light">
-                    <h6>North District Medical Center Node</h6>
-                    <p class="mb-1 text-muted small">PostGIS spatial node #2 &bull; Status: Online</p>
-                    <span class="badge bg-info text-dark">18 Units Available</span>
-                </div>
-            </div>
+    <footer class="app-footer">
+        <div class="container footer-content">
+            <p>&copy; 2024 Blood Donor Connection Network. All Rights Reserved.</p>
+            <p>All data is encrypted in transit and at rest. (REQ-N-004)</p>
         </div>
-    </div>
-</div>
-{% endblock %}
+    </footer>
+</body>
+</html>
