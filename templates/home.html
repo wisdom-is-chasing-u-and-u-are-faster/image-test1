@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page | E-Commerce Website</title>
+    <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/*
+  DESIGN SYSTEM: Modern and Clean
+  - Personality: Modern, clean, vibrant, and user-friendly for e-commerce.
+  - Colors: Based on CONSTRAINT-001.
+  - Typography: Poppins (sans-serif) from Google Fonts, per CONSTRAINT-002.
+  - Spacing: 8pt grid system.
+  - Components: Reusable classes for buttons, cards, headers, etc.
+*/
+
+:root {
+  /* COLOR PALETTE (CONSTRAINT-001) */
+  --primary-brand-pink: #fb2e86;
+  --primary-brand-orange: #f56e0f;
+  --action-blue: #03a9f4;
+  --background-color: #ffffff;
+  --secondary-background-color: #f5f5f5;
+  --text-color: #282c3f;
+  --text-color-light: #5a5f75;
+  --border-color: #e5e5e5;
+
+  /* TYPOGRAPHY (CONSTRAINT-002) */
+  --font-family-sans: 'Poppins', sans-serif;
+  --fs-h1: 3.052rem;
+  --fs-h2: 2.441rem;
+  --fs-h3: 1.953rem;
+  --fs-body: 1rem;
+  --fs-small: 0.8rem;
+  --fw-light: 300;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* SPACING */
+  --space-1: 0.5rem; /* 8px */
+  --space-2: 1rem;   /* 16px */
+  --space-3: 1.5rem; /* 24px */
+  --space-4: 2rem;   /* 32px */
+  --space-5: 3rem;   /* 48px */
+
+  /* BORDER RADIUS */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* ELEVATION */
+  --shadow-1: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-2: 0px 5px 15px rgba(0, 0, 0, 0.1);
+
+  /* TRANSITIONS */
+  --transition-fast: all 0.2s ease-in-out;
+}
+
+/* --- BASE & RESET --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-body);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  margin: var(--space-3) 0 var(--space-2);
+  font-weight: var(--fw-bold);
+  line-height: 1.2;
+}
+
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+
+a {
+  color: var(--primary-brand-pink);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-brand-orange);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --- UTILITY CLASSES --- */
+.container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-2);
+  padding-right: var(--space-2);
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* --- COMPONENT CLASSES --- */
+
+/* REQ-F-003: Header */
+.main-header {
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--background-color);
+}
+
+.main-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-color);
+}
+
+.main-nav {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.main-nav a {
+  color: var(--text-color-light);
+  font-weight: var(--fw-medium);
+}
+
+.main-nav a.active, .main-nav a:hover {
+  color: var(--primary-brand-pink);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  border: 1px solid var(--border-color);
+  border-right: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  min-width: 250px;
+}
+
+.search-bar button {
+  background-color: var(--primary-brand-pink);
+  border: none;
+  color: white;
+  padding: var(--space-1);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px; /* Match input height */
+  width: 45px;
+}
+
+.user-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.user-actions a {
+  color: var(--text-color);
+}
+
+/* REQ-F-002: Promotional Banner */
+.promo-banner {
+  background-color: var(--secondary-background-color);
+  padding: var(--space-5) 0;
+  text-align: center;
+}
+
+.promo-banner h1 {
+  color: var(--text-color);
+  margin-bottom: var(--space-1);
+}
+
+.promo-banner p {
+  color: var(--text-color-light);
+  font-size: 1.2rem;
+  margin-bottom: var(--space-3);
+}
+
+.btn {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-weight: var(--fw-bold);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--primary-brand-pink);
+  color: white;
+  border: 2px solid var(--primary-brand-pink);
+}
+
+.btn-primary:hover {
+  background-color: #d82072;
+  border-color: #d82072;
+  color: white;
+}
+
+/* REQ-F-002: Product Section */
+.product-section {
+  padding: var(--space-5) 0;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.product-card {
+  background-color: var(--background-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  transition: var(--transition-fast);
+  text-align: center;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-2);
+}
+
+.product-card__image-container {
+  background-color: var(--secondary-background-color);
+  padding: var(--space-2);
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card__image-container img {
+  max-height: 100%;
+}
+
+
+.product-card__info {
+  padding: var(--space-2);
+}
+
+.product-card__name {
+  font-size: 1.1rem;
+  font-weight: var(--fw-medium);
+  color: var(--text-color);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.product-card__price {
+  font-size: 1.2rem;
+  font-weight: var(--fw-bold);
+  color: var(--primary-brand-pink);
+}
+
+/* Footer */
+.main-footer {
+  background-color: var(--text-color);
+  color: var(--secondary-background-color);
+  padding: var(--space-4) 0;
+  margin-top: var(--space-5);
+}
+
+.main-footer .container {
+  text-align: center;
+}
+
+/* --- RESPONSIVENESS --- */
+@media (max-width: 768px) {
+  .main-header .container {
+    flex-direction: column;
+  }
+
+  .main-nav {
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .search-bar input {
+      min-width: 0;
+      flex-grow: 1;
+  }
+
+  h1 { font-size: 2.441rem; }
+  h2 { font-size: 1.953rem; }
+  h3 { font-size: 1.563rem; }
+}
+
+@media (max-width: 375px) {
+  h1 { font-size: 1.953rem; }
+  .main-nav {
+      flex-direction: column;
+      gap: var(--space-2);
+  }
+}
+
+</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+</head>
+<body>
+
+    <!-- REQ-F-003: Main Header -->
+    <header class="main-header">
+        <div class="container">
+            <a href="home.html" class="logo">Hekto</a>
+            <nav class="main-nav">
+                <a href="home.html" class="active">Home</a>
+                <a href="#">Pages</a>
+                <a href="#">Products</a>
+                <a href="#">Blog</a>
+                <a href="#">Shop</a>
+                <a href="#">Contact</a>
+            </nav>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search products...">
+                    <button aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="user-actions">
+                    <a href="#" aria-label="Wishlist"><i class="fa-regular fa-heart"></i></a>
+                    <a href="#" aria-label="User Profile"><i class="fa-regular fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- REQ-F-001, REQ-F-002, REQ-N-001: Main Content -->
+        <section id="home-page">
+        
+            <!-- REQ-F-002: Promotional Banner -->
+            <section class="promo-banner">
+                <div class="container">
+                    <h1>New Arrivals For Spring</h1>
+                    <p>Discover the latest trends in fashion and get ready for the new season.</p>
+                    <a href="#" class="btn btn-primary">Shop Collection</a>
+                </div>
+            </section>
+
+            <!-- REQ-F-002: Product Section -->
+            <section class="product-section container">
+                <h2 class="text-center">Featured Products</h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <div class="product-card__image-container">
+                            <img src="https://via.placeholder.com/200x200.png?text=Product+1" alt="Cantilever chair">
+                        </div>
+                        <div class="product-card__info">
+                            <h3 class="product-card__name">Cantilever chair</h3>
+                            <p class="product-card__price">$42.00</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card__image-container">
+                             <img src="https://via.placeholder.com/200x200.png?text=Product+2" alt="Comfort chair">
+                        </div>
+                        <div class="product-card__info">
+                            <h3 class="product-card__name">Comfort chair</h3>
+                            <p class="product-card__price">$65.00</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card__image-container">
+                            <img src="https://via.placeholder.com/200x200.png?text=Product+3" alt="Minimalist chair">
+                        </div>
+                        <div class="product-card__info">
+                            <h3 class="product-card__name">Minimalist chair</h3>
+                            <p class="product-card__price">$37.00</p>
+                        </div>
+                    </div>
+                     <div class="product-card">
+                        <div class="product-card__image-container">
+                             <img src="https://via.placeholder.com/200x200.png?text=Product+4" alt="Modern lamp">
+                        </div>
+                        <div class="product-card__info">
+                            <h3 class="product-card__name">Modern lamp</h3>
+                            <p class="product-card__price">$25.00</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2024 Hekto E-commerce. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
