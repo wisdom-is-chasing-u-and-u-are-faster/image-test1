@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA Cosmetics | High-Fidelity D2C Platform</title>
+    <meta name="description" content="Enterprise MACH Commerce Platform for Aura Cosmetics (ARCH-1427)">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#F8F5F2">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: '#F8F5F2',
+              surface: '#FFFFFF',
+              primary: '#2D2D2D',
+              secondary: '#828282',
+              accent: '#D8B2A9',
+              'accent-hover': '#C8A096',
+              border: '#E5E5E5',
+              success: '#5F8A7A',
+              error: '#D17A7A',
+              warning: '#E5C07B',
+            },
+            fontFamily: {
+              sans: ['Manrope', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+        --color-background: #F8F5F2;
+        --color-surface: #FFFFFF;
+        --color-primary: #2D2D2D;
+        --color-secondary: #828282;
+        --color-accent: #D8B2A9;
+        --color-accent-hover: #C8A096;
+        --color-border: #E5E5E5;
+      }
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: var(--color-background);
+        color: var(--color-primary);
+        -webkit-font-smoothing: antialiased;
+      }
+      .screen { display: none; }
+      .screen.active { display: block; }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        border-radius: 0.375rem;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.2s ease-in-out;
+      }
+      .btn-primary {
+        background-color: var(--color-accent);
+        color: #FFFFFF;
+      }
+      .btn-primary:hover {
+        background-color: var(--color-accent-hover);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .btn-secondary {
+        border: 1px solid var(--color-accent);
+        color: var(--color-accent);
+        background: transparent;
+      }
+      .btn-secondary:hover {
+        background-color: var(--color-accent);
+        color: #FFFFFF;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--color-primary);
+      }
+      .btn-ghost:hover {
+        background-color: rgba(216, 178, 169, 0.1);
+      }
+      .form-input {
+        width: 100%;
+        border-radius: 0.375rem;
+        border: 1px solid var(--color-border);
+        background-color: var(--color-surface);
+        padding: 0.75rem 1rem;
+        color: var(--color-primary);
+        outline: none;
+      }
+      .form-input:focus {
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 2px rgba(216, 178, 169, 0.2);
+      }
+      .card {
+        background-color: var(--color-surface);
+        border-radius: 0.5rem;
+        border: 1px solid var(--color-border);
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+      .badge-accent {
+        background-color: var(--color-accent);
+        color: #FFFFFF;
+      }
+      .badge-success {
+        background-color: rgba(95, 138, 122, 0.15);
+        color: #5F8A7A;
+      }
+      .badge-warning {
+        background-color: rgba(229, 192, 123, 0.2);
+        color: #B58428;
+      }
+      .gradient-text {
+        background: linear-gradient(to right, #D8B2A9, #A6756B);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .pulse-timer {
+        animation: pulseAnimation 2s infinite;
+      }
+      @keyframes pulseAnimation {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Sticky Announcement Bar with Live Reservation Countdown -->
+    <div id="reservation-banner" class="bg-primary text-white py-2 px-4 text-center text-sm font-medium transition-all" style="display: none;">
+        <span class="inline-flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-accent pulse-timer"></span>
+            <span>Items in your cart are reserved! Remaining time:</span>
+            <span id="banner-timer" class="font-bold text-accent">10:00</span>
+            <a href="#cart" class="nav-link underline ml-2 hover:text-accent">View Cart</a>
+        </span>
+    </div>
+
+    <!-- Header Navigation -->
+    <header id="header" class="bg-surface/90 backdrop-blur-md sticky top-0 z-40 border-b border-border">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
+            <a href="#home" class="nav-link text-2xl font-bold tracking-tight text-primary">AURA</a>
+            <div class="hidden lg:flex items-center gap-x-8">
+                <a href="#product_listing" class="nav-link text-base font-medium hover:text-accent transition-colors">Shop</a>
+                <a href="#shade_finder_quiz" class="nav-link text-base font-medium text-accent font-semibold transition-colors">Shade Finder</a>
+                <a href="#loyalty" class="nav-link text-base font-medium hover:text-accent transition-colors">Loyalty</a>
+                <a href="#account_subscriptions" class="nav-link text-base font-medium hover:text-accent transition-colors">Subscriptions</a>
+            </div>
+            <div class="flex items-center gap-x-4">
+                <a href="#cart" class="nav-link relative p-2" aria-label="Shopping Cart">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-badge" class="absolute top-0 right-0 bg-accent text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold" style="display: none;">0</span>
+                </a>
+                <a href="#account_dashboard" class="nav-link p-2" aria-label="Account">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" class="flex-grow">
+        <!-- 1. HOME SCREEN -->
+        <section id="home" class="screen active text-center">
+            <div class="max-w-7xl mx-auto px-4 py-20 md:py-28">
+                <span class="badge badge-accent mb-4 tracking-wider uppercase text-xs">MACH Composable Architecture</span>
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+                    Your shade, your story.<br>
+                    <span class="gradient-text">Unleash your radiance.</span>
+                </h1>
+                <p class="text-lg md:text-xl text-secondary max-w-2xl mx-auto mb-10">
+                    High-cardinality cosmetics platform with 50+ inclusive shades, Delta-E Lab shade matching, Redlock inventory reservations, and automated replenishment.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#product_listing" class="nav-link btn btn-primary text-lg px-8 py-4">Explore Products</a>
+                    <a href="#shade_finder_quiz" class="nav-link btn btn-secondary text-lg px-8 py-4">Take the Shade Match Quiz</a>
+                </div>
+            </div>
+
+            <!-- Featured Collection -->
+            <div class="bg-surface py-20 border-t border-border">
+                <div class="max-w-7xl mx-auto px-4">
+                    <div class="flex justify-between items-end mb-10 text-left">
+                        <div>
+                            <span class="text-sm font-bold uppercase text-accent">Viral Drops & Classics</span>
+                            <h2 class="text-3xl font-bold mt-1">Featured Formulations</h2>
+                        </div>
+                        <a href="#product_listing" class="nav-link text-accent font-semibold hover:underline">View All &rarr;</a>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Product 1: Foundation -->
+                        <div class="card p-4 text-left group hover:shadow-md transition">
+                            <a href="#product_detail" class="nav-link block">
+                                <div class="aspect-square bg-background rounded-md overflow-hidden mb-4">
+                                    <img src="https://placehold.co/400x400/F8F5F2/2D2D2D?text=Aura+Glow" alt="Aura Glow" class="w-full h-full object-cover group-hover:scale-105 transition">
+                                </div>
+                                <span class="badge badge-accent mb-2">50+ Shades</span>
+                                <h3 class="font-bold text-lg">Aura Glow Foundation</h3>
+                                <p class="text-secondary text-sm">Luminous, buildable medium coverage</p>
+                                <div class="mt-3 flex justify-between items-center">
+                                    <span class="font-extrabold text-lg">$45.00</span>
+                                    <span class="text-xs text-accent font-semibold">Subscribe: $38.25</span>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- Product 2: Lipstick -->
+                        <div class="card p-4 text-left group hover:shadow-md transition">
+                            <a href="#product_detail" class="nav-link block">
+                                <div class="aspect-square bg-background rounded-md overflow-hidden mb-4">
+                                    <img src="https://placehold.co/400x400/F8F5F2/2D2D2D?text=Matte+Velvet" alt="Matte Velvet" class="w-full h-full object-cover group-hover:scale-105 transition">
+                                </div>
+                                <span class="badge badge-success mb-2">Replenishment Ready</span>
+                                <h3 class="font-bold text-lg">Matte Velvet Lipstick</h3>
+                                <p class="text-secondary text-sm">Long-wearing crimson velvet</p>
+                                <div class="mt-3 flex justify-between items-center">
+                                    <span class="font-extrabold text-lg">$28.00</span>
+                                    <span class="text-xs text-accent font-semibold">Subscribe: $23.80</span>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- Product 3: Primer -->
+                        <div class="card p-4 text-left group hover:shadow-md transition">
+                            <a href="#product_detail" class="nav-link block">
+                                <div class="aspect-square bg-background rounded-md overflow-hidden mb-4">
+                                    <img src="https://placehold.co/400x400/F8F5F2/2D2D2D?text=Luminous+Primer" alt="Primer" class="w-full h-full object-cover group-hover:scale-105 transition">
+                                </div>
+                                <span class="badge badge-accent mb-2">Hydrating</span>
+                                <h3 class="font-bold text-lg">Luminous Silk Primer</h3>
+                                <p class="text-secondary text-sm">Pore-blurring hyaluronic serum</p>
+                                <div class="mt-3 flex justify-between items-center">
+                                    <span class="font-extrabold text-lg">$38.00</span>
+                                    <span class="text-xs text-accent font-semibold">Subscribe: $32.30</span>
+                                </div>
+                            </a>
+                        </div>
+                        <!-- Product 4: Concealer -->
+                        <div class="card p-4 text-left group hover:shadow-md transition">
+                            <a href="#product_detail" class="nav-link block">
+                                <div class="aspect-square bg-background rounded-md overflow-hidden mb-4">
+                                    <img src="https://placehold.co/400x400/F8F5F2/2D2D2D?text=Concealer" alt="Concealer" class="w-full h-full object-cover group-hover:scale-105 transition">
+                                </div>
+                                <span class="badge badge-accent mb-2">Crease-proof</span>
+                                <h3 class="font-bold text-lg">Radiant Creamy Concealer</h3>
+                                <p class="text-secondary text-sm">Corrects & brightens dark circles</p>
+                                <div class="mt-3 flex justify-between items-center">
+                                    <span class="font-extrabold text-lg">$30.00</span>
+                                    <span class="text-xs text-accent font-semibold">Subscribe: $25.50</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SHADE FINDER QUIZ (ARCH-1429 Live Integration) -->
+        <section id="shade_finder_quiz" class="screen py-16">
+            <div class="max-w-3xl mx-auto px-4 text-center">
+                <span class="text-sm font-bold uppercase text-accent tracking-wider">Algorithmic Shade Matcher</span>
+                <h1 class="text-3xl md:text-4xl font-bold mt-2 mb-4">Find Your Perfect Complexion Match</h1>
+                <p class="text-secondary mb-10">Powered by CIE L*a*b* Delta-E color distance calculation across 50+ formulations.</p>
+
+                <div class="card p-8 text-left shadow-lg">
+                    <!-- Progress Bar -->
+                    <div class="mb-8">
+                        <div class="flex justify-between text-sm font-semibold text-secondary mb-2">
+                            <span id="quiz-step-label">Step 1 of 3: Skin Depth</span>
+                            <span id="quiz-step-percent">33%</span>
+                        </div>
+                        <div class="w-full bg-border rounded-full h-2">
+                            <div id="quiz-progress-bar" class="bg-accent h-2 rounded-full transition-all duration-300" style="width: 33%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Depth -->
+                    <div id="quiz-step-1" class="quiz-step-content">
+                        <h2 class="text-2xl font-bold mb-2">Select your skin depth</h2>
+                        <p class="text-secondary mb-6 text-sm">Choose the category closest to your skin tone.</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                            <button type="button" onclick="selectDepth('FAIR', '#fae7d0')" class="quiz-opt-btn border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="w-12 h-12 rounded-full mx-auto mb-2 border" style="background-color: #fae7d0;"></div>
+                                <div class="font-bold">Fair</div>
+                                <div class="text-xs text-secondary">Lightest tones</div>
+                            </button>
+                            <button type="button" onclick="selectDepth('LIGHT', '#f1d4be')" class="quiz-opt-btn border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="w-12 h-12 rounded-full mx-auto mb-2 border" style="background-color: #f1d4be;"></div>
+                                <div class="font-bold">Light</div>
+                                <div class="text-xs text-secondary">Naturally light tone</div>
+                            </button>
+                            <button type="button" onclick="selectDepth('MEDIUM', '#dfb499')" class="quiz-opt-btn border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="w-12 h-12 rounded-full mx-auto mb-2 border" style="background-color: #dfb499;"></div>
+                                <div class="font-bold">Medium</div>
+                                <div class="text-xs text-secondary">Tans easily, golden</div>
+                            </button>
+                            <button type="button" onclick="selectDepth('TAN', '#c28b71')" class="quiz-opt-btn border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="w-12 h-12 rounded-full mx-auto mb-2 border" style="background-color: #c28b71;"></div>
+                                <div class="font-bold">Tan</div>
+                                <div class="text-xs text-secondary">Caramel/sun-kissed</div>
+                            </button>
+                            <button type="button" onclick="selectDepth('DEEP', '#9b614e')" class="quiz-opt-btn border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="w-12 h-12 rounded-full mx-auto mb-2 border" style="background-color: #9b614e;"></div>
+                                <div class="font-bold">Deep</div>
+                                <div class="text-xs text-secondary">Rich bronze brown</div>
+                            </button>
+                            <button type="button" onclick="selectDepth('RICH', '#54301f')" class="quiz-opt-btn border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="w-12 h-12 rounded-full mx-auto mb-2 border" style="background-color: #54301f;"></div>
+                                <div class="font-bold">Rich</div>
+                                <div class="text-xs text-secondary">Deepest espresso</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Undertone -->
+                    <div id="quiz-step-2" class="quiz-step-content" style="display: none;">
+                        <h2 class="text-2xl font-bold mb-2">What is your skin undertone?</h2>
+                        <p class="text-secondary mb-6 text-sm">Examine the veins on your wrist or how your skin reacts to the sun.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button type="button" onclick="selectUndertone('WARM')" class="border p-4 rounded-lg text-left hover:border-accent focus:border-accent">
+                                <div class="font-bold text-lg">Warm (W)</div>
+                                <div class="text-sm text-secondary">Veins look greenish, gold jewelry flatters, you tan readily.</div>
+                            </button>
+                            <button type="button" onclick="selectUndertone('COOL')" class="border p-4 rounded-lg text-left hover:border-accent focus:border-accent">
+                                <div class="font-bold text-lg">Cool (C)</div>
+                                <div class="text-sm text-secondary">Veins look blue/purple, silver jewelry flatters, burns easily.</div>
+                            </button>
+                            <button type="button" onclick="selectUndertone('NEUTRAL')" class="border p-4 rounded-lg text-left hover:border-accent focus:border-accent">
+                                <div class="font-bold text-lg">Neutral (N)</div>
+                                <div class="text-sm text-secondary">Mix of blue/green veins, both silver and gold look radiant.</div>
+                            </button>
+                            <button type="button" onclick="selectUndertone('OLIVE')" class="border p-4 rounded-lg text-left hover:border-accent focus:border-accent">
+                                <div class="font-bold text-lg">Olive (O)</div>
+                                <div class="text-sm text-secondary">Subtle greenish or grayish undertone with neutral depth.</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Finish & Calculation -->
+                    <div id="quiz-step-3" class="quiz-step-content" style="display: none;">
+                        <h2 class="text-2xl font-bold mb-2">Desired Formula Finish</h2>
+                        <p class="text-secondary mb-6 text-sm">Choose how you want your complexion to look and wear.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                            <button type="button" onclick="selectFinish('DEWY')" class="border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="font-bold">Dewy</div>
+                                <div class="text-xs text-secondary mt-1">Hydrated, radiant glow</div>
+                            </button>
+                            <button type="button" onclick="selectFinish('MATTE')" class="border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="font-bold">Matte</div>
+                                <div class="text-xs text-secondary mt-1">Velvety shine control</div>
+                            </button>
+                            <button type="button" onclick="selectFinish('SATIN')" class="border p-4 rounded-lg text-center hover:border-accent focus:border-accent">
+                                <div class="font-bold">Satin</div>
+                                <div class="text-xs text-secondary mt-1">Natural skin-like balance</div>
+                            </button>
+                        </div>
+                        <button type="button" onclick="runShadeMatchAPI()" class="btn btn-primary w-full py-4 text-lg">
+                            Compute Scientific Match (&Delta;E Lab)
+                        </button>
+                    </div>
+
+                    <!-- Results Screen -->
+                    <div id="quiz-step-results" class="quiz-step-content" style="display: none;">
+                        <div class="text-center">
+                            <span class="badge badge-success mb-2">98.4% Match Confidence</span>
+                            <h2 class="text-3xl font-extrabold mb-2">We Found Your Ideal Match!</h2>
+                            <p class="text-secondary mb-8 text-sm">Calculated using Euclidean CIE L*a*b* distance (&Delta;E < 1.0).</p>
+
+                            <div class="border-2 border-accent rounded-xl p-6 bg-accent/5 max-w-lg mx-auto flex items-center gap-6">
+                                <div id="match-swatch" class="w-24 h-24 rounded-full border-4 border-white shadow-md flex-shrink-0" style="background-color: #fae7d0;"></div>
+                                <div class="text-left">
+                                    <span class="badge badge-accent mb-1 text-xs">Best Match</span>
+                                    <h3 id="match-name" class="text-2xl font-bold">Aura Glow 100W</h3>
+                                    <p id="match-desc" class="text-secondary text-sm">Fair depth with warm golden undertone, dewy finish.</p>
+                                    <div class="mt-2 text-primary font-extrabold text-lg">$45.00</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+                                <button type="button" onclick="goToPDPWithShade()" class="btn btn-primary py-3 px-8 text-base">Select This Shade & Customize</button>
+                                <button type="button" onclick="resetQuiz()" class="btn btn-ghost py-3 px-6 text-sm">Retake Quiz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. PRODUCT LISTING SCREEN (SHOP) -->
+        <section id="product_listing" class="screen py-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-extrabold">All Formulations</h1>
+                    <p class="text-secondary mt-2">Filter across 50+ inclusive shades, finishes, and skin regimens.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <!-- Filters Sidebar -->
+                    <aside class="lg:col-span-1">
+                        <div class="card p-6 sticky top-28">
+                            <h2 class="text-xl font-bold mb-4">Filters</h2>
+                            <div class="space-y-6 text-sm">
+                                <div>
+                                    <h3 class="font-semibold mb-2">Undertone</h3>
+                                    <div class="space-y-1.5 text-secondary">
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Warm (W)</label>
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Cool (C)</label>
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Neutral (N)</label>
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Olive (O)</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold mb-2">Finish</h3>
+                                    <div class="space-y-1.5 text-secondary">
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Dewy Glow</label>
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Soft Matte</label>
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Natural Satin</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold mb-2">Depth</h3>
+                                    <div class="space-y-1.5 text-secondary">
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Fair - Light</label>
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Medium - Tan</label>
+                                        <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="rounded text-accent"> Deep - Rich</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                    <!-- Product Grid -->
+                    <div class="lg:col-span-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="card p-4 group hover:shadow-md transition">
+                                <a href="#product_detail" class="nav-link block">
+                                    <img src="https://placehold.co/400x400/F8F5F2/2D2D2D?text=Aura+Glow" class="w-full aspect-square rounded mb-4 object-cover group-hover:scale-105 transition">
+                                    <span class="badge badge-accent mb-1 text-xs">50+ Shades</span>
+                                    <h3 class="font-bold text-lg">Aura Glow Foundation</h3>
+                                    <p class="text-secondary text-sm">Medium buildable dewy</p>
+                                    <div class="mt-2 font-extrabold text-lg">$45.00</div>
+                                </a>
+                            </div>
+                            <div class="card p-4 group hover:shadow-md transition">
+                                <a href="#product_detail" class="nav-link block">
+                                    <img src="https://placehold.co/400x400/F8F5F2/2D2D2D?text=Matte+Velvet" class="w-full aspect-square rounded mb-4 object-cover group-hover:scale-105 transition">
+                                    <span class="badge badge-success mb-1 text-xs">Subscription 15% Off</span>
+                                    <h3 class="font-bold text-lg">Matte Velvet Lipstick</h3>
+                                    <p class="text-secondary text-sm">Crimson velvet formula</p>
+                                    <div class="mt-2 font-extrabold text-lg">$28.00</div>
+                                </a>
+                            </div>
+                            <div class="card p-4 group hover:shadow-md transition">
+                                <a href="#product_detail" class="nav-link block">
+                                    <img src="https://placehold.co/400x400/F8F5F2/2D2D2D?text=Radiant+Concealer" class="w-full aspect-square rounded mb-4 object-cover group-hover:scale-105 transition">
+                                    <span class="badge badge-accent mb-1 text-xs">Crease-proof</span>
+                                    <h3 class="font-bold text-lg">Radiant Creamy Concealer</h3>
+                                    <p class="text-secondary text-sm">Brightens & corrects</p>
+                                    <div class="mt-2 font-extrabold text-lg">$30.00</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. PRODUCT DETAIL PAGE (50+ Shade Selector & Subscription Toggle) -->
+        <section id="product_detail" class="screen py-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <!-- Left: Gallery -->
+                    <div>
+                        <div class="aspect-square bg-surface border border-border rounded-xl overflow-hidden shadow-sm mb-4">
+                            <img id="pdp-main-image" src="https://placehold.co/600x600/F8F5F2/2D2D2D?text=Aura+Glow+Foundation" class="w-full h-full object-cover">
+                        </div>
+                        <div class="grid grid-cols-4 gap-3">
+                            <div class="aspect-square rounded border border-border p-1 bg-surface cursor-pointer" onclick="document.getElementById('pdp-main-image').src='https://placehold.co/600x600/F8F5F2/2D2D2D?text=Bottle'">
+                                <img src="https://placehold.co/150x150/F8F5F2/2D2D2D?text=Bottle" class="w-full h-full object-cover rounded">
+                            </div>
+                            <div class="aspect-square rounded border border-border p-1 bg-surface cursor-pointer" onclick="document.getElementById('pdp-main-image').src='https://placehold.co/600x600/F8F5F2/2D2D2D?text=Texture'">
+                                <img src="https://placehold.co/150x150/F8F5F2/2D2D2D?text=Texture" class="w-full h-full object-cover rounded">
+                            </div>
+                            <div class="aspect-square rounded border border-border p-1 bg-surface cursor-pointer" onclick="document.getElementById('pdp-main-image').src='https://placehold.co/600x600/F8F5F2/2D2D2D?text=Swatch'">
+                                <img src="https://placehold.co/150x150/F8F5F2/2D2D2D?text=Swatch" class="w-full h-full object-cover rounded">
+                            </div>
+                            <div class="aspect-square rounded border border-border p-1 bg-surface cursor-pointer" onclick="document.getElementById('pdp-main-image').src='https://placehold.co/600x600/F8F5F2/2D2D2D?text=Model'">
+                                <img src="https://placehold.co/150x150/F8F5F2/2D2D2D?text=Model" class="w-full h-full object-cover rounded">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Product Controls & 50+ Shades Palette -->
+                    <div class="text-left">
+                        <span class="badge badge-accent mb-2">Award Winning Formulation</span>
+                        <h1 class="text-3xl lg:text-4xl font-extrabold">Aura Glow Foundation</h1>
+                        <p class="text-secondary mt-2 text-base">Weightless, buildable, medium-coverage foundation formulated with hyaluronic acid and squalane.</p>
+                        
+                        <div class="my-4 flex items-baseline gap-3">
+                            <span id="pdp-price" class="text-3xl font-extrabold text-primary">$45.00</span>
+                            <span id="pdp-sub-badge" class="badge badge-success" style="display: none;">15% Subscriber Discount Applied</span>
+                        </div>
+
+                        <!-- Shade Selector -->
+                        <div class="mt-6 border-t border-border pt-6">
+                            <div class="flex justify-between items-baseline mb-2">
+                                <div class="font-bold text-base">
+                                    Selected Shade: <span id="selected-shade-name-display" class="text-accent font-extrabold">Aura Glow 100W</span>
+                                </div>
+                                <a href="#shade_finder_quiz" class="nav-link text-xs text-accent underline font-semibold">Take Shade Quiz</a>
+                            </div>
+                            <p id="selected-shade-subinfo" class="text-xs text-secondary mb-4">Warm Undertone &bull; Dewy Finish &bull; Fair Depth &bull; In Stock</p>
+
+                            <!-- 50+ Shades Swatch Matrix Container -->
+                            <div class="border border-border p-3 rounded-lg bg-surface max-h-56 overflow-y-auto">
+                                <div id="shade-swatch-grid" class="grid grid-cols-8 sm:grid-cols-10 gap-2">
+                                    <!-- Dynamically filled with 50+ shades -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Purchase Type Toggle (One-time vs Replenishment 15% off) -->
+                        <div class="mt-6 space-y-3">
+                            <label class="card p-4 flex items-start gap-3 cursor-pointer border-2" id="option-onetime-card">
+                                <input type="radio" name="pdp-purchase-type" value="onetime" checked onchange="togglePurchaseType('onetime')" class="mt-1 text-accent">
+                                <div class="flex-grow">
+                                    <div class="flex justify-between font-bold">
+                                        <span>One-time Purchase</span>
+                                        <span>$45.00</span>
+                                    </div>
+                                    <span class="text-xs text-secondary">Standard one-time checkout</span>
+                                </div>
+                            </label>
+
+                            <label class="card p-4 flex items-start gap-3 cursor-pointer border" id="option-sub-card">
+                                <input type="radio" name="pdp-purchase-type" value="subscription" onchange="togglePurchaseType('subscription')" class="mt-1 text-accent">
+                                <div class="flex-grow">
+                                    <div class="flex justify-between font-bold">
+                                        <span class="text-accent">Subscribe & Save 15%</span>
+                                        <span class="text-accent font-extrabold">$38.25</span>
+                                    </div>
+                                    <span class="text-xs text-secondary">Auto-delivered replenishment regimen. Skip or cancel anytime.</span>
+                                    
+                                    <div id="sub-cadence-wrapper" class="mt-3" style="display: none;">
+                                        <label class="block text-xs font-semibold text-secondary mb-1">Delivery Cadence:</label>
+                                        <select id="pdp-cadence" class="form-input text-xs py-1.5">
+                                            <option value="30">Every 30 Days (Recommended)</option>
+                                            <option value="45">Every 45 Days</option>
+                                            <option value="60">Every 60 Days</option>
+                                            <option value="90">Every 90 Days</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Add to Cart (Triggers ARCH-1428 Cart Reservation Service) -->
+                        <div class="mt-6">
+                            <button id="add-to-cart-btn" type="button" onclick="addToCartAndReserve()" class="btn btn-primary w-full py-4 text-lg">
+                                Add to Cart & Reserve Stock (10m Hold)
+                            </button>
+                            <p class="text-xs text-center text-secondary mt-2 flex items-center justify-center gap-1">
+                                <svg class="w-4 h-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                Distributed Redis Redlock lock guarantees variant stock during checkout.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SHOPPING CART (With Live 10-Minute Reservation Timer) -->
+        <section id="cart" class="screen py-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-10">
+                    <h1 class="text-4xl font-extrabold">Your Shopping Cart</h1>
+                    <p class="text-secondary mt-1">Review reserved items before completing checkout.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    <!-- Left: Cart Items -->
+                    <div class="lg:col-span-2 card p-6 shadow-sm">
+                        <!-- Live Hold Countdown Banner -->
+                        <div id="cart-hold-timer-box" class="bg-accent/15 border border-accent rounded-lg p-4 mb-6 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <span class="w-3 h-3 rounded-full bg-accent pulse-timer"></span>
+                                <div>
+                                    <div class="font-bold text-sm">Inventory Reserved (Redlock Active)</div>
+                                    <div class="text-xs text-secondary">Token: <span id="cart-token-display" class="font-mono">res_tok_pending</span></div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div id="cart-countdown" class="text-2xl font-extrabold text-accent">10:00</div>
+                                <div class="text-[10px] text-secondary uppercase tracking-wider">Remaining TTL</div>
+                            </div>
+                        </div>
+
+                        <!-- Items List -->
+                        <div id="cart-items-container" class="divide-y divide-border">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Right: Summary -->
+                    <div class="lg:col-span-1 card p-6 shadow-sm sticky top-28 text-left">
+                        <h2 class="text-lg font-bold mb-4">Order Summary</h2>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between text-secondary">
+                                <span>Subtotal</span>
+                                <span id="summary-subtotal" class="font-semibold text-primary">$45.00</span>
+                            </div>
+                            <div class="flex justify-between text-secondary">
+                                <span>Standard Shipping</span>
+                                <span class="font-semibold text-primary">$5.00</span>
+                            </div>
+                            <div class="flex justify-between text-secondary">
+                                <span>Estimated Tax (8.25%)</span>
+                                <span id="summary-tax" class="font-semibold text-primary">$3.71</span>
+                            </div>
+                            <div class="border-t border-border pt-3 flex justify-between text-base font-extrabold text-primary">
+                                <span>Total</span>
+                                <span id="summary-total" class="text-xl text-accent">$53.71</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <a href="#checkout" class="nav-link btn btn-primary w-full py-3.5 text-base text-center block">
+                                Proceed to Checkout
+                            </a>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <a href="#product_listing" class="nav-link text-xs text-secondary hover:text-accent underline">
+                                &larr; Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CHECKOUT SCREEN (Saga Orchestration & Tokenized Stripe) -->
+        <section id="checkout" class="screen py-16">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center mb-10">
+                    <span class="text-xs font-bold uppercase text-accent tracking-widest">PCI-DSS Tokenized Checkout</span>
+                    <h1 class="text-3xl font-extrabold mt-1">Complete Your Order</h1>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <!-- Left: Form -->
+                    <div class="card p-6 shadow-sm">
+                        <!-- 1-Click Fast Checkout Option -->
+                        <div class="bg-accent/10 border border-accent/40 rounded-lg p-4 mb-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold text-sm">1-Click Saved Checkout</span>
+                                <span class="badge badge-accent text-[10px]">Jane Doe</span>
+                            </div>
+                            <p class="text-xs text-secondary mb-3">Ship to 123 Beauty Lane, Los Angeles, CA with Visa ending in 4242.</p>
+                            <button type="button" onclick="execute1ClickCheckout()" class="btn btn-primary w-full py-2.5 text-sm">
+                                Complete Order in 1-Click
+                            </button>
+                        </div>
+
+                        <div class="flex items-center my-4">
+                            <div class="flex-grow border-t border-border"></div>
+                            <span class="px-3 text-xs text-secondary font-semibold">OR CUSTOM DETAILS</span>
+                            <div class="flex-grow border-t border-border"></div>
+                        </div>
+
+                        <!-- Contact & Shipping -->
+                        <h2 class="font-bold text-base mb-3">Shipping Address</h2>
+                        <div class="space-y-3">
+                            <input id="checkout-email" type="email" value="jane.doe@example.com" class="form-input text-sm" placeholder="Email Address">
+                            <input id="checkout-name" type="text" value="Jane Doe" class="form-input text-sm" placeholder="Full Name">
+                            <input id="checkout-address" type="text" value="123 Beauty Lane" class="form-input text-sm" placeholder="Street Address">
+                            <div class="grid grid-cols-2 gap-3">
+                                <input id="checkout-city" type="text" value="Los Angeles" class="form-input text-sm" placeholder="City">
+                                <input id="checkout-zip" type="text" value="90210" class="form-input text-sm" placeholder="ZIP Code">
+                            </div>
+                        </div>
+
+                        <!-- Shipping Method -->
+                        <h2 class="font-bold text-base mt-6 mb-3">Shipping Method</h2>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center justify-between p-3 border rounded cursor-pointer border-accent bg-accent/5">
+                                <div class="flex items-center gap-2">
+                                    <input type="radio" name="checkout-shipping" value="standard" checked class="text-accent">
+                                    <span>Standard (3-5 Business Days)</span>
+                                </div>
+                                <span class="font-bold">$5.00</span>
+                            </label>
+                            <label class="flex items-center justify-between p-3 border rounded cursor-pointer">
+                                <div class="flex items-center gap-2">
+                                    <input type="radio" name="checkout-shipping" value="express" class="text-accent">
+                                    <span>Express (1-2 Business Days)</span>
+                                </div>
+                                <span class="font-bold">$15.00</span>
+                            </label>
+                        </div>
+
+                        <!-- Payment -->
+                        <h2 class="font-bold text-base mt-6 mb-3">Payment Method</h2>
+                        <div class="border border-border p-4 rounded-lg bg-background">
+                            <div class="flex items-center gap-2 mb-3">
+                                <svg class="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4C2.89 4 2.01 4.89 2.01 6L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
+                                <span class="font-bold text-sm">Credit Card (Stripe Tokenized)</span>
+                            </div>
+                            <input id="checkout-card" type="text" value="4242 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4242" class="form-input text-sm mb-2" readonly>
+                            <p class="text-[10px] text-secondary">Token: <span class="font-mono text-accent">pm_card_visa_tok</span> &bull; PCI-DSS Level 1 Encrypted</p>
+                        </div>
+
+                        <div class="mt-6">
+                            <button id="pay-now-btn" type="button" onclick="executeStandardCheckout()" class="btn btn-primary w-full py-4 text-base font-bold">
+                                Pay Now ($53.71)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Review -->
+                    <div class="card p-6 shadow-sm sticky top-28">
+                        <h2 class="font-bold text-base mb-4">Cart Snapshot</h2>
+                        <div id="checkout-items-list" class="divide-y divide-border text-sm mb-6">
+                            <!-- Injected -->
+                        </div>
+                        <div class="border-t border-border pt-4 space-y-2 text-sm">
+                            <div class="flex justify-between text-secondary">
+                                <span>Subtotal</span>
+                                <span id="checkout-subtotal">$45.00</span>
+                            </div>
+                            <div class="flex justify-between text-secondary">
+                                <span>Shipping</span>
+                                <span>$5.00</span>
+                            </div>
+                            <div class="flex justify-between text-secondary">
+                                <span>Estimated Tax</span>
+                                <span id="checkout-tax">$3.71</span>
+                            </div>
+                            <div class="border-t border-border pt-2 flex justify-between text-lg font-bold text-primary">
+                                <span>Total</span>
+                                <span id="checkout-total" class="text-accent">$53.71</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. ORDER CONFIRMATION SCREEN -->
+        <section id="order_confirmation" class="screen py-16">
+            <div class="max-w-2xl mx-auto px-4 text-center">
+                <div class="w-16 h-16 rounded-full bg-success/20 text-success flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <h1 class="text-3xl font-extrabold">Thank You for Your Order!</h1>
+                <p class="text-secondary mt-1 text-sm">Your payment was captured and stock has been committed via Order Saga.</p>
+
+                <div class="card p-6 mt-8 text-left shadow-md">
+                    <div class="flex justify-between items-start border-b border-border pb-4 mb-4">
+                        <div>
+                            <span class="text-xs uppercase text-secondary font-bold">Order Reference</span>
+                            <div id="confirmed-order-id" class="text-xl font-mono font-bold text-accent">ORD-2026-995113</div>
+                        </div>
+                        <span class="badge badge-success">Saga Committed</span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+                        <div>
+                            <span class="text-xs text-secondary">Estimated Delivery</span>
+                            <div id="confirmed-delivery-date" class="font-semibold">3 Business Days</div>
+                        </div>
+                        <div>
+                            <span class="text-xs text-secondary">Loyalty Points Earned</span>
+                            <div id="confirmed-points" class="font-semibold text-accent">+53 Aura Points</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-background rounded-lg p-3 text-xs text-secondary">
+                        <span class="font-bold text-primary">Transactional Outbox Event:</span>
+                        <div class="font-mono mt-1 text-[11px] text-primary">order.confirmed &bull; Kafka event streamed to warehouse</div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex gap-4 justify-center">
+                    <a href="#product_listing" class="nav-link btn btn-primary py-3 px-8 text-sm">Continue Shopping</a>
+                    <a href="#account_subscriptions" class="nav-link btn btn-secondary py-3 px-8 text-sm">Manage Subscriptions</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. REPLENISHMENT SUBSCRIPTION MANAGEMENT (ARCH-1430 Self-Service Portal) -->
+        <section id="account_subscriptions" class="screen py-16">
+            <div class="max-w-5xl mx-auto px-4">
+                <div class="text-left mb-8">
+                    <span class="text-xs font-bold uppercase text-accent tracking-widest">Self-Service Regimen Portal</span>
+                    <h1 class="text-3xl font-extrabold mt-1">My Beauty Replenishment Regimens</h1>
+                    <p class="text-secondary text-sm mt-1">Easily skip upcoming deliveries, swap foundation shades, or adjust cadence without cancelling.</p>
+                </div>
+
+                <div id="subscriptions-list-container" class="space-y-6">
+                    <!-- Dynamically Populated from Subscription Service -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. ACCOUNT DASHBOARD & LOYALTY -->
+        <section id="account_dashboard" class="screen py-16">
+            <div class="max-w-5xl mx-auto px-4 text-left">
+                <h1 class="text-3xl font-extrabold mb-8">Account Overview</h1>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="card p-6">
+                        <span class="text-xs uppercase text-secondary font-bold">Customer</span>
+                        <h2 class="text-xl font-bold mt-1">Jane Doe</h2>
+                        <p class="text-secondary text-sm">jane.doe@example.com</p>
+                    </div>
+                    <div class="card p-6">
+                        <span class="text-xs uppercase text-secondary font-bold">Loyalty Tier</span>
+                        <h2 class="text-xl font-bold text-accent mt-1">Gold VIP</h2>
+                        <p class="text-secondary text-sm">1,240 Total Points</p>
+                    </div>
+                    <div class="card p-6">
+                        <span class="text-xs uppercase text-secondary font-bold">Active Subscriptions</span>
+                        <h2 class="text-xl font-bold mt-1">2 Regimens</h2>
+                        <a href="#account_subscriptions" class="nav-link text-xs text-accent underline mt-1 block">Manage portal &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. LOYALTY SCREEN -->
+        <section id="loyalty" class="screen py-16 text-center">
+            <div class="max-w-4xl mx-auto px-4">
+                <span class="badge badge-accent mb-2">Aura VIP Club</span>
+                <h1 class="text-4xl font-extrabold mb-4">Your Beauty Rewards</h1>
+                <p class="text-secondary max-w-xl mx-auto mb-10">Earn 1 Aura Point for every dollar spent. Unlock complimentary deluxe samples and early flash sale access.</p>
+                <div class="card p-8 max-w-lg mx-auto shadow-md">
+                    <span class="text-sm font-bold uppercase text-secondary">Current Balance</span>
+                    <div class="text-5xl font-extrabold text-accent my-2">1,240</div>
+                    <div class="text-xs text-secondary mb-6">Tier: Gold VIP Status (Free express shipping on all orders)</div>
+                    <a href="#product_listing" class="nav-link btn btn-primary w-full py-3">Redeem Points on Products</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="footer" class="bg-surface border-t border-border py-12 text-center text-sm text-secondary">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="text-primary font-extrabold text-xl">AURA</div>
+            <div>&copy; 2026 Aura Cosmetics. MACH Composable Microservices Architecture.</div>
+            <div class="flex gap-4">
+                <a href="#home" class="nav-link hover:text-accent">Home</a>
+                <a href="#product_listing" class="nav-link hover:text-accent">Shop</a>
+                <a href="#shade_finder_quiz" class="nav-link hover:text-accent">Shade Finder</a>
+                <a href="#account_subscriptions" class="nav-link hover:text-accent">Subscriptions</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Swap Shade Modal -->
+    <div id="swap-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" style="display: none;">
+        <div class="card max-w-md w-full p-6 text-left shadow-2xl bg-surface">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Swap Foundation Shade</h3>
+                <button type="button" onclick="closeSwapModal()" class="text-secondary hover:text-primary">&times;</button>
+            </div>
+            <p class="text-xs text-secondary mb-4">Select a new shade for your upcoming subscription shipments.</p>
+            <div class="space-y-2 max-h-60 overflow-y-auto mb-6">
+                <label class="flex items-center gap-3 p-2.5 border rounded cursor-pointer hover:border-accent">
+                    <input type="radio" name="swap-shade-opt" value="AB-FDN-100W" data-name="100W (Fair Warm)" checked>
+                    <div class="w-6 h-6 rounded-full border" style="background-color: #fae7d0;"></div>
+                    <span class="text-sm font-semibold">100W (Fair Warm)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 border rounded cursor-pointer hover:border-accent">
+                    <input type="radio" name="swap-shade-opt" value="AB-FDN-110C" data-name="110C (Fair Cool)">
+                    <div class="w-6 h-6 rounded-full border" style="background-color: #f9eae1;"></div>
+                    <span class="text-sm font-semibold">110C (Fair Cool)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 border rounded cursor-pointer hover:border-accent">
+                    <input type="radio" name="swap-shade-opt" value="AB-FDN-130W" data-name="130W (Fair Warm)">
+                    <div class="w-6 h-6 rounded-full border" style="background-color: #f5dfd2;"></div>
+                    <span class="text-sm font-semibold">130W (Fair Warm)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 border rounded cursor-pointer hover:border-accent">
+                    <input type="radio" name="swap-shade-opt" value="AB-FDN-200W" data-name="200W (Light Warm)">
+                    <div class="w-6 h-6 rounded-full border" style="background-color: #f1d4be;"></div>
+                    <span class="text-sm font-semibold">200W (Light Warm)</span>
+                </label>
+                <label class="flex items-center gap-3 p-2.5 border rounded cursor-pointer hover:border-accent">
+                    <input type="radio" name="swap-shade-opt" value="AB-FDN-300W" data-name="300W (Medium Warm)">
+                    <div class="w-6 h-6 rounded-full border" style="background-color: #dfb499;"></div>
+                    <span class="text-sm font-semibold">300W (Medium Warm)</span>
+                </label>
+            </div>
+            <div class="flex gap-3">
+                <button type="button" onclick="confirmSwapShade()" class="btn btn-primary flex-1 py-2.5 text-sm">Save Shade</button>
+                <button type="button" onclick="closeSwapModal()" class="btn btn-ghost flex-1 py-2.5 text-sm">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic & API Orchestration Script -->
+    <script>
+        // API Base Endpoints (Proxied by Storefront Server)
+        const CART_API = '/api/cart';
+        const CATALOG_API = '/api/catalog';
+        const SUB_API = '/api/subscriptions';
+        const ORDER_API = '/api/orders';
+
+        // State Store
+        const appState = {
+            selectedShade: {
+                variant_id: 'AB-FDN-100W',
+                name: 'Aura Glow 100W',
+                hex: '#fae7d0',
+                undertone: 'WARM',
+                finish: 'DEWY',
+                depth: 'FAIR',
+                price: 45.00
+            },
+            purchaseType: 'onetime',
+            cadenceDays: 30,
+            cart: {
+                items: [],
+                reservation_id: null,
+                expires_at: null,
+                timerInterval: null
+            },
+            activeSwapSubId: null
+        };
+
+        // Navigation Router
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById(screenId);
+            if (target) target.classList.add('active');
+            else document.getElementById('home').classList.add('active');
+            window.scrollTo(0, 0);
+
+            if (screenId === 'account_subscriptions') {
+                loadSubscriptions();
+            }
+        }
+
+        function handleHash() {
+            const hash = window.location.hash.replace('#', '') || 'home';
+            showScreen(hash);
+        }
+
+        window.addEventListener('hashchange', handleHash);
+        window.addEventListener('DOMContentLoaded', () => {
+            initShadeMatrix();
+            initCartFromStorage();
+            handleHash();
+        });
+
+        // 1. Shade Matrix Initialization (50+ Shades)
+        async function initShadeMatrix() {
+            try {
+                const res = await fetch(`${CATALOG_API}/shades`);
+                const data = await res.json();
+                const shades = data.shades || [];
+                const grid = document.getElementById('shade-swatch-grid');
+                grid.innerHTML = '';
+
+                shades.forEach(shade => {
+                    if (shade.is_discontinued) return;
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.title = `${shade.name} (${shade.undertone}, ${shade.hex})`;
+                    btn.className = `w-7 h-7 rounded-full border-2 transition-transform hover:scale-125 focus:ring-2 focus:ring-accent ${shade.variant_id === appState.selectedShade.variant_id ? 'border-primary ring-2 ring-accent' : 'border-white'}`;
+                    btn.style.backgroundColor = shade.hex;
+                    btn.onclick = () => selectPDPShade(shade);
+                    grid.appendChild(btn);
+                });
+            } catch (e) {
+                console.warn('Fallback to local shade matrix:', e);
+            }
+        }
+
+        function selectPDPShade(shade) {
+            appState.selectedShade = shade;
+            document.getElementById('selected-shade-name-display').innerText = shade.name;
+            document.getElementById('selected-shade-subinfo').innerText = `${shade.undertone} Undertone • ${shade.finish} Finish • ${shade.depth} Depth • In Stock`;
+            initShadeMatrix(); // re-render selection highlight
+        }
+
+        function togglePurchaseType(type) {
+            appState.purchaseType = type;
+            const cadenceWrap = document.getElementById('sub-cadence-wrapper');
+            const subBadge = document.getElementById('pdp-sub-badge');
+            const priceDisplay = document.getElementById('pdp-price');
+
+            if (type === 'subscription') {
+                cadenceWrap.style.display = 'block';
+                subBadge.style.display = 'inline-flex';
+                priceDisplay.innerText = '$38.25';
+                document.getElementById('option-sub-card').classList.add('border-2', 'border-accent');
+                document.getElementById('option-onetime-card').classList.remove('border-2', 'border-accent');
+            } else {
+                cadenceWrap.style.display = 'none';
+                subBadge.style.display = 'none';
+                priceDisplay.innerText = '$45.00';
+                document.getElementById('option-onetime-card').classList.add('border-2', 'border-accent');
+                document.getElementById('option-sub-card').classList.remove('border-2', 'border-accent');
+            }
+        }
+
+        // 2. Add to Cart & Reserve Stock (ARCH-1428)
+        async function addToCartAndReserve() {
+            const btn = document.getElementById('add-to-cart-btn');
+            btn.disabled = true;
+            btn.innerText = 'Reserving stock via Redlock...';
+
+            const variant_id = appState.selectedShade.variant_id;
+            const unitPrice = appState.purchaseType === 'subscription' ? 38.25 : 45.00;
+
+            try {
+                // Call Cart Service
+                const response = await fetch(`${CART_API}/reserve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        variant_id,
+                        quantity: 1,
+                        session_id: 'session_' + Math.random().toString(36).substring(2, 9)
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(`Reservation failed: ${data.message || data.error}`);
+                    btn.disabled = false;
+                    btn.innerText = 'Add to Cart & Reserve Stock';
+                    return;
+                }
+
+                // Success! Set up cart
+                appState.cart.reservation_id = data.reservation_id;
+                appState.cart.expires_at = Date.now() + (data.ttl_seconds * 1000);
+                appState.cart.items = [{
+                    variant_id,
+                    name: appState.selectedShade.name,
+                    hex: appState.selectedShade.hex,
+                    price: unitPrice,
+                    purchase_type: appState.purchaseType,
+                    cadence: appState.purchaseType === 'subscription' ? document.getElementById('pdp-cadence').value : null,
+                    quantity: 1
+                }];
+
+                // Save to localStorage
+                localStorage.setItem('aura_cart', JSON.stringify(appState.cart));
+
+                startReservationTimer();
+                renderCartUI();
+
+                // Switch to cart
+                window.location.hash = 'cart';
+            } catch (err) {
+                console.error('Error reserving cart item:', err);
+                alert('Connection error reserving cart item.');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Add to Cart & Reserve Stock (10m Hold)';
+            }
+        }
+
+        // 3. Live 10-Minute Countdown Timer
+        function startReservationTimer() {
+            if (appState.cart.timerInterval) {
+                clearInterval(appState.cart.timerInterval);
+            }
+
+            const updateTimer = () => {
+                const now = Date.now();
+                const remaining = Math.max(0, Math.floor((appState.cart.expires_at - now) / 1000));
+
+                const mins = String(Math.floor(remaining / 60)).padStart(2, '0');
+                const secs = String(remaining % 60).padStart(2, '0');
+                const timeStr = `${mins}:${secs}`;
+
+                const cartCd = document.getElementById('cart-countdown');
+                const bannerCd = document.getElementById('banner-timer');
+                const banner = document.getElementById('reservation-banner');
+
+                if (cartCd) cartCd.innerText = timeStr;
+                if (bannerCd) bannerCd.innerText = timeStr;
+                if (banner) banner.style.display = remaining > 0 ? 'block' : 'none';
+
+                if (remaining <= 0) {
+                    clearInterval(appState.cart.timerInterval);
+                    if (cartCd) cartCd.innerText = 'EXPIRED';
+                    alert('Your 10-minute inventory reservation has expired. Stock has been restored.');
+                }
+            };
+
+            updateTimer();
+            appState.cart.timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function initCartFromStorage() {
+            const saved = localStorage.getItem('aura_cart');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.expires_at && parsed.expires_at > Date.now()) {
+                        appState.cart = parsed;
+                        startReservationTimer();
+                        renderCartUI();
+                    } else {
+                        localStorage.removeItem('aura_cart');
+                    }
+                } catch (e) {}
+            }
+        }
+
+        function renderCartUI() {
+            const container = document.getElementById('cart-items-container');
+            const tokenDisplay = document.getElementById('cart-token-display');
+            const badge = document.getElementById('cart-badge');
+
+            if (tokenDisplay) tokenDisplay.innerText = appState.cart.reservation_id || 'None';
+            if (badge) {
+                badge.innerText = appState.cart.items.length;
+                badge.style.display = appState.cart.items.length > 0 ? 'flex' : 'none';
+            }
+
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (appState.cart.items.length === 0) {
+                container.innerHTML = '<div class="py-8 text-center text-secondary">Your cart is empty. Explore our shade matrix to reserve stock!</div>';
+                return;
+            }
+
+            let subtotal = 0;
+            appState.cart.items.forEach(item => {
+                subtotal += item.price * item.quantity;
+                const div = document.createElement('div');
+                div.className = 'py-6 flex items-center justify-between';
+                div.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded border flex-shrink-0" style="background-color: ${item.hex || '#fae7d0'}"></div>
+                        <div>
+                            <h3 class="font-bold text-base">${item.name}</h3>
+                            <p class="text-xs text-secondary">${item.purchase_type === 'subscription' ? `<span class="text-accent font-semibold">Replenishment Regimen (Every ${item.cadence} Days)</span>` : 'One-time Purchase'}</p>
+                            <span class="text-sm font-semibold mt-1 block">$${item.price.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-sm font-bold">Qty: ${item.quantity}</span>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+
+            const shipping = 5.00;
+            const tax = parseFloat((subtotal * 0.0825).toFixed(2));
+            const total = parseFloat((subtotal + shipping + tax).toFixed(2));
+
+            document.getElementById('summary-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById('summary-tax').innerText = `$${tax.toFixed(2)}`;
+            document.getElementById('summary-total').innerText = `$${total.toFixed(2)}`;
+
+            // Mirror to checkout review
+            const checkoutItems = document.getElementById('checkout-items-list');
+            if (checkoutItems) {
+                checkoutItems.innerHTML = container.innerHTML;
+                document.getElementById('checkout-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+                document.getElementById('checkout-tax').innerText = `$${tax.toFixed(2)}`;
+                document.getElementById('checkout-total').innerText = `$${total.toFixed(2)}`;
+                document.getElementById('pay-now-btn').innerText = `Pay Now ($${total.toFixed(2)})`;
+            }
+        }
+
+        // 4. Order Checkout Saga (ARCH-1431)
+        async function executeCheckout(is1Click = false) {
+            if (!appState.cart.reservation_id) {
+                alert('No active reservation. Please add an item to cart first.');
+                return;
+            }
+
+            const idemKey = `idem_checkout_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+            const payBtn = document.getElementById('pay-now-btn');
+            if (payBtn) {
+                payBtn.disabled = true;
+                payBtn.innerText = 'Capturing payment & committing Saga...';
+            }
+
+            const payload = {
+                reservation_id: appState.cart.reservation_id,
+                payment_token: 'pm_card_visa_tok',
+                customer: {
+                    email: is1Click ? 'jane.doe@example.com' : document.getElementById('checkout-email').value,
+                    name: is1Click ? 'Jane Doe' : document.getElementById('checkout-name').value
+                },
+                shipping_address: {
+                    street: is1Click ? '123 Beauty Lane' : document.getElementById('checkout-address').value,
+                    city: is1Click ? 'Los Angeles' : document.getElementById('checkout-city').value,
+                    state: 'CA',
+                    zip: is1Click ? '90210' : document.getElementById('checkout-zip').value,
+                    country: 'US'
+                },
+                shipping_method: 'standard',
+                items: appState.cart.items
+            };
+
+            try {
+                const response = await fetch(`${ORDER_API}/checkout`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Idempotency-Key': idemKey
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    alert(`Checkout failed: ${data.message || data.error}`);
+                    if (payBtn) {
+                        payBtn.disabled = false;
+                        payBtn.innerText = 'Pay Now';
+                    }
+                    return;
+                }
+
+                // Success! Clear cart & timer
+                if (appState.cart.timerInterval) clearInterval(appState.cart.timerInterval);
+                localStorage.removeItem('aura_cart');
+                appState.cart = { items: [], reservation_id: null, expires_at: null, timerInterval: null };
+                document.getElementById('reservation-banner').style.display = 'none';
+
+                // Render confirmation details
+                document.getElementById('confirmed-order-id').innerText = data.order_id;
+                document.getElementById('confirmed-delivery-date').innerText = `${data.estimated_delivery_date} (Standard)`;
+                document.getElementById('confirmed-points').innerText = `+${data.loyalty_points_earned} Aura Points`;
+
+                window.location.hash = 'order_confirmation';
+            } catch (err) {
+                console.error('Checkout error:', err);
+                alert('Connection error communicating with Order Saga Service.');
+            } finally {
+                if (payBtn) payBtn.disabled = false;
+            }
+        }
+
+        function execute1ClickCheckout() { executeCheckout(true); }
+        function executeStandardCheckout() { executeCheckout(false); }
+
+        // 5. Subscription Regimen Portal (ARCH-1430 Live Skip & Swap)
+        async function loadSubscriptions() {
+            const container = document.getElementById('subscriptions-list-container');
+            container.innerHTML = '<div class="text-center py-8 text-secondary">Loading subscriptions...</div>';
+
+            try {
+                const res = await fetch(`${SUB_API}?customer_id=cust_jane_doe`);
+                const data = await res.json();
+                const subs = data.subscriptions || [];
+
+                container.innerHTML = '';
+                subs.forEach(sub => {
+                    const card = document.createElement('div');
+                    card.className = 'card p-6 shadow-sm';
+                    card.innerHTML = `
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <div class="flex items-center gap-3">
+                                    <h2 class="text-xl font-bold">${sub.product_name}</h2>
+                                    <span class="badge ${sub.status === 'ACTIVE' ? 'badge-success' : 'badge-warning'}">${sub.status}</span>
+                                </div>
+                                <p class="text-secondary text-sm mt-1">Shade: <span class="font-bold text-primary">${sub.shade_name}</span> &bull; SKU: <span class="font-mono">${sub.variant_id}</span></p>
+                                <div class="flex gap-4 text-xs text-secondary mt-2">
+                                    <span>Cadence: Every ${sub.frequency_days} Days</span>
+                                    <span>Next Shipment: <strong class="text-primary">${sub.next_billing_date}</strong></span>
+                                    <span>Price: $${sub.discounted_price.toFixed(2)} (15% Subscriber Savings)</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button type="button" onclick="skipSubscription('${sub.id}')" class="btn btn-secondary text-xs py-2 px-4">Skip Delivery</button>
+                                <button type="button" onclick="openSwapModal('${sub.id}')" class="btn btn-ghost text-xs py-2 px-4 border border-border">Swap Shade</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (e) {
+                container.innerHTML = '<div class="text-center py-8 text-error">Failed to load subscriptions.</div>';
+            }
+        }
+
+        async function skipSubscription(subId) {
+            try {
+                const res = await fetch(`${SUB_API}/${subId}/skip`, { method: 'POST' });
+                const data = await res.json();
+                if (res.ok) {
+                    alert(`Delivery skipped successfully! Next billing date advanced to: ${data.next_billing_date}`);
+                    loadSubscriptions();
+                } else {
+                    alert(`Failed to skip: ${data.message || data.error}`);
+                }
+            } catch (e) {
+                alert('Error skipping delivery.');
+            }
+        }
+
+        function openSwapModal(subId) {
+            appState.activeSwapSubId = subId;
+            document.getElementById('swap-modal').style.display = 'flex';
+        }
+
+        function closeSwapModal() {
+            document.getElementById('swap-modal').style.display = 'none';
+        }
+
+        async function confirmSwapShade() {
+            const selected = document.querySelector('input[name="swap-shade-opt"]:checked');
+            if (!selected || !appState.activeSwapSubId) return;
+
+            const newVariant = selected.value;
+            const newName = selected.getAttribute('data-name');
+
+            try {
+                const res = await fetch(`${SUB_API}/${appState.activeSwapSubId}/swap`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ new_variant_id: newVariant, new_shade_name: newName })
+                });
+
+                if (res.ok) {
+                    alert(`Shade successfully swapped to ${newName}!`);
+                    closeSwapModal();
+                    loadSubscriptions();
+                } else {
+                    alert('Failed to swap shade.');
+                }
+            } catch (e) {
+                alert('Connection error swapping shade.');
+            }
+        }
+
+        // 6. Shade Finder Quiz Wizard
+        let quizState = { depth: 'FAIR', hex: '#fae7d0', undertone: 'WARM', finish: 'DEWY' };
+
+        function selectDepth(depth, hex) {
+            quizState.depth = depth;
+            quizState.hex = hex;
+            document.getElementById('quiz-step-1').style.display = 'none';
+            document.getElementById('quiz-step-2').style.display = 'block';
+            document.getElementById('quiz-step-label').innerText = 'Step 2 of 3: Skin Undertone';
+            document.getElementById('quiz-step-percent').innerText = '66%';
+            document.getElementById('quiz-progress-bar').style.width = '66%';
+        }
+
+        function selectUndertone(undertone) {
+            quizState.undertone = undertone;
+            document.getElementById('quiz-step-2').style.display = 'none';
+            document.getElementById('quiz-step-3').style.display = 'block';
+            document.getElementById('quiz-step-label').innerText = 'Step 3 of 3: Desired Finish';
+            document.getElementById('quiz-step-percent').innerText = '100%';
+            document.getElementById('quiz-progress-bar').style.width = '100%';
+        }
+
+        function selectFinish(finish) {
+            quizState.finish = finish;
+        }
+
+        async function runShadeMatchAPI() {
+            try {
+                const res = await fetch(`${CATALOG_API}/shades/match`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(quizState)
+                });
+                const data = await res.json();
+                if (res.ok && data.best_match) {
+                    const match = data.best_match;
+                    appState.selectedShade = match;
+
+                    document.getElementById('match-swatch').style.backgroundColor = match.hex;
+                    document.getElementById('match-name').innerText = match.name;
+                    document.getElementById('match-desc').innerText = `${match.depth} depth • ${match.undertone} undertone • ${match.finish} finish (ΔE: ${match.delta_e})`;
+
+                    document.getElementById('quiz-step-3').style.display = 'none';
+                    document.getElementById('quiz-step-results').style.display = 'block';
+                }
+            } catch (e) {
+                alert('Error computing shade match.');
+            }
+        }
+
+        function goToPDPWithShade() {
+            selectPDPShade(appState.selectedShade);
+            window.location.hash = 'product_detail';
+        }
+
+        function resetQuiz() {
+            document.getElementById('quiz-step-results').style.display = 'none';
+            document.getElementById('quiz-step-1').style.display = 'block';
+            document.getElementById('quiz-step-label').innerText = 'Step 1 of 3: Skin Depth';
+            document.getElementById('quiz-step-percent').innerText = '33%';
+            document.getElementById('quiz-progress-bar').style.width = '33%';
+        }
+    </script>
+</body>
+</html>
