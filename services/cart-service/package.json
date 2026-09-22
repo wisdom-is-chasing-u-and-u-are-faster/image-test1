@@ -1,0 +1,12 @@
+{
+  "name": "cart-service",
+  "version": "1.0.0",
+  "description": "High-Concurrency Flash-Sale Cart & Redis Redlock Distributed Inventory Reservation (ARCH-1428)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": ["cart", "redlock", "reservation", "mach", "inventory"],
+  "author": "Antigravity Engineering",
+  "license": "ISC"
+}
