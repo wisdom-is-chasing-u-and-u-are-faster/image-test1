@@ -1,0 +1,12 @@
+{
+  "name": "aura-storefront",
+  "version": "1.0.0",
+  "description": "Aura Cosmetics Headless PWA Storefront & API Gateway (ARCH-1432)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["storefront", "pwa", "cosmetics", "d2c", "mach"],
+  "author": "Antigravity Engineering",
+  "license": "ISC"
+}
