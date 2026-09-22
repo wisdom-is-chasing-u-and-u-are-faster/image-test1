@@ -1,0 +1,12 @@
+{
+  "name": "order-service",
+  "version": "1.0.0",
+  "description": "Order Checkout Saga Orchestration & PCI-DSS Tokenized Payment Capture (ARCH-1431)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": ["order", "saga", "checkout", "pci-dss", "outbox", "idempotency"],
+  "author": "Antigravity Engineering",
+  "license": "ISC"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "subscription-service",
+  "version": "1.0.0",
+  "description": "Automated Cosmetic Replenishment Subscriptions & Self-Service Regimen Portal (ARCH-1430)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": ["subscriptions", "replenishment", "dunning", "regimen", "cosmetics"],
+  "author": "Antigravity Engineering",
+  "license": "ISC"
+}

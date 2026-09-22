@@ -1,0 +1,12 @@
+{
+  "name": "catalog-service",
+  "version": "1.0.0",
+  "description": "High-Cardinality Product Catalog & Faceted Shade Matching Engine (ARCH-1429)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": ["catalog", "shade-matching", "delta-e", "lab", "cosmetics"],
+  "author": "Antigravity Engineering",
+  "license": "ISC"
+}
