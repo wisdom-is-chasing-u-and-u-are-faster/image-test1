@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; background-color: #f8fafc; padding: 20px; }
+    .card { background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 24px; max-width: 600px; margin: 0 auto; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 9999px; font-weight: 600; font-size: 12px; }
+    .badge-p1 { background: #fee2e2; color: #dc2626; }
+    .btn { background: #2563eb; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>SLA Milestone Threshold Alert ({{milestone}})</h2>
+    <p>Ticket <strong>#{{ticketNumber}}</strong> has reached <strong>{{milestone}}</strong> of its SLA deadline without resolution.</p>
+    <p><span class="badge badge-p1">{{priority}}</span> | <strong>Title:</strong> {{title}}</p>
+    <p style="margin-top: 24px;">
+      <a href="{{ticketUrl}}" class="btn">View Ticket in Agent Workbench</a>
+    </p>
+  </div>
+</body>
+</html>
