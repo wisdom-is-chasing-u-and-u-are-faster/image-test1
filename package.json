@@ -1,0 +1,44 @@
+{
+  "name": "enterprise-ticketing-management-system",
+  "version": "1.0.0",
+  "description": "Serverless Event-Driven Platform Core for Enterprise Incident and Service Request Management",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts",
+    "migrate:up": "ts-node src/db/client.ts migrate",
+    "test:unit": "jest tests/contract tests/integration/state_machine.test.ts",
+    "test:integration": "jest tests/integration",
+    "test:security": "jest tests/security",
+    "test:ui": "jest tests/client",
+    "test": "jest",
+    "k6:concurrency": "k6 run tests/load/concurrency_race.js",
+    "k6:search": "k6 run tests/load/search_latency.js"
+  },
+  "dependencies": {
+    "@google-cloud/pubsub": "^4.0.0",
+    "@google-cloud/tasks": "^5.0.0",
+    "@opensearch-project/opensearch": "^2.6.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.5",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.12.7",
+    "@types/pg": "^8.11.5",
+    "@types/supertest": "^6.0.2",
+    "@types/uuid": "^9.0.8",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

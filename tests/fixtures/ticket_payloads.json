@@ -1,0 +1,22 @@
+{
+  "valid_p1_ticket": {
+    "title": "Core Payment Gateway Database Unresponsive",
+    "description": "Production database instances returning connection pool timeout errors under peak traffic.",
+    "category": "PostgreSQL",
+    "department_id": "22222222-2222-2222-2222-222222222222",
+    "priority": "P1"
+  },
+  "valid_p3_ticket": {
+    "title": "Request for staging database read replica",
+    "description": "Please provision a read-replica in us-central1-b for the QA testing environment.",
+    "category": "Database Operations",
+    "department_id": "22222222-2222-2222-2222-222222222222",
+    "priority": "P3"
+  },
+  "invalid_missing_title": {
+    "description": "Short missing title payload",
+    "category": "General",
+    "department_id": "11111111-1111-1111-1111-111111111111",
+    "priority": "P3"
+  }
+}
