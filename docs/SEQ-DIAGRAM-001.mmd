@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    actor Requester as 👤 Requester
+    participant Gateway as 🚪 API Gateway (Cloud Run)
+    participant DB as 🗄️ PostgreSQL 15+ (RLS)
+    participant PubSub as 📬 Cloud Pub/Sub
+    participant Tasks as ⏱️ Cloud Tasks
+    participant Router as 🧭 Routing Worker
+    actor Agent as 🎧 Support Specialist
+
+    Requester->>Gateway: POST /api/v1/tickets (X-Idempotency-Key)
+    Gateway->>DB: INSERT INTO tickets (status='SUBMITTED', version=1)
+    Gateway->>DB: INSERT INTO ticket_audit_ledger (SHA-256 trigger)
+    Gateway->>PubSub: Publish TicketCreatedEvent
+    Gateway->>Tasks: Schedule SLA Callbacks (50%, 75%, 100%)
+    Gateway-->>Requester: 201 Created (ticket_id, ETag)
+
+    PubSub->>Router: Consume TicketCreatedEvent
+    Router->>DB: Query least-loaded agent with matching skills
+    Router->>DB: UPDATE tickets SET assigned_agent_id, status='ASSIGNED', version=2
+    Router->>PubSub: Publish TicketAssignedEvent
+    Router-->>Agent: Notify in Workbench & Slack

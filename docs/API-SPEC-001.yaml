@@ -1,0 +1,318 @@
+openapi: 3.0.3
+info:
+  title: Enterprise Ticketing Management System (ETMS) API
+  version: 1.0.0
+  description: High-throughput serverless REST API contract for enterprise incident and service request management.
+servers:
+  - url: https://api.etms.corp.internal
+    description: Production API Gateway
+  - url: http://localhost:8080
+    description: Local Development Server
+
+paths:
+  /api/v1/tickets:
+    post:
+      summary: Ingest Incident or Service Request
+      operationId: createTicket
+      parameters:
+        - name: X-Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Unique idempotency token preventing duplicate ticket creation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTicketRequest'
+      responses:
+        '201':
+          description: Ticket created successfully.
+          headers:
+            Location:
+              schema:
+                type: string
+            ETag:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+        '200':
+          description: Idempotent resubmission - cached ticket returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+        '400':
+          description: Bad request schema validation failure.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '429':
+          description: Rate limit exceeded.
+
+  /api/v1/tickets/{id}/status:
+    patch:
+      summary: Transition Ticket Lifecycle Status
+      operationId: updateTicketStatus
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStatusRequest'
+      responses:
+        '200':
+          description: Status successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+        '400':
+          description: Invalid state transition requested.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Optimistic lock concurrency conflict.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ConcurrencyConflictDetails'
+        '422':
+          description: Mandatory resolution notes missing.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
+  /api/v1/tickets/search:
+    get:
+      summary: Faceted Full-Text Search
+      operationId: searchTickets
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: priority
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: department_id
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Paginated search results and aggregations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+  /internal/sla/callback:
+    post:
+      summary: Cloud Tasks SLA Milestone Callback
+      operationId: processSlaCallback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlaCallbackPayload'
+      responses:
+        '200':
+          description: Callback processed successfully.
+
+components:
+  schemas:
+    CreateTicketRequest:
+      type: object
+      required:
+        - title
+        - description
+        - category
+        - department_id
+      properties:
+        title:
+          type: string
+          minLength: 5
+          maxLength: 255
+        description:
+          type: string
+          minLength: 10
+        category:
+          type: string
+          maxLength: 64
+        department_id:
+          type: string
+          format: uuid
+        priority:
+          type: string
+          enum: [P1, P2, P3, P4]
+          default: P3
+
+    UpdateStatusRequest:
+      type: object
+      required:
+        - status
+        - expected_version
+      properties:
+        status:
+          type: string
+          enum: [SUBMITTED, QUEUED, ASSIGNED, IN_PROGRESS, PENDING_CUSTOMER, RESOLVED, CLOSED]
+        expected_version:
+          type: integer
+          minimum: 1
+        resolution_notes:
+          type: string
+
+    TicketResponse:
+      type: object
+      properties:
+        ticket_id:
+          type: string
+          format: uuid
+        ticket_number:
+          type: string
+        requester_id:
+          type: string
+          format: uuid
+        assigned_agent_id:
+          type: string
+          format: uuid
+          nullable: true
+        department_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+        priority:
+          type: string
+        category:
+          type: string
+        sla_ack_deadline:
+          type: string
+          format: date-time
+        sla_resolve_deadline:
+          type: string
+          format: date-time
+        sla_ack_status:
+          type: string
+        sla_resolve_status:
+          type: string
+        version:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    SearchResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+        hits:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketResponse'
+        facets:
+          type: object
+          properties:
+            by_status:
+              type: object
+              additionalProperties:
+                type: integer
+            by_priority:
+              type: object
+              additionalProperties:
+                type: integer
+
+    SlaCallbackPayload:
+      type: object
+      required:
+        - ticket_id
+        - milestone
+      properties:
+        ticket_id:
+          type: string
+          format: uuid
+        milestone:
+          type: string
+          enum: ['50%', '75%', '100%']
+
+    ProblemDetails:
+      type: object
+      required:
+        - type
+        - title
+        - status
+        - detail
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+
+    ConcurrencyConflictDetails:
+      allOf:
+        - $ref: '#/components/schemas/ProblemDetails'
+        - type: object
+          properties:
+            current_version:
+              type: integer
+            current_record:
+              $ref: '#/components/schemas/TicketResponse'
