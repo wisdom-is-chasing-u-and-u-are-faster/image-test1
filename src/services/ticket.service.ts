@@ -4,7 +4,7 @@ import { CreateTicketDTO } from '../api/validators/ticket.validator';
 import { SlaCalculatorService } from './sla_calculator.service';
 import { SlaSchedulerService } from './sla_scheduler.service';
 import { IndexingService } from './indexing.service';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid';
 
 export class TicketService {
   public static async createTicket(dto: CreateTicketDTO, requesterId: string, sessionContext?: UserSessionContext): Promise<any> {
@@ -65,6 +65,9 @@ export class TicketService {
   }
 
   public static async getTicketById(ticketId: string): Promise<any | null> {
+    if (!ticketId || !uuidValidate(ticketId)) {
+      return null;
+    }
     const res = await query('SELECT * FROM tickets WHERE ticket_id = $1', [ticketId]);
     return res.rows[0] || null;
   }

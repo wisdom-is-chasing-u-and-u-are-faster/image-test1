@@ -47,6 +47,18 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
+  if (err.type === 'entity.parse.failed' || (err instanceof SyntaxError && 'body' in err)) {
+    res.setHeader('Content-Type', 'application/problem+json');
+    res.status(400).json({
+      type: 'https://errors.etms.corp/malformed-json',
+      title: 'Malformed JSON',
+      status: 400,
+      detail: 'The request body could not be parsed as valid JSON.',
+      instance: req.originalUrl
+    });
+    return;
+  }
+
   console.error('Unhandled internal server error:', err);
   res.setHeader('Content-Type', 'application/problem+json');
   res.status(500).json({

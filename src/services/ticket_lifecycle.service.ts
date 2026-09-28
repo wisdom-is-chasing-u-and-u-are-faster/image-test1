@@ -33,12 +33,12 @@ export class TicketLifecycleService {
       const updateSql = `
         UPDATE tickets
         SET
-          status = $1,
+          status = $1::varchar,
           version = version + 1,
           resolution_notes = COALESCE($2, resolution_notes),
-          sla_resolve_status = CASE WHEN $1 = 'RESOLVED' THEN 'MET' ELSE sla_resolve_status END,
+          sla_resolve_status = CASE WHEN $1::varchar = 'RESOLVED' THEN 'MET' ELSE sla_resolve_status END,
           updated_at = NOW()
-        WHERE ticket_id = $3 AND version = $4
+        WHERE ticket_id = $3::uuid AND version = $4::int
         RETURNING *;
       `;
 

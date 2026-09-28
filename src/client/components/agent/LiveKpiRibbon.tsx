@@ -19,7 +19,7 @@ export const LiveKpiRibbon: React.FC<KpiProps> = ({ assignedToMe, unassigned, sl
         <p className="text-2xl font-bold text-blue-600 mt-1">{unassigned}</p>
       </div>
       <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
-        <p className="text-xs font-medium text-slate-500 uppercase">SLA Warning (>=75%)</p>
+        <p className="text-xs font-medium text-slate-500 uppercase">SLA Warning (&gt;=75%)</p>
         <p className="text-2xl font-bold text-amber-500 mt-1">{slaWarning}</p>
       </div>
       <div className="bg-white p-4 rounded-lg border border-slate-200 shadow-sm">
