@@ -1,0 +1,109 @@
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1,
+    "analysis": {
+      "analyzer": {
+        "ticket_text_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "stop",
+            "snowball"
+          ]
+        },
+        "autocomplete_analyzer": {
+          "type": "custom",
+          "tokenizer": "edge_ngram_tokenizer",
+          "filter": [
+            "lowercase"
+          ]
+        }
+      },
+      "tokenizer": {
+        "edge_ngram_tokenizer": {
+          "type": "edge_ngram",
+          "min_gram": 2,
+          "max_gram": 15,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "ticket_id": {
+        "type": "keyword"
+      },
+      "ticket_number": {
+        "type": "keyword"
+      },
+      "department_id": {
+        "type": "keyword"
+      },
+      "department_name": {
+        "type": "keyword"
+      },
+      "requester_id": {
+        "type": "keyword"
+      },
+      "assigned_agent_id": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "text",
+        "analyzer": "ticket_text_analyzer",
+        "fields": {
+          "autocomplete": {
+            "type": "text",
+            "analyzer": "autocomplete_analyzer",
+            "search_analyzer": "standard"
+          },
+          "keyword": {
+            "type": "keyword",
+            "ignore_above": 256
+          }
+        }
+      },
+      "description": {
+        "type": "text",
+        "analyzer": "ticket_text_analyzer"
+      },
+      "comments": {
+        "type": "text",
+        "analyzer": "ticket_text_analyzer"
+      },
+      "status": {
+        "type": "keyword"
+      },
+      "priority": {
+        "type": "keyword"
+      },
+      "category": {
+        "type": "keyword"
+      },
+      "version": {
+        "type": "integer"
+      },
+      "sla_ack_deadline": {
+        "type": "date"
+      },
+      "sla_resolve_deadline": {
+        "type": "date"
+      },
+      "sla_resolve_status": {
+        "type": "keyword"
+      },
+      "created_at": {
+        "type": "date"
+      },
+      "updated_at": {
+        "type": "date"
+      }
+    }
+  }
+}

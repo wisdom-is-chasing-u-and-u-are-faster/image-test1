@@ -1,0 +1,70 @@
+{
+  "allowed": [
+    {
+      "from": "SUBMITTED",
+      "to": "QUEUED"
+    },
+    {
+      "from": "SUBMITTED",
+      "to": "ASSIGNED"
+    },
+    {
+      "from": "QUEUED",
+      "to": "ASSIGNED"
+    },
+    {
+      "from": "ASSIGNED",
+      "to": "IN_PROGRESS"
+    },
+    {
+      "from": "ASSIGNED",
+      "to": "QUEUED"
+    },
+    {
+      "from": "IN_PROGRESS",
+      "to": "PENDING_CUSTOMER"
+    },
+    {
+      "from": "IN_PROGRESS",
+      "to": "RESOLVED"
+    },
+    {
+      "from": "PENDING_CUSTOMER",
+      "to": "IN_PROGRESS"
+    },
+    {
+      "from": "PENDING_CUSTOMER",
+      "to": "RESOLVED"
+    },
+    {
+      "from": "RESOLVED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "RESOLVED",
+      "to": "IN_PROGRESS"
+    }
+  ],
+  "disallowed": [
+    {
+      "from": "SUBMITTED",
+      "to": "RESOLVED"
+    },
+    {
+      "from": "SUBMITTED",
+      "to": "CLOSED"
+    },
+    {
+      "from": "QUEUED",
+      "to": "RESOLVED"
+    },
+    {
+      "from": "CLOSED",
+      "to": "SUBMITTED"
+    },
+    {
+      "from": "CLOSED",
+      "to": "IN_PROGRESS"
+    }
+  ]
+}
