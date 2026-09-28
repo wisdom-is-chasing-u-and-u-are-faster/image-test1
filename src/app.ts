@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import path from 'path';
 import { createTicketHandler } from './api/controllers/ticket.controller';
 import { updateTicketStatusHandler } from './api/controllers/ticket_status.controller';
 import { searchTicketsHandler } from './api/controllers/ticket_search.controller';
@@ -9,6 +10,9 @@ import { AppError } from './errors/rfc7807.error';
 import { ZodError } from 'zod';
 
 export const app = express();
+
+const publicPath = path.resolve(__dirname, '../public');
+app.use(express.static(publicPath));
 
 app.use(express.json());
 app.use(dbSessionContextMiddleware);
@@ -25,6 +29,14 @@ app.get('/api/v1/tickets/search', searchTicketsHandler);
 
 // Cloud Tasks internal callback
 app.post('/internal/sla/callback', slaCallbackHandler);
+
+// SPA Frontend Fallback Handler
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
+  if (req.path.startsWith('/api') || req.path === '/health' || req.path.startsWith('/internal')) {
+    return next();
+  }
+  res.sendFile(path.join(publicPath, 'index.html'));
+});
 
 // RFC-7807 Problem Details Global Error Middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
