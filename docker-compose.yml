@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  digital-banking-app:
+    build: .
+    container_name: digital-banking-platform
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - HOST=0.0.0.0
+      - DATABASE_URL=sqlite:///./digital_banking.db
+      - AES_SECRET_KEY=demo-aes-secret-key-32-bytes-long!
+      - HMAC_SECRET_KEY=demo-hmac-secret-key-for-ssn-hashing
+    restart: unless-stopped
