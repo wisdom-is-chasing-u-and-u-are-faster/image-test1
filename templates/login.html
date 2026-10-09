@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Blood Donor Connection Network (BDCN)</title>
+    
+    <!-- Dynamic Global Theme Injection (AC6) -->
+    <style id="global-theme-vars">
+    :root {
+        --color-primary-base: {{ active_theme.primary_base | default('#2c3e50') }};
+        --color-primary-light: {{ active_theme.primary_light | default('#34495e') }};
+        --color-accent-base: {{ active_theme.accent_base | default('#3498db') }};
+        --color-accent-light: {{ active_theme.accent_light | default('#5dade2') }};
+        --color-background: {{ active_theme.bg_color | default('#f8f9fa') }};
+        --color-surface: {{ active_theme.surface_color | default('#ffffff') }};
+        --color-text-primary: {{ active_theme.text_primary | default('#212529') }};
+        --color-text-secondary: {{ active_theme.text_secondary | default('#6c757d') }};
+        --color-border: {{ active_theme.border_color | default('#dee2e6') }};
+        --color-input-bg: {{ active_theme.surface_color | default('#ffffff') }};
+
+        --color-text-on-primary: #ffffff;
+        --color-text-on-accent: #ffffff;
+        --color-text-link: var(--color-accent-base);
+
+        --color-success: #28a745;
+        --color-warning: #ffc107;
+        --color-danger: #dc3545;
+        --color-info: #17a2b8;
+
+        --spacing-1: 4px;
+        --spacing-2: 8px;
+        --spacing-3: 16px;
+        --spacing-4: 24px;
+        --spacing-5: 32px;
+        --spacing-6: 48px;
+
+        --font-size-base: 1rem;
+        --font-size-small: 0.875rem;
+        --font-size-caption: 0.75rem;
+        --font-size-h1: 2rem;
+        --font-size-h2: 1.75rem;
+        --font-size-h3: 1.5rem;
+        --font-size-h4: 1.25rem;
+        --font-size-h5: 1.1rem;
+
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+        --radius-pill: 50rem;
+
+        --border-width: 1px;
+        --border-style: solid;
+        --shadow-1: 0 1px 3px rgba(0,0,0,0.08);
+        --shadow-2: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-3: 0 10px 15px rgba(0,0,0,0.12);
+
+        --transition-fast: 0.15s ease-in-out;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: var(--color-background);
+        color: var(--color-text-primary);
+        line-height: 1.5;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-4);
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 440px;
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-3);
+        padding: var(--spacing-5);
+    }
+
+    .brand-header {
+        text-align: center;
+        margin-bottom: var(--spacing-4);
+    }
+    .brand-logo {
+        font-size: 2.8rem;
+        margin-bottom: 8px;
+    }
+    .brand-title {
+        font-size: var(--font-size-h3);
+        font-weight: 700;
+        color: var(--color-primary-base);
+    }
+    .brand-subtitle {
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-small);
+        margin-top: 4px;
+    }
+
+    .form-group { margin-bottom: var(--spacing-3); }
+    .form-label { display: block; font-weight: 600; margin-bottom: 6px; font-size: var(--font-size-small); }
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 10px 14px;
+        font-size: var(--font-size-base);
+        background-color: var(--color-input-bg);
+        color: var(--color-text-primary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: var(--color-accent-base);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px 20px;
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        background-color: var(--color-primary-base);
+        color: var(--color-text-on-primary);
+    }
+    .btn:hover {
+        background-color: var(--color-primary-light);
+        box-shadow: var(--shadow-2);
+    }
+
+    .error-banner {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 10px 14px;
+        border-radius: var(--radius-md);
+        margin-bottom: 16px;
+        font-size: var(--font-size-small);
+    }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand-header">
+            <div class="brand-logo">🩸</div>
+            <h1 class="brand-title">BDCN Platform</h1>
+            <p class="brand-subtitle">Blood Donor Connection Network — Authenticated Access</p>
+        </div>
+
+        {% if error %}
+        <div class="error-banner">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/login">
+            {% if csrf_token %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            {% endif %}
+            <div class="form-group">
+                <label for="username" class="form-label">Username or Hospital ID</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="e.g. coordinator_01" required value="coordinator">
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Credentials Key</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn">
+                    Sign In to BDCN
+                </button>
+            </div>
+        </form>
+
+        <p style="text-align: center; color: var(--color-text-secondary); font-size: var(--font-size-caption); margin-top: 20px;">
+            End-to-End Encrypted Access. System Administration & Global Presets enabled.
+        </p>
+    </div>
+</body>
+</html>

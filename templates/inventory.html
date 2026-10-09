@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Inventory - Blood Donor Connection Network (BDCN)</title>
+    
+    <!-- Dynamic Global Theme Injection (AC6) -->
+    <style id="global-theme-vars">
+    :root {
+        --color-primary-base: {{ active_theme.primary_base | default('#2c3e50') }};
+        --color-primary-light: {{ active_theme.primary_light | default('#34495e') }};
+        --color-accent-base: {{ active_theme.accent_base | default('#3498db') }};
+        --color-accent-light: {{ active_theme.accent_light | default('#5dade2') }};
+        --color-background: {{ active_theme.bg_color | default('#f8f9fa') }};
+        --color-surface: {{ active_theme.surface_color | default('#ffffff') }};
+        --color-text-primary: {{ active_theme.text_primary | default('#212529') }};
+        --color-text-secondary: {{ active_theme.text_secondary | default('#6c757d') }};
+        --color-border: {{ active_theme.border_color | default('#dee2e6') }};
+        --color-input-bg: {{ active_theme.surface_color | default('#ffffff') }};
+
+        --color-text-on-primary: #ffffff;
+        --color-text-on-accent: #ffffff;
+        --color-text-link: var(--color-accent-base);
+
+        --color-success: #28a745;
+        --color-warning: #ffc107;
+        --color-danger: #dc3545;
+        --color-info: #17a2b8;
+
+        /* Spacing & Layout */
+        --spacing-1: 4px;
+        --spacing-2: 8px;
+        --spacing-3: 16px;
+        --spacing-4: 24px;
+        --spacing-5: 32px;
+        --spacing-6: 48px;
+
+        --font-size-base: 1rem;
+        --font-size-small: 0.875rem;
+        --font-size-caption: 0.75rem;
+        --font-size-h1: 2rem;
+        --font-size-h2: 1.75rem;
+        --font-size-h3: 1.5rem;
+        --font-size-h4: 1.25rem;
+        --font-size-h5: 1.1rem;
+
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+        --radius-pill: 50rem;
+
+        --border-width: 1px;
+        --border-style: solid;
+        --shadow-1: 0 1px 3px rgba(0,0,0,0.08);
+        --shadow-2: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-3: 0 10px 15px rgba(0,0,0,0.12);
+
+        --transition-fast: 0.15s ease-in-out;
+        --transition-medium: 0.25s ease-in-out;
+        --z-index-header: 1000;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: var(--color-background);
+        color: var(--color-text-primary);
+        line-height: 1.5;
+        padding-top: 80px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-4);
+    }
+
+    .main-content { flex: 1; padding-bottom: var(--spacing-6); }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all var(--transition-fast);
+        gap: var(--spacing-2);
+    }
+    .btn-sm { padding: var(--spacing-1) var(--spacing-2); font-size: var(--font-size-small); }
+    .btn-primary {
+        background-color: var(--color-primary-base);
+        color: var(--color-text-on-primary);
+        border-color: var(--color-primary-base);
+    }
+    .btn-primary:hover {
+        background-color: var(--color-primary-light);
+        border-color: var(--color-primary-light);
+        box-shadow: var(--shadow-2);
+    }
+    .btn-accent {
+        background-color: var(--color-accent-base);
+        color: var(--color-text-on-accent);
+        border-color: var(--color-accent-base);
+    }
+    .btn-accent:hover {
+        background-color: var(--color-accent-light);
+        border-color: var(--color-accent-light);
+        box-shadow: var(--shadow-2);
+    }
+    .btn-secondary {
+        color: var(--color-text-primary);
+        background-color: var(--color-surface);
+        border-color: var(--color-border);
+    }
+    .btn-secondary:hover {
+        background-color: var(--color-background);
+        border-color: var(--color-text-secondary);
+    }
+
+    /* Cards */
+    .card {
+        background-color: var(--color-surface);
+        border: var(--border-width) var(--border-style) var(--color-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-1);
+        padding: var(--spacing-4);
+        margin-bottom: var(--spacing-4);
+    }
+    .card-header {
+        padding-bottom: var(--spacing-3);
+        border-bottom: 1px solid var(--color-border);
+        margin-bottom: var(--spacing-3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    /* Tables & Density */
+    .table-container { width: 100%; overflow-x: auto; }
+    .table { width: 100%; margin-bottom: var(--spacing-3); border-collapse: collapse; }
+    .table th, .table td {
+        padding: var(--spacing-3);
+        vertical-align: middle;
+        border-top: 1px solid var(--color-border);
+        text-align: left;
+    }
+    .table thead th { border-bottom: 2px solid var(--color-border); font-weight: 600; }
+
+    .density-compact th, .density-compact td { padding: 6px 12px; font-size: 0.875rem; }
+    .density-comfortable th, .density-comfortable td { padding: 14px 16px; font-size: 1rem; }
+    .density-spacious th, .density-spacious td { padding: 20px 20px; font-size: 1.05rem; }
+
+    /* Worklist Cards */
+    .inventory-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+    }
+    .inventory-card-item {
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 16px;
+        box-shadow: var(--shadow-1);
+    }
+
+    /* Badges */
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        font-size: var(--font-size-caption);
+        font-weight: 700;
+        border-radius: var(--radius-pill);
+        text-transform: uppercase;
+    }
+    .badge-danger { background-color: var(--color-danger); color: white; }
+    .badge-success { background-color: var(--color-success); color: white; }
+    .badge-warning { background-color: var(--color-warning); color: #212529; }
+    .badge-info { background-color: var(--color-info); color: white; }
+    .badge-primary { background-color: var(--color-primary-base); color: white; }
+
+    /* App Header */
+    .app-header {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: var(--z-index-header);
+        background: var(--color-surface);
+        box-shadow: var(--shadow-2);
+        padding: var(--spacing-3) 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+    .header-content { display: flex; justify-content: space-between; align-items: center; }
+    .logo {
+        display: flex; align-items: center; gap: var(--spacing-2);
+        font-size: var(--font-size-h5); font-weight: 700;
+        color: var(--color-text-primary); text-decoration: none;
+    }
+    .logo-icon { font-size: 1.5em; color: var(--color-danger); }
+    .main-nav ul { margin: 0; padding: 0; list-style: none; display: flex; gap: var(--spacing-4); }
+    .main-nav a {
+        color: var(--color-text-secondary);
+        font-weight: 500;
+        padding: var(--spacing-2) 0;
+        border-bottom: 2px solid transparent;
+        text-decoration: none;
+        transition: all var(--transition-fast);
+    }
+    .main-nav a:hover, .main-nav a.active {
+        color: var(--color-text-primary);
+        border-bottom-color: var(--color-accent-base);
+    }
+    .header-actions { display: flex; align-items: center; gap: var(--spacing-3); }
+
+    .app-footer {
+        background-color: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        padding: var(--spacing-4) 0;
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-small);
+    }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; }
+
+    .grid-container { display: grid; gap: var(--spacing-4); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+    .worklist-toolbar {
+        background-color: var(--color-background);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    .toolbar-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .alert-banner {
+        padding: var(--spacing-3);
+        border-radius: var(--radius-md);
+        margin-bottom: var(--spacing-3);
+        display: none;
+    }
+    .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+    @media (max-width: 900px) {
+        .grid-cols-3 { grid-template-columns: 1fr; }
+    }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <div class="container header-content">
+            <a href="/dashboard" class="logo">
+                <span class="logo-icon">🩸</span>
+                <span>BDCN Platform</span>
+            </a>
+            <nav class="main-nav" aria-label="Main Navigation">
+                <ul>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/search">Donor Search</a></li>
+                    <li><a href="/inventory" class="active">Global Inventory</a></li>
+                    <li><a href="/admin">System Admin</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <span class="user-info">Welcome, Inventory Director</span>
+                <a href="/login" class="btn btn-secondary btn-sm">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="main-content container">
+        <section id="inventory">
+            <header class="mb-4" style="margin-bottom: 24px;">
+                <h1>Global Aggregated Inventory (AC5)</h1>
+                <p style="color: var(--color-text-secondary);">Overall status of blood supply across the regional and edge network.</p>
+            </header>
+
+            <div id="inv-alert" class="alert-banner alert-success"></div>
+
+            <!-- KPI Metric Cards -->
+            <div class="grid-container grid-cols-3" style="margin-bottom: 24px;">
+                <div class="card">
+                    <h5 style="color: var(--color-text-secondary); margin-bottom: 8px;">Total Units Available</h5>
+                    <p style="font-size: 2.2rem; font-weight: 700; color: var(--color-primary-base);">{{ total_units }} Units</p>
+                    <span style="font-size: var(--font-size-small); color: var(--color-success);">Across 8 Blood Categories</span>
+                </div>
+                <div class="card">
+                    <h5 style="color: var(--color-text-secondary); margin-bottom: 8px;">Optimal Supply Groups</h5>
+                    <p style="font-size: 2.2rem; font-weight: 700; color: var(--color-success);">{{ optimal_count }} Types</p>
+                    <span style="font-size: var(--font-size-small); color: var(--color-text-secondary);">Above critical threshold</span>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--color-danger);">
+                    <h5 style="color: var(--color-text-secondary); margin-bottom: 8px;">Critical Alert Groups</h5>
+                    <p style="font-size: 2.2rem; font-weight: 700; color: var(--color-danger);">{{ critical_count }} Types</p>
+                    <span style="font-size: var(--font-size-small); color: var(--color-danger);">Urgent donor drives recommended</span>
+                </div>
+            </div>
+
+            <!-- Worklist / Inventory Supply Table (AC7) -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h5>📦 Network Supply Levels & Worklist</h5>
+                        <small style="color: var(--color-text-secondary);">Layout synced with global preset settings.</small>
+                    </div>
+                    <span class="badge badge-info" id="inv-layout-badge">
+                        Layout: {{ worklist_layout.name | default('Standard') }}
+                    </span>
+                </div>
+
+                <!-- Worklist Layout Toolbar (AC7) -->
+                <div class="worklist-toolbar">
+                    <div class="toolbar-group">
+                        <label style="font-size: var(--font-size-small); font-weight: 600;">Presets:</label>
+                        <select id="inv-preset-select" class="form-control" style="width: auto; padding: 4px 8px;" onchange="switchInvPreset(this.value)">
+                            {% for pid, p in worklist_presets.items() %}
+                                <option value="{{ pid }}" {% if pid == worklist_preset_id %}selected{% endif %}>
+                                    {{ p.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <label style="font-size: var(--font-size-small); font-weight: 600;">Density:</label>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setInvDensity('compact')">Compact</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setInvDensity('comfortable')">Comfortable</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setInvDensity('spacious')">Spacious</button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <label style="font-size: var(--font-size-small); font-weight: 600;">View Mode:</label>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setInvViewMode('table')">📊 Table</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setInvViewMode('cards')">📇 Cards</button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button type="button" class="btn btn-sm btn-accent" onclick="saveInvAsGlobalPreset()">
+                            🌟 Save for All like Preset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table View Mode -->
+                <div id="inv-table-container" class="table-container density-{{ worklist_layout.density | default('comfortable') }}" {% if worklist_layout.view_mode == 'cards' %}style="display:none;"{% endif %}>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Blood Type</th>
+                                <th>Total Stock Units</th>
+                                <th>Supply Status</th>
+                                <th>Major Regional Hubs</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in inventory %}
+                            <tr>
+                                <td>
+                                    <span class="badge {% if item.status == 'Critical' %}badge-danger{% elif item.status == 'Low' %}badge-warning{% else %}badge-primary{% endif %}" style="font-size:0.95rem; padding:6px 12px;">
+                                        {{ item.type }}
+                                    </span>
+                                </td>
+                                <td><strong>{{ item.units }} Units</strong></td>
+                                <td>
+                                    <span class="badge {% if item.status == 'Optimal' %}badge-success{% elif item.status == 'Low' %}badge-warning{% else %}badge-danger{% endif %}">
+                                        {{ item.status }}
+                                    </span>
+                                </td>
+                                <td>{{ item.hubs | default('Metro General, Regional Hubs') }}</td>
+                                <td>
+                                    <a href="/search?blood_type={{ item.type }}" class="btn btn-secondary btn-sm">Find Donors</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cards View Mode -->
+                <div id="inv-cards-container" class="inventory-cards-grid" {% if worklist_layout.view_mode != 'cards' %}style="display:none;"{% endif %}>
+                    {% for item in inventory %}
+                    <div class="inventory-card-item">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <span class="badge {% if item.status == 'Critical' %}badge-danger{% elif item.status == 'Low' %}badge-warning{% else %}badge-primary{% endif %}" style="font-size:1.1rem; padding:6px 14px;">
+                                {{ item.type }}
+                            </span>
+                            <span class="badge {% if item.status == 'Optimal' %}badge-success{% elif item.status == 'Low' %}badge-warning{% else %}badge-danger{% endif %}">
+                                {{ item.status }}
+                            </span>
+                        </div>
+                        <p style="font-size: 1.5rem; font-weight:700; margin: 8px 0; color:var(--color-primary-base);">{{ item.units }} Units</p>
+                        <p style="font-size:var(--font-size-small); color:var(--color-text-secondary); margin-bottom:12px;">
+                            Hubs: {{ item.hubs | default('All Regional Hubs') }}
+                        </p>
+                        <a href="/search?blood_type={{ item.type }}" class="btn btn-primary btn-sm" style="width:100%;">
+                            🔍 Match Donors
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container footer-content">
+            <p>&copy; 2024 Blood Donor Connection Network. All Rights Reserved.</p>
+            <p>All data is encrypted in transit and at rest. (REQ-N-004)</p>
+        </div>
+    </footer>
+
+    <script>
+    let invLayout = {{ worklist_layout | tojson }};
+    const invPresets = {{ worklist_presets | tojson }};
+
+    function showInvAlert(msg) {
+        const el = document.getElementById('inv-alert');
+        el.innerText = msg;
+        el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    function setInvDensity(density) {
+        invLayout.density = density;
+        document.getElementById('inv-table-container').className = `table-container density-${density}`;
+        updateInvBadge();
+    }
+
+    function setInvViewMode(mode) {
+        invLayout.view_mode = mode;
+        const table = document.getElementById('inv-table-container');
+        const cards = document.getElementById('inv-cards-container');
+        if (mode === 'cards') {
+            table.style.display = 'none';
+            cards.style.display = 'grid';
+        } else {
+            table.style.display = 'block';
+            cards.style.display = 'none';
+        }
+        updateInvBadge();
+    }
+
+    function switchInvPreset(pid) {
+        if (invPresets[pid]) {
+            invLayout = Object.assign({}, invPresets[pid]);
+            setInvDensity(invLayout.density || 'comfortable');
+            setInvViewMode(invLayout.view_mode || 'table');
+            showInvAlert(`Switched inventory layout preset to: ${invPresets[pid].name}`);
+        }
+    }
+
+    function updateInvBadge() {
+        document.getElementById('inv-layout-badge').innerText = `Layout: ${invLayout.name || 'Custom'} (${invLayout.density})`;
+    }
+
+    async function saveInvAsGlobalPreset() {
+        const name = prompt('Save this Inventory Worklist Layout as Global Preset for all:', invLayout.name || 'Inventory Standard');
+        if (!name) return;
+
+        const payload = {
+            name: name,
+            density: invLayout.density,
+            view_mode: invLayout.view_mode,
+            visible_columns: invLayout.visible_columns,
+            page_size: 10
+        };
+
+        const res = await fetch('/api/admin/worklist-presets/save-for-all', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showInvAlert('🌟 ' + data.message);
+            invLayout.name = name;
+            updateInvBadge();
+        }
+    }
+    </script>
+</body>
+</html>

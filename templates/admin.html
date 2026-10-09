@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Admin - Blood Donor Connection Network (BDCN)</title>
+    
+    <!-- Dynamic Global Theme Injection (AC6) -->
+    <style id="global-theme-vars">
+    :root {
+        --color-primary-base: {{ active_theme.primary_base | default('#2c3e50') }};
+        --color-primary-light: {{ active_theme.primary_light | default('#34495e') }};
+        --color-accent-base: {{ active_theme.accent_base | default('#3498db') }};
+        --color-accent-light: {{ active_theme.accent_light | default('#5dade2') }};
+        --color-background: {{ active_theme.bg_color | default('#f8f9fa') }};
+        --color-surface: {{ active_theme.surface_color | default('#ffffff') }};
+        --color-text-primary: {{ active_theme.text_primary | default('#212529') }};
+        --color-text-secondary: {{ active_theme.text_secondary | default('#6c757d') }};
+        --color-border: {{ active_theme.border_color | default('#dee2e6') }};
+        --color-input-bg: {{ active_theme.surface_color | default('#ffffff') }};
+
+        --color-text-on-primary: #ffffff;
+        --color-text-on-accent: #ffffff;
+        --color-text-link: var(--color-accent-base);
+
+        --color-success: #28a745;
+        --color-warning: #ffc107;
+        --color-danger: #dc3545;
+        --color-info: #17a2b8;
+
+        /* Spacing & Layout */
+        --spacing-1: 4px;
+        --spacing-2: 8px;
+        --spacing-3: 16px;
+        --spacing-4: 24px;
+        --spacing-5: 32px;
+        --spacing-6: 48px;
+
+        --font-size-base: 1rem;
+        --font-size-small: 0.875rem;
+        --font-size-caption: 0.75rem;
+        --font-size-h1: 2rem;
+        --font-size-h2: 1.75rem;
+        --font-size-h3: 1.5rem;
+        --font-size-h4: 1.25rem;
+        --font-size-h5: 1.1rem;
+
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+        --radius-pill: 50rem;
+
+        --border-width: 1px;
+        --border-style: solid;
+        --shadow-1: 0 1px 3px rgba(0,0,0,0.08);
+        --shadow-2: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-3: 0 10px 15px rgba(0,0,0,0.12);
+
+        --transition-fast: 0.15s ease-in-out;
+        --transition-medium: 0.25s ease-in-out;
+        --z-index-header: 1000;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: var(--color-background);
+        color: var(--color-text-primary);
+        line-height: 1.5;
+        padding-top: 80px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-4);
+    }
+
+    .main-content { flex: 1; padding-bottom: var(--spacing-6); }
+
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all var(--transition-fast);
+        gap: var(--spacing-2);
+    }
+    .btn-sm { padding: var(--spacing-1) var(--spacing-2); font-size: var(--font-size-small); }
+    .btn-primary {
+        background-color: var(--color-primary-base);
+        color: var(--color-text-on-primary);
+        border-color: var(--color-primary-base);
+    }
+    .btn-primary:hover {
+        background-color: var(--color-primary-light);
+        border-color: var(--color-primary-light);
+        box-shadow: var(--shadow-2);
+    }
+    .btn-accent {
+        background-color: var(--color-accent-base);
+        color: var(--color-text-on-accent);
+        border-color: var(--color-accent-base);
+    }
+    .btn-accent:hover {
+        background-color: var(--color-accent-light);
+        border-color: var(--color-accent-light);
+        box-shadow: var(--shadow-2);
+    }
+    .btn-secondary {
+        color: var(--color-text-primary);
+        background-color: var(--color-surface);
+        border-color: var(--color-border);
+    }
+    .btn-secondary:hover {
+        background-color: var(--color-background);
+        border-color: var(--color-text-secondary);
+    }
+
+    /* Cards */
+    .card {
+        background-color: var(--color-surface);
+        border: var(--border-width) var(--border-style) var(--color-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-1);
+        padding: var(--spacing-4);
+        margin-bottom: var(--spacing-4);
+    }
+    .card-header {
+        padding-bottom: var(--spacing-3);
+        border-bottom: 1px solid var(--color-border);
+        margin-bottom: var(--spacing-3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Forms & Inputs */
+    .form-group { margin-bottom: var(--spacing-3); }
+    .form-label { display: block; font-weight: 500; margin-bottom: var(--spacing-1); font-size: var(--font-size-small); }
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-base);
+        background-color: var(--color-input-bg);
+        color: var(--color-text-primary);
+        border: var(--border-width) var(--border-style) var(--color-border);
+        border-radius: var(--radius-md);
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: var(--color-accent-base);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+    }
+
+    /* Tables */
+    .table { width: 100%; margin-bottom: var(--spacing-3); border-collapse: collapse; }
+    .table th, .table td {
+        padding: var(--spacing-3);
+        vertical-align: middle;
+        border-top: 1px solid var(--color-border);
+        text-align: left;
+    }
+    .table thead th { border-bottom: 2px solid var(--color-border); font-weight: 600; }
+
+    /* Badges */
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        font-size: var(--font-size-caption);
+        font-weight: 700;
+        border-radius: var(--radius-pill);
+        text-transform: uppercase;
+    }
+    .badge-danger { background-color: var(--color-danger); color: white; }
+    .badge-success { background-color: var(--color-success); color: white; }
+    .badge-warning { background-color: var(--color-warning); color: #212529; }
+    .badge-info { background-color: var(--color-info); color: white; }
+    .badge-primary { background-color: var(--color-primary-base); color: white; }
+
+    /* App Header */
+    .app-header {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: var(--z-index-header);
+        background: var(--color-surface);
+        box-shadow: var(--shadow-2);
+        padding: var(--spacing-3) 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+    .header-content { display: flex; justify-content: space-between; align-items: center; }
+    .logo {
+        display: flex; align-items: center; gap: var(--spacing-2);
+        font-size: var(--font-size-h5); font-weight: 700;
+        color: var(--color-text-primary); text-decoration: none;
+    }
+    .logo-icon { font-size: 1.5em; color: var(--color-danger); }
+    .main-nav ul { margin: 0; padding: 0; list-style: none; display: flex; gap: var(--spacing-4); }
+    .main-nav a {
+        color: var(--color-text-secondary);
+        font-weight: 500;
+        padding: var(--spacing-2) 0;
+        border-bottom: 2px solid transparent;
+        text-decoration: none;
+        transition: all var(--transition-fast);
+    }
+    .main-nav a:hover, .main-nav a.active {
+        color: var(--color-text-primary);
+        border-bottom-color: var(--color-accent-base);
+    }
+    .header-actions { display: flex; align-items: center; gap: var(--spacing-3); }
+
+    .app-footer {
+        background-color: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        padding: var(--spacing-4) 0;
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-small);
+    }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; }
+
+    .grid-container { display: grid; gap: var(--spacing-4); }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .color-swatch-box {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border-radius: var(--radius-sm);
+        border: 1px solid #ccc;
+        vertical-align: middle;
+        margin-right: 6px;
+    }
+
+    .alert-banner {
+        padding: var(--spacing-3);
+        border-radius: var(--radius-md);
+        margin-bottom: var(--spacing-3);
+        display: none;
+    }
+    .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+
+    @media (max-width: 900px) {
+        .grid-cols-2, .grid-cols-3, .grid-cols-4 { grid-template-columns: 1fr; }
+    }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <div class="container header-content">
+            <a href="/dashboard" class="logo">
+                <span class="logo-icon">🩸</span>
+                <span>BDCN Global Admin</span>
+            </a>
+            <nav class="main-nav" aria-label="Main Navigation">
+                <ul>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/search">Donor Search</a></li>
+                    <li><a href="/inventory">Global Inventory</a></li>
+                    <li><a href="/admin" class="active">System Admin</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <span class="user-info"><strong>Global Administrator</strong></span>
+                <a href="/login" class="btn btn-secondary btn-sm">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" class="main-content container">
+        <section id="admin">
+            <header class="mb-4" style="margin-bottom: 24px;">
+                <h1>System Administration & Global Controls</h1>
+                <p style="color: var(--color-text-secondary);">Manage system health, global theme color presets, and worklist layout presets.</p>
+            </header>
+
+            <div id="admin-alert" class="alert-banner alert-success"></div>
+
+            <!-- FEATURE 1: Global Theme & Color Presets Transfer (AC6) -->
+            <div class="card" id="theme-preset-card">
+                <div class="card-header">
+                    <div>
+                        <h2>🎨 Global Theme & Color Presets Transfer (AC6)</h2>
+                        <p style="color: var(--color-text-secondary); font-size: var(--font-size-small);">
+                            Configure brand colors and transfer active presets across all application views for all users.
+                        </p>
+                    </div>
+                    <span class="badge badge-primary" id="active-theme-badge">Active: {{ active_theme.name | default('Corporate Blue') }}</span>
+                </div>
+
+                <div class="grid-container grid-cols-2">
+                    <div>
+                        <div class="form-group">
+                            <label for="theme-preset-select" class="form-label">Select Color Preset</label>
+                            <select id="theme-preset-select" class="form-control" onchange="loadPresetValues()">
+                                {% for pid, preset in theme_presets.items() %}
+                                    <option value="{{ pid }}" {% if pid == active_theme_id %}selected{% endif %}>
+                                        {{ preset.name }}
+                                    </option>
+                                {% endfor %}
+                                <option value="custom">-- Custom Color Palette --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="preset-name-input" class="form-label">Preset Name (for saving custom preset)</label>
+                            <input type="text" id="preset-name-input" class="form-control" value="{{ active_theme.name }}">
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;">
+                            <button type="button" class="btn btn-primary" onclick="applyThemePresetGlobally()">
+                                🚀 Transfer & Apply Preset Globally
+                            </button>
+                            <button type="button" class="btn btn-accent" onclick="saveCustomThemePreset()">
+                                💾 Save as New Preset
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetThemeToDefault()">
+                                ↺ Reset to Default
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="margin-bottom: 12px; font-size: 1rem;">Palette Color Pickers:</h4>
+                        <div class="grid-container grid-cols-2" style="gap: 12px;">
+                            <div>
+                                <label class="form-label">Primary Base</label>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <input type="color" id="picker-primary-base" value="{{ active_theme.primary_base }}" style="width:40px; height:36px; border:none; cursor:pointer;" onchange="updateLivePreview()">
+                                    <input type="text" id="hex-primary-base" class="form-control" value="{{ active_theme.primary_base }}" onchange="syncFromHex()">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Primary Light</label>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <input type="color" id="picker-primary-light" value="{{ active_theme.primary_light }}" style="width:40px; height:36px; border:none; cursor:pointer;" onchange="updateLivePreview()">
+                                    <input type="text" id="hex-primary-light" class="form-control" value="{{ active_theme.primary_light }}" onchange="syncFromHex()">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Accent Base</label>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <input type="color" id="picker-accent-base" value="{{ active_theme.accent_base }}" style="width:40px; height:36px; border:none; cursor:pointer;" onchange="updateLivePreview()">
+                                    <input type="text" id="hex-accent-base" class="form-control" value="{{ active_theme.accent_base }}" onchange="syncFromHex()">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Accent Light</label>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <input type="color" id="picker-accent-light" value="{{ active_theme.accent_light }}" style="width:40px; height:36px; border:none; cursor:pointer;" onchange="updateLivePreview()">
+                                    <input type="text" id="hex-accent-light" class="form-control" value="{{ active_theme.accent_light }}" onchange="syncFromHex()">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Background</label>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <input type="color" id="picker-bg-color" value="{{ active_theme.bg_color }}" style="width:40px; height:36px; border:none; cursor:pointer;" onchange="updateLivePreview()">
+                                    <input type="text" id="hex-bg-color" class="form-control" value="{{ active_theme.bg_color }}" onchange="syncFromHex()">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Surface / Card</label>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <input type="color" id="picker-surface-color" value="{{ active_theme.surface_color }}" style="width:40px; height:36px; border:none; cursor:pointer;" onchange="updateLivePreview()">
+                                    <input type="text" id="hex-surface-color" class="form-control" value="{{ active_theme.surface_color }}" onchange="syncFromHex()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEATURE 2: Global Worklist Layout Setting & Save for All Presets (AC7) -->
+            <div class="card" id="worklist-preset-card">
+                <div class="card-header">
+                    <div>
+                        <h2>⚙️ Worklist Layout Setting & Save for All Presets (AC7)</h2>
+                        <p style="color: var(--color-text-secondary); font-size: var(--font-size-small);">
+                            Customize worklist views, density, and column visibility and save as a system-wide preset for all users.
+                        </p>
+                    </div>
+                    <span class="badge badge-info" id="active-worklist-badge">Default: {{ worklist_layout.name | default('Standard Comprehensive') }}</span>
+                </div>
+
+                <div class="grid-container grid-cols-2">
+                    <div>
+                        <div class="form-group">
+                            <label for="worklist-preset-select" class="form-label">Saved Worklist Presets</label>
+                            <select id="worklist-preset-select" class="form-control" onchange="loadWorklistPresetValues()">
+                                {% for wpid, wpreset in worklist_presets.items() %}
+                                    <option value="{{ wpid }}" {% if wpid == worklist_preset_id %}selected{% endif %}>
+                                        {{ wpreset.name }} ({{ wpreset.density }} / {{ wpreset.view_mode }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Row Density</label>
+                            <div style="display:flex; gap: 8px;">
+                                <label><input type="radio" name="admin-density" value="compact" {% if worklist_layout.density == 'compact' %}checked{% endif %}> Compact</label>
+                                <label><input type="radio" name="admin-density" value="comfortable" {% if worklist_layout.density == 'comfortable' %}checked{% endif %}> Comfortable</label>
+                                <label><input type="radio" name="admin-density" value="spacious" {% if worklist_layout.density == 'spacious' %}checked{% endif %}> Spacious</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Default View Mode</label>
+                            <div style="display:flex; gap: 16px;">
+                                <label><input type="radio" name="admin-viewmode" value="table" {% if worklist_layout.view_mode == 'table' %}checked{% endif %}> 📊 Table Grid</label>
+                                <label><input type="radio" name="admin-viewmode" value="cards" {% if worklist_layout.view_mode == 'cards' %}checked{% endif %}> 📇 Card View</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="admin-preset-name" class="form-label">Preset Name</label>
+                            <input type="text" id="admin-preset-name" class="form-control" value="Global Standard Default">
+                        </div>
+
+                        <div style="display: flex; gap: 8px; margin-top: 16px;">
+                            <button type="button" class="btn btn-primary" onclick="saveWorklistPresetForAll()">
+                                🌟 Save for All like Preset
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="applySelectedWorklistPresetForAll()">
+                                Apply Selected for All
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 style="margin-bottom: 12px; font-size: 1rem;">Visible Columns in Worklist:</h4>
+                        <div id="column-checkboxes" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                            <label><input type="checkbox" value="donor_id" checked> Donor ID</label>
+                            <label><input type="checkbox" value="name" checked> Full Name</label>
+                            <label><input type="checkbox" value="blood_type" checked> Blood Type</label>
+                            <label><input type="checkbox" value="location" checked> Location</label>
+                            <label><input type="checkbox" value="status" checked> Availability Status</label>
+                            <label><input type="checkbox" value="distance" checked> Distance (km)</label>
+                            <label><input type="checkbox" value="units" checked> Units Donated</label>
+                            <label><input type="checkbox" value="last_donation" checked> Last Donation Date</label>
+                            <label><input type="checkbox" value="shard_id" checked> Shard / Cluster Node</label>
+                            <label><input type="checkbox" value="actions" checked> Actions</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing AC4 System Status Cards -->
+            <div class="grid-container grid-cols-2">
+                <div class="card">
+                    <h5 class="card-header">Data Source Management (REQ-F-001)</h5>
+                    <p style="color: var(--color-text-secondary); margin-bottom: 12px;">Manage connections to data sources.</p>
+                    <table class="table">
+                        <thead>
+                            <tr><th>Source</th><th>Type</th><th>Status</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Primary Donor DB</td><td>PostgreSQL</td><td><span class="badge badge-success">Connected</span></td></tr>
+                            <tr><td>Archival Records</td><td>S3 Object Storage</td><td><span class="badge badge-success">Connected</span></td></tr>
+                            <tr><td>Partner Lab API</td><td>REST API</td><td><span class="badge badge-danger">Disconnected</span></td></tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-secondary mt-3">Add New Source</button>
+                </div>
+
+                <div class="card">
+                    <h5 class="card-header">Cluster Status (REQ-N-002, REQ-N-003)</h5>
+                    <p style="color: var(--color-text-secondary); margin-bottom: 12px;">Health of cache cluster nodes (Active: {{ system.active_nodes }} | Latency: {{ system.p99_latency_ms }}ms).</p>
+                    <table class="table">
+                        <thead>
+                            <tr><th>Node ID</th><th>Status</th><th>Data Partition</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>node-a1b2</td><td><span class="badge badge-success">Healthy</span></td><td>Shard 1, 2</td></tr>
+                            <tr><td>node-c3d4</td><td><span class="badge badge-success">Healthy</span></td><td>Shard 3, 4</td></tr>
+                            <tr><td>node-e5f6</td><td><span class="badge badge-success">Healthy</span></td><td>Shard 1, 3</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container footer-content">
+            <p>&copy; 2024 Blood Donor Connection Network. All Rights Reserved.</p>
+            <p>All data is encrypted in transit and at rest. (REQ-N-004)</p>
+        </div>
+    </footer>
+
+    <!-- Client Script for Global Theme & Worklist Presets Management -->
+    <script>
+    const PRESETS = {{ theme_presets | tojson }};
+
+    function showAlert(msg) {
+        const el = document.getElementById('admin-alert');
+        el.innerText = msg;
+        el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 5000);
+    }
+
+    function syncFromHex() {
+        document.getElementById('picker-primary-base').value = document.getElementById('hex-primary-base').value;
+        document.getElementById('picker-primary-light').value = document.getElementById('hex-primary-light').value;
+        document.getElementById('picker-accent-base').value = document.getElementById('hex-accent-base').value;
+        document.getElementById('picker-accent-light').value = document.getElementById('hex-accent-light').value;
+        document.getElementById('picker-bg-color').value = document.getElementById('hex-bg-color').value;
+        document.getElementById('picker-surface-color').value = document.getElementById('hex-surface-color').value;
+        updateLivePreview();
+    }
+
+    function updateLivePreview() {
+        document.getElementById('hex-primary-base').value = document.getElementById('picker-primary-base').value;
+        document.getElementById('hex-primary-light').value = document.getElementById('picker-primary-light').value;
+        document.getElementById('hex-accent-base').value = document.getElementById('picker-accent-base').value;
+        document.getElementById('hex-accent-light').value = document.getElementById('picker-accent-light').value;
+        document.getElementById('hex-bg-color').value = document.getElementById('picker-bg-color').value;
+        document.getElementById('hex-surface-color').value = document.getElementById('picker-surface-color').value;
+
+        // Apply to CSS variables on page dynamically
+        const root = document.documentElement;
+        root.style.setProperty('--color-primary-base', document.getElementById('hex-primary-base').value);
+        root.style.setProperty('--color-primary-light', document.getElementById('hex-primary-light').value);
+        root.style.setProperty('--color-accent-base', document.getElementById('hex-accent-base').value);
+        root.style.setProperty('--color-accent-light', document.getElementById('hex-accent-light').value);
+        root.style.setProperty('--color-background', document.getElementById('hex-bg-color').value);
+        root.style.setProperty('--color-surface', document.getElementById('hex-surface-color').value);
+    }
+
+    function loadPresetValues() {
+        const val = document.getElementById('theme-preset-select').value;
+        if (PRESETS[val]) {
+            const p = PRESETS[val];
+            document.getElementById('preset-name-input').value = p.name;
+            document.getElementById('hex-primary-base').value = p.primary_base;
+            document.getElementById('hex-primary-light').value = p.primary_light;
+            document.getElementById('hex-accent-base').value = p.accent_base;
+            document.getElementById('hex-accent-light').value = p.accent_light;
+            document.getElementById('hex-bg-color').value = p.bg_color;
+            document.getElementById('hex-surface-color').value = p.surface_color;
+            syncFromHex();
+        }
+    }
+
+    async function applyThemePresetGlobally() {
+        const select = document.getElementById('theme-preset-select');
+        const presetId = select.value;
+        const payload = {
+            preset_id: presetId,
+            custom_theme: {
+                primary_base: document.getElementById('hex-primary-base').value,
+                primary_light: document.getElementById('hex-primary-light').value,
+                accent_base: document.getElementById('hex-accent-base').value,
+                accent_light: document.getElementById('hex-accent-light').value,
+                bg_color: document.getElementById('hex-bg-color').value,
+                surface_color: document.getElementById('hex-surface-color').value,
+            }
+        };
+
+        const res = await fetch('/api/admin/theme-presets/apply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showAlert('✅ ' + data.message);
+            document.getElementById('active-theme-badge').innerText = 'Active: ' + (data.active_theme.name || presetId);
+            updateLivePreview();
+        }
+    }
+
+    async function saveCustomThemePreset() {
+        const name = document.getElementById('preset-name-input').value || 'Custom Preset';
+        const payload = {
+            name: name,
+            theme: {
+                primary_base: document.getElementById('hex-primary-base').value,
+                primary_light: document.getElementById('hex-primary-light').value,
+                accent_base: document.getElementById('hex-accent-base').value,
+                accent_light: document.getElementById('hex-accent-light').value,
+                bg_color: document.getElementById('hex-bg-color').value,
+                surface_color: document.getElementById('hex-surface-color').value,
+            },
+            set_active: true
+        };
+
+        const res = await fetch('/api/admin/theme-presets/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showAlert('✅ Theme preset saved & transferred globally: ' + name);
+            location.reload();
+        }
+    }
+
+    async function resetThemeToDefault() {
+        const res = await fetch('/api/admin/theme-presets/reset', { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showAlert('✅ ' + data.message);
+            location.reload();
+        }
+    }
+
+    async function saveWorklistPresetForAll() {
+        const name = document.getElementById('admin-preset-name').value || 'Global Standard Default';
+        const density = document.querySelector('input[name="admin-density"]:checked').value;
+        const viewMode = document.querySelector('input[name="admin-viewmode"]:checked').value;
+        const visibleCols = Array.from(document.querySelectorAll('#column-checkboxes input:checked')).map(cb => cb.value);
+
+        const payload = {
+            name: name,
+            density: density,
+            view_mode: viewMode,
+            visible_columns: visibleCols,
+            page_size: 10
+        };
+
+        const res = await fetch('/api/admin/worklist-presets/save-for-all', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showAlert('✅ ' + data.message);
+            document.getElementById('active-worklist-badge').innerText = 'Default: ' + name;
+        }
+    }
+
+    async function applySelectedWorklistPresetForAll() {
+        const select = document.getElementById('worklist-preset-select');
+        const presetId = select.value;
+        const res = await fetch(`/api/admin/worklist-presets/${presetId}/apply-for-all`, { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showAlert('✅ ' + data.message);
+            document.getElementById('active-worklist-badge').innerText = 'Default: ' + presetId;
+        }
+    }
+    </script>
+</body>
+</html>
