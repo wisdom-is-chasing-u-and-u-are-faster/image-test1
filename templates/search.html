@@ -4,567 +4,480 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donor Search - Blood Donor Connection Network (BDCN)</title>
-    <style>
+    
+    <!-- Dynamic Global Theme Injection (AC6) -->
+    <style id="global-theme-vars">
+    :root {
+        --color-primary-base: {{ active_theme.primary_base | default('#2c3e50') }};
+        --color-primary-light: {{ active_theme.primary_light | default('#34495e') }};
+        --color-accent-base: {{ active_theme.accent_base | default('#3498db') }};
+        --color-accent-light: {{ active_theme.accent_light | default('#5dade2') }};
+        --color-background: {{ active_theme.bg_color | default('#f8f9fa') }};
+        --color-surface: {{ active_theme.surface_color | default('#ffffff') }};
+        --color-text-primary: {{ active_theme.text_primary | default('#212529') }};
+        --color-text-secondary: {{ active_theme.text_secondary | default('#6c757d') }};
+        --color-border: {{ active_theme.border_color | default('#dee2e6') }};
+        --color-input-bg: {{ active_theme.surface_color | default('#ffffff') }};
 
-/* ==========================================================================
-   DESIGN SYSTEM: Corporate Blue
-   ========================================================================== */
+        --color-text-on-primary: #ffffff;
+        --color-text-on-accent: #ffffff;
+        --color-text-link: var(--color-accent-base);
 
-/* --------------------------------------------------------------------------
-   ART DIRECTION:
-   - PERSONALITY: Professional, trustworthy, efficient, modern. For a critical
-     medical application.
-   - COLOR: Trustworthy blues and clean neutrals.
-   - TYPOGRAPHY: Clean, legible sans-serif (Inter).
-   - SPACING: 8pt grid system.
-   - COMPONENTS: Reusable, accessible components for a consistent experience.
-   -------------------------------------------------------------------------- */
+        --color-success: #28a745;
+        --color-warning: #ffc107;
+        --color-danger: #dc3545;
+        --color-info: #17a2b8;
 
-/* --------------------------------------------------------------------------
-   1. Root & Core Setup
-   -------------------------------------------------------------------------- */
+        /* Spacing & Layout */
+        --spacing-1: 4px;
+        --spacing-2: 8px;
+        --spacing-3: 16px;
+        --spacing-4: 24px;
+        --spacing-5: 32px;
+        --spacing-6: 48px;
 
-:root {
-    /* Color Palette */
-    --color-primary-base: #2c3e50; /* Slate Blue */
-    --color-primary-light: #34495e;
-    --color-accent-base: #3498db; /* Bright Blue */
-    --color-accent-light: #5dade2;
+        --font-size-base: 1rem;
+        --font-size-small: 0.875rem;
+        --font-size-caption: 0.75rem;
+        --font-size-h1: 2rem;
+        --font-size-h2: 1.75rem;
+        --font-size-h3: 1.5rem;
+        --font-size-h4: 1.25rem;
+        --font-size-h5: 1.1rem;
 
-    --color-text-primary: #212529;
-    --color-text-secondary: #6c757d;
-    --color-text-on-primary: #ffffff;
-    --color-text-on-accent: #ffffff;
-    --color-text-link: #3498db;
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+        --radius-pill: 50rem;
 
-    --color-background: #f8f9fa;
-    --color-surface: #ffffff;
-    --color-border: #dee2e6;
-    --color-input-bg: #ffffff;
+        --border-width: 1px;
+        --border-style: solid;
+        --shadow-1: 0 1px 3px rgba(0,0,0,0.08);
+        --shadow-2: 0 4px 6px rgba(0,0,0,0.1);
+        --shadow-3: 0 10px 15px rgba(0,0,0,0.12);
 
-    --color-success: #28a745;
-    --color-warning: #ffc107;
-    --color-danger: #dc3545;
-    --color-info: #17a2b8;
+        --transition-fast: 0.15s ease-in-out;
+        --transition-medium: 0.25s ease-in-out;
+        --z-index-header: 1000;
+    }
 
-    /* Gradients */
-    --gradient-primary-accent: linear-gradient(45deg, var(--color-accent-base), var(--color-primary-base));
-    --gradient-text: var(--gradient-primary-accent);
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: var(--color-background);
+        color: var(--color-text-primary);
+        line-height: 1.5;
+        padding-top: 80px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
 
-    /* Typography */
-    --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-size-base: 1rem; /* 16px */
-    --font-weight-light: 300;
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-bold: 700;
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-4);
+    }
 
-    --font-size-display: 3.5rem;   /* 56px */
-    --font-size-h1: 2.5rem;      /* 40px */
-    --font-size-h2: 2rem;        /* 32px */
-    --font-size-h3: 1.75rem;     /* 28px */
-    --font-size-h4: 1.5rem;      /* 24px */
-    --font-size-h5: 1.25rem;     /* 20px */
-    --font-size-h6: 1rem;        /* 16px */
-    --font-size-small: 0.875rem; /* 14px */
-    --font-size-caption: 0.75rem;/* 12px */
+    .main-content { flex: 1; padding-bottom: var(--spacing-6); }
 
-    /* Spacing (8pt Grid) */
-    --spacing-1: 0.25rem; /* 4px */
-    --spacing-2: 0.5rem;  /* 8px */
-    --spacing-3: 1rem;    /* 16px */
-    --spacing-4: 1.5rem;  /* 24px */
-    --spacing-5: 2rem;    /* 32px */
-    --spacing-6: 3rem;    /* 48px */
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--font-size-base);
+        font-weight: 600;
+        border-radius: var(--radius-md);
+        border: 1px solid transparent;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all var(--transition-fast);
+        gap: var(--spacing-2);
+    }
+    .btn-sm { padding: var(--spacing-1) var(--spacing-2); font-size: var(--font-size-small); }
+    .btn-primary {
+        background-color: var(--color-primary-base);
+        color: var(--color-text-on-primary);
+        border-color: var(--color-primary-base);
+    }
+    .btn-primary:hover {
+        background-color: var(--color-primary-light);
+        border-color: var(--color-primary-light);
+        box-shadow: var(--shadow-2);
+    }
+    .btn-accent {
+        background-color: var(--color-accent-base);
+        color: var(--color-text-on-accent);
+        border-color: var(--color-accent-base);
+    }
+    .btn-accent:hover {
+        background-color: var(--color-accent-light);
+        border-color: var(--color-accent-light);
+        box-shadow: var(--shadow-2);
+    }
+    .btn-secondary {
+        color: var(--color-text-primary);
+        background-color: var(--color-surface);
+        border-color: var(--color-border);
+    }
+    .btn-secondary:hover {
+        background-color: var(--color-background);
+        border-color: var(--color-text-secondary);
+    }
 
-    /* Borders & Radii */
-    --border-width: 1px;
-    --border-style: solid;
-    --radius-sm: 4px;
-    --radius-md: 8px;
-    --radius-lg: 16px;
-    --radius-pill: 9999px;
-    --radius-circle: 50%;
+    /* Cards */
+    .card {
+        background-color: var(--color-surface);
+        border: var(--border-width) var(--border-style) var(--color-border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-1);
+        padding: var(--spacing-4);
+        margin-bottom: var(--spacing-4);
+    }
+    .card-header {
+        padding-bottom: var(--spacing-3);
+        border-bottom: 1px solid var(--color-border);
+        margin-bottom: var(--spacing-3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
 
-    /* Shadows & Elevation */
-    --shadow-color: rgba(0, 0, 0, 0.1);
-    --shadow-1: 0 1px 3px var(--shadow-color), 0 1px 2px var(--shadow-color);
-    --shadow-2: 0 3px 6px var(--shadow-color), 0 3px 6px var(--shadow-color);
-    --shadow-3: 0 10px 20px var(--shadow-color), 0 6px 6px var(--shadow-color);
-    --shadow-4: 0 15px 30px var(--shadow-color), 0 10px 10px var(--shadow-color);
+    /* Forms & Inputs */
+    .form-group { margin-bottom: var(--spacing-3); }
+    .form-label { display: block; font-weight: 500; margin-bottom: var(--spacing-1); font-size: var(--font-size-small); }
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-base);
+        background-color: var(--color-input-bg);
+        color: var(--color-text-primary);
+        border: var(--border-width) var(--border-style) var(--color-border);
+        border-radius: var(--radius-md);
+    }
+    .form-control:focus {
+        outline: none;
+        border-color: var(--color-accent-base);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+    }
 
-    /* Transitions */
-    --transition-fast: 0.2s ease;
-    --transition-medium: 0.3s ease;
+    /* Tables & Density */
+    .table-container { width: 100%; overflow-x: auto; }
+    .table { width: 100%; margin-bottom: var(--spacing-3); border-collapse: collapse; }
+    .table th, .table td {
+        padding: var(--spacing-3);
+        vertical-align: middle;
+        border-top: 1px solid var(--color-border);
+        text-align: left;
+    }
+    .table thead th { border-bottom: 2px solid var(--color-border); font-weight: 600; }
 
-    /* Z-Index */
-    --z-index-header: 1000;
-    --z-index-modal: 1100;
+    /* Density classes */
+    .density-compact th, .density-compact td { padding: 6px 10px; font-size: 0.875rem; }
+    .density-comfortable th, .density-comfortable td { padding: 14px 16px; font-size: 1rem; }
+    .density-spacious th, .density-spacious td { padding: 20px 20px; font-size: 1.05rem; }
 
-    /* Dark Mode */
-    --color-background-dark: #121212;
-    --color-surface-dark: #1e1e1e;
-    --color-text-primary-dark: #e0e0e0;
-    --color-text-secondary-dark: #a0a0a0;
-    --color-border-dark: #333333;
-}
+    /* Cards view for worklist */
+    .worklist-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+    }
+    .donor-card-item {
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 16px;
+        box-shadow: var(--shadow-1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-*, *::before, *::after {
-    box-sizing: border-box;
-}
+    /* Badges */
+    .badge {
+        display: inline-block;
+        padding: 4px 8px;
+        font-size: var(--font-size-caption);
+        font-weight: 700;
+        border-radius: var(--radius-pill);
+        text-transform: uppercase;
+    }
+    .badge-danger { background-color: var(--color-danger); color: white; }
+    .badge-success { background-color: var(--color-success); color: white; }
+    .badge-warning { background-color: var(--color-warning); color: #212529; }
+    .badge-info { background-color: var(--color-info); color: white; }
+    .badge-primary { background-color: var(--color-primary-base); color: white; }
 
-html {
-    scroll-behavior: smooth;
-    font-size: var(--font-size-base);
-}
+    /* App Header */
+    .app-header {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: var(--z-index-header);
+        background: var(--color-surface);
+        box-shadow: var(--shadow-2);
+        padding: var(--spacing-3) 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+    .header-content { display: flex; justify-content: space-between; align-items: center; }
+    .logo {
+        display: flex; align-items: center; gap: var(--spacing-2);
+        font-size: var(--font-size-h5); font-weight: 700;
+        color: var(--color-text-primary); text-decoration: none;
+    }
+    .logo-icon { font-size: 1.5em; color: var(--color-danger); }
+    .main-nav ul { margin: 0; padding: 0; list-style: none; display: flex; gap: var(--spacing-4); }
+    .main-nav a {
+        color: var(--color-text-secondary);
+        font-weight: 500;
+        padding: var(--spacing-2) 0;
+        border-bottom: 2px solid transparent;
+        text-decoration: none;
+        transition: all var(--transition-fast);
+    }
+    .main-nav a:hover, .main-nav a.active {
+        color: var(--color-text-primary);
+        border-bottom-color: var(--color-accent-base);
+    }
+    .header-actions { display: flex; align-items: center; gap: var(--spacing-3); }
 
-body {
-    font-family: var(--font-family-base);
-    background-color: var(--color-background);
-    color: var(--color-text-primary);
-    margin: 0;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
+    .app-footer {
+        background-color: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+        padding: var(--spacing-4) 0;
+        color: var(--color-text-secondary);
+        font-size: var(--font-size-small);
+    }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; }
 
-/* Dark Mode Logic */
-body.dark-mode {
-    --color-background: var(--color-background-dark);
-    --color-surface: var(--color-surface-dark);
-    --color-text-primary: var(--color-text-primary-dark);
-    --color-text-secondary: var(--color-text-secondary-dark);
-    --color-border: var(--color-border-dark);
-    --color-input-bg: var(--color-surface-dark);
-}
+    .grid-container { display: grid; gap: var(--spacing-4); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
 
-/* --------------------------------------------------------------------------
-   2. Typography
-   -------------------------------------------------------------------------- */
-h1, h2, h3, h4, h5, h6 {
-    margin-top: 0;
-    margin-bottom: 0.5em;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary);
-    letter-spacing: -0.02em;
-}
-h1 { font-size: var(--font-size-h1); letter-spacing: -0.05em; }
-h2 { font-size: var(--font-size-h2); }
-h3 { font-size: var(--font-size-h3); }
-h4 { font-size: var(--font-size-h4); }
-h5 { font-size: var(--font-size-h5); }
-h6 { font-size: var(--font-size-h6); }
+    .worklist-toolbar {
+        background-color: var(--color-background);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    .toolbar-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-p { margin-top: 0; margin-bottom: var(--spacing-3); }
-a { color: var(--color-text-link); text-decoration: none; transition: color var(--transition-fast); }
-a:hover { color: var(--color-accent-light); text-decoration: underline; }
+    .alert-banner {
+        padding: var(--spacing-3);
+        border-radius: var(--radius-md);
+        margin-bottom: var(--spacing-3);
+        display: none;
+    }
+    .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
 
-.gradient-text {
-    background: var(--gradient-text);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-}
-
-/* --------------------------------------------------------------------------
-   3. Layout & Helpers
-   -------------------------------------------------------------------------- */
-.container {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-4);
-}
-.main-content {
-    padding-top: 100px; /* Offset for fixed header */
-    padding-bottom: var(--spacing-6);
-    min-height: calc(100vh - 150px);
-}
-.screen { display: none; }
-.screen.active { display: block; animation: fadeIn 0.5s; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.skip-to-content {
-    position: absolute;
-    left: -10000px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-}
-.skip-to-content:focus {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: var(--z-index-modal);
-    background: var(--color-primary-base);
-    color: var(--color-text-on-primary);
-    padding: var(--spacing-3);
-    border-radius: var(--radius-md);
-    text-decoration: none;
-    width: auto;
-    height: auto;
-}
-
-/* --------------------------------------------------------------------------
-   4. Components
-   -------------------------------------------------------------------------- */
-
-/* Buttons */
-.btn {
-    display: inline-block;
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    border: var(--border-width) var(--border-style) transparent;
-    padding: var(--spacing-2) var(--spacing-4);
-    border-radius: var(--radius-md);
-    transition: all var(--transition-fast);
-    user-select: none;
-}
-.btn:focus-visible {
-    outline: 2px solid var(--color-accent-base);
-    outline-offset: 2px;
-}
-.btn-primary {
-    color: var(--color-text-on-primary);
-    background-color: var(--color-primary-base);
-    border-color: var(--color-primary-base);
-}
-.btn-primary:hover {
-    background-color: var(--color-primary-light);
-    border-color: var(--color-primary-light);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-2);
-}
-.btn-accent {
-    color: var(--color-text-on-accent);
-    background-color: var(--color-accent-base);
-    border-color: var(--color-accent-base);
-}
-.btn-accent:hover {
-    background-color: var(--color-accent-light);
-    border-color: var(--color-accent-light);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-2);
-}
-.btn-secondary {
-    color: var(--color-text-primary);
-    background-color: transparent;
-    border-color: var(--color-border);
-}
-.btn-secondary:hover {
-    background-color: var(--color-background);
-    border-color: var(--color-text-secondary);
-}
-
-/* Cards */
-.card {
-    background-color: var(--color-surface);
-    border: var(--border-width) var(--border-style) var(--color-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-1);
-    padding: var(--spacing-4);
-    transition: all var(--transition-medium);
-}
-.card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-3);
-}
-.card-header {
-    padding-bottom: var(--spacing-3);
-    border-bottom: 1px solid var(--color-border);
-    margin-bottom: var(--spacing-3);
-}
-
-/* Forms & Inputs */
-.form-group {
-    margin-bottom: var(--spacing-3);
-}
-.form-label {
-    display: block;
-    font-weight: var(--font-weight-medium);
-    margin-bottom: var(--spacing-2);
-}
-.form-control {
-    display: block;
-    width: 100%;
-    padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--font-size-base);
-    background-color: var(--color-input-bg);
-    color: var(--color-text-primary);
-    border: var(--border-width) var(--border-style) var(--color-border);
-    border-radius: var(--radius-md);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-}
-.form-control:focus {
-    outline: none;
-    border-color: var(--color-accent-base);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
-}
-
-/* Badges / Pills */
-.badge {
-    display: inline-block;
-    padding: var(--spacing-1) var(--spacing-2);
-    font-size: var(--font-size-caption);
-    font-weight: var(--font-weight-bold);
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: var(--radius-pill);
-    text-transform: uppercase;
-}
-.badge-danger { background-color: var(--color-danger); color: white; }
-.badge-success { background-color: var(--color-success); color: white; }
-.badge-warning { background-color: var(--color-warning); color: var(--color-text-primary); }
-.badge-info { background-color: var(--color-info); color: white; }
-.badge-primary { background-color: var(--color-primary-base); color: var(--color-text-on-primary); }
-
-/* Tables */
-.table {
-    width: 100%;
-    margin-bottom: var(--spacing-3);
-    color: var(--color-text-primary);
-    border-collapse: collapse;
-}
-.table th, .table td {
-    padding: var(--spacing-3);
-    vertical-align: top;
-    border-top: 1px solid var(--color-border);
-    text-align: left;
-}
-.table thead th {
-    vertical-align: bottom;
-    border-bottom: 2px solid var(--color-border);
-    font-weight: var(--font-weight-bold);
-}
-
-/* Header / Navbar */
-.app-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: var(--z-index-header);
-    background: var(--color-surface);
-    box-shadow: var(--shadow-2);
-    padding: var(--spacing-3) 0;
-    border-bottom: 1px solid var(--color-border);
-}
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.logo {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-2);
-    font-size: var(--font-size-h5);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary);
-    text-decoration: none;
-}
-.logo .logo-icon {
-    font-size: 1.5em;
-    color: var(--color-danger);
-}
-.main-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-4);
-}
-.main-nav a {
-    color: var(--color-text-secondary);
-    font-weight: var(--font-weight-medium);
-    padding: var(--spacing-2) 0;
-    border-bottom: 2px solid transparent;
-    transition: all var(--transition-fast);
-}
-.main-nav a:hover,
-.main-nav a.active {
-    color: var(--color-text-primary);
-    border-bottom-color: var(--color-accent-base);
-}
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-3);
-}
-
-/* Footer */
-.app-footer {
-    background-color: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    padding: var(--spacing-4) 0;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-small);
-}
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .main-nav { display: none; /* Simplification for this example */ }
-    h1 { font-size: var(--font-size-h2); }
-    h2 { font-size: var(--font-size-h3); }
-    .container { padding: 0 var(--spacing-3); }
-}
-
-@media (max-width: 375px) {
-    h1 { font-size: 1.8rem; }
-}
-
-/* Page Specific Overrides */
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: var(--spacing-4);
-}
-.login-card {
-    width: 100%;
-    max-width: 450px;
-}
-.grid-container {
-    display: grid;
-    gap: var(--spacing-4);
-}
-.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-cols-1 { grid-template-columns: 1fr; }
-
-@media (max-width: 1024px) {
-    .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 768px) {
-    .grid-cols-3, .grid-cols-2 { grid-template-columns: 1fr; }
-}
-
-</style>
+    @media (max-width: 900px) {
+        .grid-cols-3 { grid-template-columns: 1fr; }
+    }
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <header class="app-header">
         <div class="container header-content">
-            <a href="dashboard.html" class="logo">
+            <a href="/dashboard" class="logo">
                 <span class="logo-icon">🩸</span>
-                <span>BDCN</span>
+                <span>BDCN Platform</span>
             </a>
             <nav class="main-nav" aria-label="Main Navigation">
                 <ul>
-                    <li><a href="dashboard.html">Dashboard</a></li>
-                    <li><a href="search.html" class="active">Donor Search</a></li>
-                    <li><a href="inventory.html">Global Inventory</a></li>
-                    <li><a href="admin.html">System Admin</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/search" class="active">Donor Search</a></li>
+                    <li><a href="/inventory">Global Inventory</a></li>
+                    <li><a href="/admin">System Admin</a></li>
                 </ul>
             </nav>
             <div class="header-actions">
-                <span class="user-info">Welcome, Dr. Evans</span>
-                <a href="login.html" class="btn btn-secondary">Logout</a>
+                <span class="user-info">Welcome, Coordinator</span>
+                <a href="/login" class="btn btn-secondary btn-sm">Logout</a>
             </div>
         </div>
     </header>
 
     <main id="main-content" class="main-content container">
         <section id="search">
-            <header class="mb-5">
-               <h1>Donor Search</h1>
-               <p class="text-secondary">Find suitable blood donors by various criteria. (REQ-F-003)</p>
-           </header>
-           <div class="card">
-               <div class="card-header">
-                   <h5>Search Filters</h5>
-               </div>
-               <form id="donor-search-form" class="grid-container grid-cols-3 pt-4">
-                   <div class="form-group">
-                       <label for="blood-type" class="form-label">Blood Type</label>
-                       <select id="blood-type" class="form-control">
-                           <option>Any</option>
-                           <option>O-</option>
-                           <option>O+</option>
-                           <option>A-</option>
-                           <option>A+</option>
-                           <option>B-</option>
-                           <option>B+</option>
-                           <option>AB-</option>
-                           <option>AB+</option>
-                       </select>
-                   </div>
-                   <div class="form-group">
-                       <label for="location" class="form-label">Location (Postal Code)</label>
-                       <input type="text" id="location" class="form-control" placeholder="e.g., 90210">
-                   </div>
-                   <div class="form-group">
-                       <label for="availability" class="form-label">Availability</label>
-                        <select id="availability" class="form-control">
-                           <option>Any</option>
-                           <option>Available Now</option>
-                           <option>Available in 24h</option>
-                       </select>
-                   </div>
-               </form>
-               <div class="card-header mt-4">
-                   <h5>Advanced Search (SQL-like)</h5>
-                   <p class="text-secondary small">For complex queries. (REQ-F-003)</p>
-               </div>
-               <div class="form-group pt-3">
-                   <textarea class="form-control" rows="4" placeholder="e.g., SELECT * FROM donors WHERE blood_type = 'O-' AND last_donation < '2023-10-01' AND location.zip IN (90210, 90211)"></textarea>
-               </div>
-               <div class="mt-4">
-                   <button type="submit" form="donor-search-form" class="btn btn-primary">Search</button>
-               </div>
-           </div>
-           <div class="card mt-5">
-               <h5 class="card-header">Search Results</h5>
-               <table class="table">
-                   <thead>
-                       <tr>
-                           <th>Donor ID</th>
-                           <th>Blood Type</th>
-                           <th>Location</th>
-                           <th>Status</th>
-                           <th>Actions</th>
-                       </tr>
-                   </thead>
-                   <tbody>
-                       <tr>
-                           <td>DN-73829</td>
-                           <td><span class="badge badge-danger">O-</span></td>
-                           <td>Springfield, IL</td>
-                           <td><span class="badge badge-success">Available</span></td>
-                           <td><a href="#" class="btn btn-secondary btn-sm">Contact</a></td>
-                       </tr>
-                       <tr>
-                           <td>DN-46102</td>
-                           <td><span class="badge badge-primary">A+</span></td>
-                           <td>Shelbyville, IL</td>
-                           <td><span class="badge badge-warning">On Cooldown</span></td>
-                           <td><a href="#" class="btn btn-secondary btn-sm" disabled>Contact</a></td>
-                       </tr>
-                   </tbody>
-               </table>
-           </div>
+            <header class="mb-4" style="margin-bottom: 24px;">
+                <h1>Donor Search & Worklist (REQ-F-003, AC3)</h1>
+                <p style="color: var(--color-text-secondary);">Find suitable blood donors and customize worklist layouts with system presets.</p>
+            </header>
+
+            <div id="search-alert" class="alert-banner alert-success"></div>
+
+            <!-- Search Filter Form (AC3) -->
+            <div class="card">
+                <div class="card-header">
+                    <h5>🔍 Initiate Donor Search Filters</h5>
+                </div>
+                <form id="donor-search-form" method="GET" action="/search" class="grid-container grid-cols-3 pt-3">
+                    <div class="form-group">
+                        <label for="blood-type" class="form-label">Blood Type</label>
+                        <select id="blood-type" name="blood_type" class="form-control">
+                            <option value="">Any</option>
+                            <option value="O-" {% if blood_type == 'O-' %}selected{% endif %}>O-</option>
+                            <option value="O+" {% if blood_type == 'O+' %}selected{% endif %}>O+</option>
+                            <option value="A-" {% if blood_type == 'A-' %}selected{% endif %}>A-</option>
+                            <option value="A+" {% if blood_type == 'A+' %}selected{% endif %}>A+</option>
+                            <option value="B-" {% if blood_type == 'B-' %}selected{% endif %}>B-</option>
+                            <option value="B+" {% if blood_type == 'B+' %}selected{% endif %}>B+</option>
+                            <option value="AB-" {% if blood_type == 'AB-' %}selected{% endif %}>AB-</option>
+                            <option value="AB+" {% if blood_type == 'AB+' %}selected{% endif %}>AB+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="search-query" class="form-label">Keyword / Location</label>
+                        <input type="text" id="search-query" name="q" class="form-control" value="{{ query }}" placeholder="e.g. Springfield, Sarah, DN-73829">
+                    </div>
+                    <div class="form-group" style="display:flex; align-items:flex-end;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            🔍 Search Donors
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Worklist Results & Layout Setting (AC7) -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h5>📋 Donor Worklist Results ({{ results | length }} match{% if results|length != 1 %}es{% endif %})</h5>
+                        <small style="color: var(--color-text-secondary);">Worklist layout is dynamically synchronized with global admin presets.</small>
+                    </div>
+                    <span class="badge badge-info" id="current-layout-badge">
+                        Layout: {{ worklist_layout.name | default('Standard') }} ({{ worklist_layout.density }})
+                    </span>
+                </div>
+
+                <!-- Worklist Layout Toolbar (AC7) -->
+                <div class="worklist-toolbar">
+                    <div class="toolbar-group">
+                        <label style="font-size: var(--font-size-small); font-weight: 600;">Layout Presets:</label>
+                        <select id="wl-preset-selector" class="form-control" style="width: auto; padding: 4px 8px;" onchange="switchPreset(this.value)">
+                            {% for pid, p in worklist_presets.items() %}
+                                <option value="{{ pid }}" {% if pid == worklist_preset_id %}selected{% endif %}>
+                                    {{ p.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <label style="font-size: var(--font-size-small); font-weight: 600;">Density:</label>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setDensity('compact')">Compact</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setDensity('comfortable')">Comfortable</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setDensity('spacious')">Spacious</button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <label style="font-size: var(--font-size-small); font-weight: 600;">View Mode:</label>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setViewMode('table')">📊 Table</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="setViewMode('cards')">📇 Cards</button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button type="button" class="btn btn-sm btn-accent" onclick="saveAsGlobalPreset()">
+                            🌟 Save for All like Preset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table View Mode -->
+                <div id="worklist-table-container" class="table-container density-{{ worklist_layout.density | default('comfortable') }}" {% if worklist_layout.view_mode == 'cards' %}style="display:none;"{% endif %}>
+                    <table class="table" id="donor-table">
+                        <thead>
+                            <tr>
+                                <th class="col-donor_id">Donor ID</th>
+                                <th class="col-name">Name</th>
+                                <th class="col-blood_type">Blood Type</th>
+                                <th class="col-location">Location</th>
+                                <th class="col-status">Status</th>
+                                <th class="col-distance">Distance</th>
+                                <th class="col-units">Units</th>
+                                <th class="col-last_donation">Last Donation</th>
+                                <th class="col-shard_id">Cluster Shard</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in results %}
+                            <tr>
+                                <td class="col-donor_id"><strong>{{ d.id }}</strong></td>
+                                <td class="col-name">{{ d.name }}</td>
+                                <td class="col-blood_type">
+                                    <span class="badge {% if 'O-' in d.blood_type or 'B-' in d.blood_type %}badge-danger{% else %}badge-primary{% endif %}">
+                                        {{ d.blood_type }}
+                                    </span>
+                                </td>
+                                <td class="col-location">{{ d.location }}</td>
+                                <td class="col-status">
+                                    <span class="badge {% if d.status == 'Available' %}badge-success{% else %}badge-warning{% endif %}">
+                                        {{ d.status }}
+                                    </span>
+                                </td>
+                                <td class="col-distance">{{ d.distance_km }} km</td>
+                                <td class="col-units">{{ d.units | default(1) }} unit(s)</td>
+                                <td class="col-last_donation">{{ d.last_donation | default('2024-01-01') }}</td>
+                                <td class="col-shard_id">{{ d.shard_id | default('Shard 1') }}</td>
+                                <td class="col-actions">
+                                    <button class="btn btn-secondary btn-sm" onclick="alert('Contacting {{ d.name }}...')">Contact</button>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="10" style="text-align: center; color: var(--color-text-secondary); padding: 24px;">
+                                    No donors matching your search criteria.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cards View Mode -->
+                <div id="worklist-cards-container" class="worklist-cards-grid" {% if worklist_layout.view_mode != 'cards' %}style="display:none;"{% endif %}>
+                    {% for d in results %}
+                    <div class="donor-card-item">
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <strong style="font-size:1.1rem;">{{ d.name }}</strong>
+                                <span class="badge {% if 'O-' in d.blood_type or 'B-' in d.blood_type %}badge-danger{% else %}badge-primary{% endif %}">
+                                    {{ d.blood_type }}
+                                </span>
+                            </div>
+                            <p style="color:var(--color-text-secondary); font-size:var(--font-size-small); margin-bottom:4px;">
+                                📍 {{ d.location }} ({{ d.distance_km }} km away)
+                            </p>
+                            <p style="color:var(--color-text-secondary); font-size:var(--font-size-small); margin-bottom:8px;">
+                                ID: {{ d.id }} | Cluster: {{ d.shard_id | default('Shard 1') }}
+                            </p>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--color-border); padding-top:10px; margin-top:8px;">
+                            <span class="badge {% if d.status == 'Available' %}badge-success{% else %}badge-warning{% endif %}">
+                                {{ d.status }}
+                            </span>
+                            <button class="btn btn-primary btn-sm" onclick="alert('Contacting {{ d.name }}...')">Contact Donor</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </section>
     </main>
 
@@ -574,5 +487,105 @@ a:hover { color: var(--color-accent-light); text-decoration: underline; }
             <p>All data is encrypted in transit and at rest. (REQ-N-004)</p>
         </div>
     </footer>
+
+    <!-- Client Script for Worklist Layout & Save for All (AC7) -->
+    <script>
+    let currentLayout = {{ worklist_layout | tojson }};
+    const presets = {{ worklist_presets | tojson }};
+
+    function showSearchAlert(msg) {
+        const el = document.getElementById('search-alert');
+        el.innerText = msg;
+        el.style.display = 'block';
+        setTimeout(() => { el.style.display = 'none'; }, 4000);
+    }
+
+    function applyColumnVisibility() {
+        const cols = currentLayout.visible_columns || [];
+        const allCols = ["donor_id", "name", "blood_type", "location", "status", "distance", "units", "last_donation", "shard_id", "actions"];
+        allCols.forEach(col => {
+            const isVisible = cols.includes(col);
+            document.querySelectorAll(`.col-${col}`).forEach(el => {
+                el.style.display = isVisible ? '' : 'none';
+            });
+        });
+    }
+
+    function setDensity(density) {
+        currentLayout.density = density;
+        const container = document.getElementById('worklist-table-container');
+        container.className = `table-container density-${density}`;
+        updateLayoutBadge();
+        saveLayoutSession();
+    }
+
+    function setViewMode(mode) {
+        currentLayout.view_mode = mode;
+        const table = document.getElementById('worklist-table-container');
+        const cards = document.getElementById('worklist-cards-container');
+        if (mode === 'cards') {
+            table.style.display = 'none';
+            cards.style.display = 'grid';
+        } else {
+            table.style.display = 'block';
+            cards.style.display = 'none';
+        }
+        updateLayoutBadge();
+        saveLayoutSession();
+    }
+
+    function switchPreset(presetId) {
+        if (presets[presetId]) {
+            currentLayout = Object.assign({}, presets[presetId]);
+            setDensity(currentLayout.density || 'comfortable');
+            setViewMode(currentLayout.view_mode || 'table');
+            applyColumnVisibility();
+            showSearchAlert(`Switched to layout preset: ${presets[presetId].name}`);
+        }
+    }
+
+    function updateLayoutBadge() {
+        const badge = document.getElementById('current-layout-badge');
+        badge.innerText = `Layout: ${currentLayout.name || 'Custom'} (${currentLayout.density} / ${currentLayout.view_mode})`;
+    }
+
+    async function saveLayoutSession() {
+        await fetch('/api/worklist/layout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(currentLayout)
+        });
+    }
+
+    async function saveAsGlobalPreset() {
+        const name = prompt('Enter a name for this Global Worklist Preset:', currentLayout.name || 'Emergency Fast-View');
+        if (!name) return;
+
+        const payload = {
+            name: name,
+            density: currentLayout.density,
+            view_mode: currentLayout.view_mode,
+            visible_columns: currentLayout.visible_columns,
+            page_size: currentLayout.page_size || 10
+        };
+
+        const res = await fetch('/api/admin/worklist-presets/save-for-all', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+            showSearchAlert('🌟 ' + data.message);
+            currentLayout.name = name;
+            updateLayoutBadge();
+        }
+    }
+
+    // Initialize column visibility on load
+    document.addEventListener('DOMContentLoaded', () => {
+        applyColumnVisibility();
+    });
+    </script>
 </body>
 </html>
